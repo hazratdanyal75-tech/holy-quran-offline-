@@ -1,0 +1,1085 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#075640">
+
+<title>Holy Quran Ultimate</title>
+
+<meta name="description"
+content="Complete Quran, translations, recitation and Islamic companion.">
+
+<meta name="application-name" content="Holy Quran Ultimate">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div id="appLoader" class="app-loader">
+  <div class="loader-icon">۞</div>
+  <h2>HOLY QURAN</h2>
+  <p>Preparing your spiritual journey...</p>
+</div>
+
+<div id="app" class="app-container">
+
+<!-- HEADER -->
+
+<header class="top-header">
+
+  <div class="brand">
+    <div class="brand-logo">☪</div>
+    <div>
+      <h1>Holy Quran</h1>
+      <small>ULTIMATE EDITION</small>
+    </div>
+  </div>
+
+  <div class="header-actions">
+    <button id="installBtn" aria-label="Install app">⬇</button>
+    <button id="notificationBtn" aria-label="Notifications">♧</button>
+    <button id="themeBtn" aria-label="Change theme">☾</button>
+  </div>
+
+</header>
+
+
+<main id="mainContent">
+
+<!-- HOME -->
+
+<section id="homePage" class="page active">
+
+  <div class="home-welcome">
+    <span>ASSALAM O ALAIKUM</span>
+    <h2>Your Islamic Companion</h2>
+    <p>Read, Listen, Learn and Remember Allah.</p>
+  </div>
+
+  <!-- HERO -->
+
+  <section class="hero-card">
+
+    <div class="hero-decoration">۞</div>
+
+    <span>THE NOBLE QURAN</span>
+
+    <h2 class="arabic-heading">
+      الْقُرْآنُ الْكَرِيمُ
+    </h2>
+
+    <p>Read Quran every day</p>
+
+    <div class="hero-actions">
+
+      <button data-page="quranPage">
+        📖 Read Quran
+      </button>
+
+      <button data-page="audioPage">
+        🎧 Listen Quran
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- DAILY AYAH -->
+
+  <section class="daily-card">
+
+    <div class="section-heading">
+      <h3>Daily Ayah</h3>
+      <span>۞</span>
+    </div>
+
+    <div id="dailyAyah">
+      <p>Daily Quran reminder will appear here.</p>
+    </div>
+
+    <button id="dailyAyahRefresh">
+      Another Reminder
+    </button>
+
+  </section>
+
+
+  <!-- PRAYER OVERVIEW -->
+
+  <section class="prayer-overview">
+
+    <div class="section-heading">
+      <h3>Prayer Times</h3>
+      <button data-page="prayerPage">View All →</button>
+    </div>
+
+    <div class="prayer-current">
+      <span>YOUR LOCATION</span>
+      <h3 id="homeLocation">Location not selected</h3>
+      <p id="nextPrayerName">Prayer schedule unavailable</p>
+      <strong id="nextPrayerTime">--:--</strong>
+    </div>
+
+  </section>
+
+
+  <!-- LAST READING -->
+
+  <section class="last-reading-card">
+
+    <div>
+      <small>CONTINUE READING</small>
+      <h3 id="lastSurahName">Start Your Journey</h3>
+      <p id="lastReadingDetails">Your last reading will appear here.</p>
+    </div>
+
+    <button id="continueReadingBtn">
+      Continue →
+    </button>
+
+  </section>
+
+
+  <!-- QUICK FEATURES -->
+
+  <section class="quick-section">
+
+    <div class="section-heading">
+      <h3>Islamic Features</h3>
+      <span>Explore All</span>
+    </div>
+
+    <div class="quick-grid">
+
+      <button data-page="quranPage">
+        <span>📖</span>
+        <strong>Read Quran</strong>
+      </button>
+
+      <button data-page="qiblaPage">
+        <span>🕋</span>
+        <strong>Qibla</strong>
+      </button>
+
+      <button data-page="tasbeehPage">
+        <span>📿</span>
+        <strong>Tasbeeh</strong>
+      </button>
+
+      <button data-page="duaPage">
+        <span>🤲</span>
+        <strong>Duas</strong>
+      </button>
+
+      <button data-page="prayerPage">
+        <span>🕌</span>
+        <strong>Prayer Time</strong>
+      </button>
+
+      <button data-page="tajweedPage">
+        <span>🎨</span>
+        <strong>Tajweed</strong>
+      </button>
+
+      <button data-page="hifzPage">
+        <span>📚</span>
+        <strong>Hifz</strong>
+      </button>
+
+      <button data-page="morePage">
+        <span>✦</span>
+        <strong>More</strong>
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- STATISTICS -->
+
+  <section class="stats-card">
+
+    <h3>My Quran Journey</h3>
+
+    <div class="stats-grid">
+
+      <div>
+        <strong id="readCount">0</strong>
+        <span>Surahs Read</span>
+      </div>
+
+      <div>
+        <strong id="bookmarkCount">0</strong>
+        <span>Bookmarks</span>
+      </div>
+
+      <div>
+        <strong id="audioCount">0</strong>
+        <span>Downloads</span>
+      </div>
+
+    </div>
+
+  </section>
+
+</section>
+
+
+<!-- QURAN LIBRARY -->
+
+<section id="quranPage" class="page">
+
+  <div class="page-heading">
+    <span>THE HOLY BOOK</span>
+    <h2>القرآن الكريم</h2>
+    <p>114 Surahs • 30 Juz</p>
+  </div>
+
+  <div class="quran-tools">
+
+    <input
+      id="surahSearch"
+      type="search"
+      placeholder="Search Surah or Ayah..."
+      aria-label="Search Quran">
+
+    <select id="quranView">
+      <option value="surah">Surah</option>
+      <option value="juz">Juz / Para</option>
+    </select>
+
+  </div>
+
+  <div class="quran-filters">
+
+    <button data-filter="all" class="filter-btn active">
+      All
+    </button>
+
+    <button data-filter="makki" class="filter-btn">
+      Makki
+    </button>
+
+    <button data-filter="madani" class="filter-btn">
+      Madani
+    </button>
+
+  </div>
+
+  <div id="surahList" class="surah-list">
+    <p class="loading">Loading Surah database...</p>
+  </div>
+
+</section>
+
+
+<!-- QURAN READER -->
+
+<section id="readerPage" class="page">
+
+  <div class="reader-header">
+
+    <button data-page="quranPage">← Back</button>
+
+    <div>
+      <h2 id="readerSurahName">Surah</h2>
+      <p id="readerSurahDetails">Quran Reading</p>
+    </div>
+
+    <button id="readerBookmarkBtn">☆</button>
+
+  </div>
+
+
+  <!-- READER OPTIONS -->
+
+  <div class="reader-options">
+
+    <label for="quranFont">Quran Font</label>
+
+    <select id="quranFont">
+      <option value="indopak">IndoPak</option>
+      <option value="uthmani">Uthmani</option>
+      <option value="mushaf">Mushaf</option>
+      <option value="tajweed">Mushaf Tajweed</option>
+    </select>
+
+    <label for="pageLines">Page Lines</label>
+
+    <select id="pageLines">
+      <option value="13">13 Lines</option>
+      <option value="15" selected>15 Lines</option>
+      <option value="17">17 Lines</option>
+      <option value="18">18 Lines</option>
+    </select>
+
+    <label for="translationLanguage">
+      Translation
+    </label>
+
+    <select id="translationLanguage">
+      <option value="both">Urdu + English</option>
+      <option value="urdu">Urdu</option>
+      <option value="english">English</option>
+      <option value="none">Arabic Only</option>
+    </select>
+
+  </div>
+
+
+  <!-- FONT SIZE -->
+
+  <div class="font-controls">
+
+    <button id="fontDecrease">A-</button>
+
+    <span>Arabic Font Size</span>
+
+    <button id="fontIncrease">A+</button>
+
+  </div>
+
+
+  <!-- READING THEME -->
+
+  <div class="reading-themes">
+
+    <button data-reading-theme="green">Green</button>
+    <button data-reading-theme="brown">Brown</button>
+    <button data-reading-theme="grey">Grey</button>
+    <button data-reading-theme="night">Night</button>
+
+  </div>
+
+
+  <div id="bismillah" class="bismillah">
+    بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+  </div>
+
+
+  <!-- AYAH DISPLAY -->
+
+  <div id="ayahContainer" class="ayah-container">
+    <p>Select a Surah to begin reading.</p>
+  </div>
+
+
+  <!-- READING CONTROLS -->
+
+  <div class="reader-tools">
+
+    <button id="autoScrollBtn">
+      ▶ Auto Scroll
+    </button>
+
+    <button id="wordByWordBtn">
+      Word by Word
+    </button>
+
+    <button id="saveReadingBtn">
+      ☆ Save Position
+    </button>
+
+  </div>
+
+
+  <div class="reader-navigation">
+
+    <button id="previousAyah">← Previous</button>
+    <button id="nextAyah">Next →</button>
+
+  </div>
+
+</section>
+
+
+<!-- WORD BY WORD -->
+
+<section id="wordPage" class="page">
+
+  <div class="page-heading">
+    <span>UNDERSTAND EVERY WORD</span>
+    <h2>Word by Word Quran</h2>
+  </div>
+
+  <div id="wordByWordContent">
+    <p>Select an Ayah to explore its words and meanings.</p>
+  </div>
+
+</section>
+
+
+<!-- QARI LIBRARY -->
+
+<section id="audioPage" class="page">
+
+  <div class="page-heading">
+    <span>BEAUTIFUL RECITATION</span>
+    <h2>Qari Audio Library</h2>
+    <p>Listen to the Holy Quran.</p>
+  </div>
+
+
+  <div class="qari-section">
+
+    <h3>Select Your Qari</h3>
+
+    <div class="qari-grid">
+
+      <button data-qari="mishary">
+        <span>🎙️</span>
+        <strong>Mishary Rashid</strong>
+      </button>
+
+      <button data-qari="abdulbasit">
+        <span>🎙️</span>
+        <strong>Abdul Basit</strong>
+      </button>
+
+      <button data-qari="sudais">
+        <span>🎙️</span>
+        <strong>Abdur Rahman Al-Sudais</strong>
+      </button>
+
+      <button data-qari="shuraim">
+        <span>🎙️</span>
+        <strong>Saud Al-Shuraim</strong>
+      </button>
+
+      <button data-qari="other">
+        <span>🎙️</span>
+        <strong>Other Qaris</strong>
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="audio-settings">
+
+    <label for="qariSelect">Selected Reciter</label>
+
+    <select id="qariSelect">
+
+      <option value="mishary">Mishary Rashid Alafasy</option>
+      <option value="abdulbasit">Abdul Basit</option>
+      <option value="sudais">Abdur Rahman Al-Sudais</option>
+      <option value="shuraim">Saud Al-Shuraim</option>
+      <option value="other">Other Qaris</option>
+
+    </select>
+
+    <input
+      type="search"
+      id="audioSurahSearch"
+      placeholder="Search Surah...">
+
+  </div>
+
+
+  <div id="audioSurahList">
+    <p>Audio Surah library will appear here.</p>
+  </div>
+
+
+  <!-- PLAYER -->
+
+  <div class="audio-player">
+
+    <span>NOW PLAYING</span>
+
+    <h3 id="audioTitle">Select a Surah</h3>
+
+    <p id="audioQariName">Qari Name</p>
+
+    <audio
+      id="quranAudio"
+      controls
+      preload="none">
+    </audio>
+
+    <div class="audio-controls">
+
+      <button id="repeatAudio">🔁 Repeat</button>
+
+      <button id="downloadAudio">⬇ Download</button>
+
+      <select id="audioSpeed">
+        <option value="0.75">0.75x</option>
+        <option value="1" selected>1x</option>
+        <option value="1.25">1.25x</option>
+        <option value="1.5">1.5x</option>
+      </select>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- BOOKMARKS -->
+
+<section id="bookmarkPage" class="page">
+
+  <div class="page-heading">
+    <span>YOUR SAVED VERSES</span>
+    <h2>Quran Bookmarks</h2>
+  </div>
+
+  <div id="bookmarkList">
+    <p>No bookmarks saved yet.</p>
+  </div>
+
+  <button id="exportBookmarks">
+    Export Bookmarks
+  </button>
+
+  <button id="importBookmarks">
+    Import Bookmarks
+  </button>
+
+  <input type="file" id="bookmarkFile"
+    accept=".json" hidden>
+
+</section>
+
+
+<!-- HIFZ -->
+
+<section id="hifzPage" class="page">
+
+  <div class="page-heading">
+    <span>QURAN MEMORIZATION</span>
+    <h2>Hifz Tracker</h2>
+    <p>Track your memorization progress.</p>
+  </div>
+
+  <div class="hifz-card">
+
+    <h3>My Memorization</h3>
+
+    <div id="hifzProgress">0%</div>
+
+    <progress id="hifzBar" value="0" max="100"></progress>
+
+    <p id="hifzDetails">Start tracking your Hifz journey.</p>
+
+  </div>
+
+  <label for="hifzSurah">Select Surah</label>
+
+  <select id="hifzSurah">
+    <option value="">Select a Surah</option>
+  </select>
+
+  <label for="hifzAyah">Ayah Number</label>
+
+  <input id="hifzAyah" type="number"
+    min="1" placeholder="Enter Ayah number">
+
+  <button id="markMemorized">
+    Mark as Memorized
+  </button>
+
+  <div id="hifzList"></div>
+
+</section>
+
+
+<!-- TAJWEED -->
+
+<section id="tajweedPage" class="page">
+
+  <div class="page-heading">
+    <span>QURAN RECITATION GUIDE</span>
+    <h2>Tajweed Learning</h2>
+    <p>Explore Quran reading rules.</p>
+  </div>
+
+  <div class="tajweed-settings">
+
+    <label for="tajweedDisplay">Display Mode</label>
+
+    <select id="tajweedDisplay">
+      <option value="color">Color-coded Tajweed</option>
+      <option value="normal">Normal Arabic</option>
+    </select>
+
+  </div>
+
+  <div id="tajweedContent">
+    <p>Verified Tajweed Quran text will appear here.</p>
+  </div>
+
+  <div id="tajweedRules">
+
+    <h3>Tajweed Rules</h3>
+
+    <div class="rule-card">
+      <strong>Izhar</strong>
+      <p>Clear pronunciation rule.</p>
+    </div>
+
+    <div class="rule-card">
+      <strong>Idgham</strong>
+      <p>Merging pronunciation rule.</p>
+    </div>
+
+    <div class="rule-card">
+      <strong>Iqlab</strong>
+      <p>Conversion pronunciation rule.</p>
+    </div>
+
+    <div class="rule-card">
+      <strong>Ikhfa</strong>
+      <p>Concealment pronunciation rule.</p>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- DOWNLOADS -->
+
+<section id="downloadsPage" class="page">
+
+  <div class="page-heading">
+    <span>OFFLINE LIBRARY</span>
+    <h2>My Downloads</h2>
+    <p>Access saved content anytime.</p>
+  </div>
+
+  <div class="storage-card">
+
+    <h3>📦 Offline Storage</h3>
+
+    <p id="storageInfo">
+      Storage information unavailable.
+    </p>
+
+  </div>
+
+  <div class="download-tabs">
+
+    <button data-download-type="audio">Audio</button>
+
+    <button data-download-type="quran">Quran Data</button>
+
+    <button data-download-type="other">Other</button>
+
+  </div>
+
+  <div id="downloadList">
+    <p>No downloaded files yet.</p>
+  </div>
+
+</section>
+
+
+<!-- PRAYER TIMES -->
+
+<section id="prayerPage" class="page">
+
+  <div class="page-heading">
+    <span>DAILY WORSHIP</span>
+    <h2>Prayer Times</h2>
+    <p id="prayerLocation">Location not selected.</p>
+  </div>
+
+  <button id="locationBtn">
+    📍 Use My Location
+  </button>
+
+  <div id="prayerTimesList">
+
+    <div class="prayer-item">Fajr <span>--:--</span></div>
+    <div class="prayer-item">Sunrise <span>--:--</span></div>
+    <div class="prayer-item">Dhuhr <span>--:--</span></div>
+    <div class="prayer-item">Asr <span>--:--</span></div>
+    <div class="prayer-item">Maghrib <span>--:--</span></div>
+    <div class="prayer-item">Isha <span>--:--</span></div>
+
+  </div>
+
+  <label for="calculationMethod">
+    Calculation Method
+  </label>
+
+  <select id="calculationMethod">
+    <option value="karachi">University of Islamic Sciences, Karachi</option>
+    <option value="isna">ISNA</option>
+    <option value="egypt">Egyptian General Authority</option>
+  </select>
+
+  <p class="notice">
+    Verify prayer schedules with your local mosque.
+  </p>
+
+</section>
+
+
+<!-- QIBLA -->
+
+<section id="qiblaPage" class="page">
+
+  <div class="page-heading">
+    <span>DIRECTION OF PRAYER</span>
+    <h2>Qibla Compass</h2>
+    <p>Find the direction of the Holy Kaaba.</p>
+  </div>
+
+  <div class="qibla-card">
+
+    <div id="compass">
+
+      <span class="compass-north">N</span>
+
+      <div id="compassNeedle">▲</div>
+
+      <div class="compass-center">🕋</div>
+
+    </div>
+
+    <h3 id="qiblaDirection">Direction unavailable</h3>
+
+    <button id="qiblaStart">
+      Find Qibla
+    </button>
+
+    <p id="qiblaMessage">
+      Location and supported device sensors are required.
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- TASBEEH -->
+
+<section id="tasbeehPage" class="page">
+
+  <div class="page-heading">
+    <span>REMEMBER ALLAH</span>
+    <h2>Digital Tasbeeh</h2>
+  </div>
+
+  <div class="tasbeeh-card">
+
+    <p id="tasbeehPhrase">
+      سُبْحَانَ اللَّهِ
+    </p>
+
+    <div id="tasbeehCount">0</div>
+
+    <span>TOTAL COUNT</span>
+
+    <button id="tasbeehButton">
+      TAP TO COUNT
+    </button>
+
+    <button id="tasbeehReset">
+      Reset
+    </button>
+
+  </div>
+
+  <div class="tasbeeh-options">
+
+    <button data-phrase="سُبْحَانَ اللَّهِ">
+      Subhan Allah
+    </button>
+
+    <button data-phrase="الْحَمْدُ لِلَّهِ">
+      Alhamdulillah
+    </button>
+
+    <button data-phrase="اللَّهُ أَكْبَرُ">
+      Allahu Akbar
+    </button>
+
+    <button data-phrase="أَسْتَغْفِرُ اللَّهَ">
+      Astaghfirullah
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- DAILY DUAS -->
+
+<section id="duaPage" class="page">
+
+  <div class="page-heading">
+    <span>DAILY ISLAMIC COLLECTION</span>
+    <h2>Daily Duas</h2>
+  </div>
+
+  <input id="duaSearch" type="search"
+    placeholder="Search Duas...">
+
+  <div id="duaList">
+    <p>Dua collection will appear here.</p>
+  </div>
+
+</section>
+
+
+<!-- 99 NAMES -->
+
+<section id="namesPage" class="page">
+
+  <div class="page-heading">
+    <span>ASMA UL HUSNA</span>
+    <h2>99 Names of Allah</h2>
+  </div>
+
+  <div id="namesList">
+    <p>99 verified names will appear here.</p>
+  </div>
+
+</section>
+
+
+<!-- ISLAMIC CALENDAR -->
+
+<section id="calendarPage" class="page">
+
+  <div class="page-heading">
+    <span>ISLAMIC DATES</span>
+    <h2>Hijri Calendar</h2>
+  </div>
+
+  <div id="hijriDate">
+    <p>Hijri calendar information will appear here.</p>
+  </div>
+
+</section>
+
+
+<!-- AI QURAN SEARCH -->
+
+<section id="aiSearchPage" class="page">
+
+  <div class="page-heading">
+    <span>QURAN DISCOVERY</span>
+    <h2>AI Quran Search</h2>
+    <p>Explore Quran topics and related verses.</p>
+  </div>
+
+  <input id="aiSearchInput"
+    type="search"
+    placeholder="Search a Quran topic...">
+
+  <button id="aiSearchBtn">
+    Search Topics
+  </button>
+
+  <div id="aiSearchResults">
+    <p>Search verified Quran translations and topics.</p>
+  </div>
+
+  <p class="notice">
+    AI assistance requires internet and should not replace
+    authentic Quran translations or qualified scholarship.
+  </p>
+
+</section>
+
+
+<!-- SETTINGS -->
+
+<section id="settingsPage" class="page">
+
+  <div class="page-heading">
+    <span>PERSONALIZE YOUR EXPERIENCE</span>
+    <h2>Settings</h2>
+  </div>
+
+  <div class="settings-group">
+
+    <h3>Appearance</h3>
+
+    <button id="settingsTheme">
+      🌙 Dark / Light Theme
+    </button>
+
+    <div class="reading-themes">
+
+      <button data-reading-theme="green">Green</button>
+      <button data-reading-theme="brown">Brown</button>
+      <button data-reading-theme="grey">Grey</button>
+      <button data-reading-theme="night">Night</button>
+
+    </div>
+
+  </div>
+
+
+  <div class="settings-group">
+
+    <h3>App Language</h3>
+
+    <select id="appLanguage">
+      <option value="en">English</option>
+      <option value="ur">اردو</option>
+    </select>
+
+  </div>
+
+
+  <div class="settings-group">
+
+    <h3>Default Translation</h3>
+
+    <select id="defaultTranslation">
+      <option value="both">Urdu + English</option>
+      <option value="urdu">Urdu</option>
+      <option value="english">English</option>
+    </select>
+
+  </div>
+
+
+  <div class="settings-group">
+
+    <h3>Reading Preferences</h3>
+
+    <label>
+      <input type="checkbox" id="keepScreenOn">
+      Keep screen awake while reading
+    </label>
+
+    <label>
+      <input type="checkbox" id="autoScrollSetting">
+      Enable auto scroll
+    </label>
+
+  </div>
+
+
+  <div class="settings-group">
+
+    <h3>About Application</h3>
+
+    <p>Holy Quran Ultimate</p>
+    <p>Version 1.0.0</p>
+    <p>Islamic Reading Companion</p>
+
+  </div>
+
+</section>
+
+
+<!-- MORE FEATURES -->
+
+<section id="morePage" class="page">
+
+  <div class="page-heading">
+    <span>EXPLORE MORE</span>
+    <h2>Islamic Tools</h2>
+  </div>
+
+  <div class="quick-grid">
+
+    <button data-page="namesPage">
+      <span>✨</span>
+      <strong>99 Names</strong>
+    </button>
+
+    <button data-page="calendarPage">
+      <span>🌙</span>
+      <strong>Hijri Calendar</strong>
+    </button>
+
+    <button data-page="aiSearchPage">
+      <span>🔎</span>
+      <strong>AI Search</strong>
+    </button>
+
+    <button data-page="downloadsPage">
+      <span>⬇</span>
+      <strong>Downloads</strong>
+    </button>
+
+    <button data-page="hifzPage">
+      <span>📚</span>
+      <strong>Hifz Tracker</strong>
+    </button>
+
+    <button data-page="tajweedPage">
+      <span>🎨</span>
+      <strong>Tajweed</strong>
+    </button>
+
+  </div>
+
+</section>
+
+
+</main>
+
+
+<!-- BOTTOM NAVIGATION -->
+
+<nav class="bottom-navigation">
+
+  <button class="nav-btn" data-page="quranPage">
+    <span>📖</span>
+    <small>Quran</small>
+  </button>
+
+  <button class="nav-btn" data-page="prayerPage">
+    <span>🕌</span>
+    <small>Prayer</small>
+  </button>
+
+  <button class="nav-btn selected" data-page="homePage">
+    <span>⌂</span>
+    <small>Home</small>
+  </button>
+
+  <button class="nav-btn" data-page="duaPage">
+    <span>🤲</span>
+    <small>Dua</small>
+  </button>
+
+  <button class="nav-btn" data-page="aiSearchPage">
+    <span>⌕</span>
+    <small>Explore</small>
+  </button>
+
+</nav>
+
+
+<!-- TOAST NOTIFICATION -->
+
+<div id="appToast"
+  class="app-toast"
+  role="status"
+  aria-live="polite">
+</div>
+
+
+<!-- JAVASCRIPT -->
+
+<script src="script.js"></script>
+
+</div>
+
+</body>
+</html>
