@@ -1079,3 +1079,27 @@ function initializeApp() {
 /* ---------- START APPLICATION ---------- */
 
 document.addEventListener("DOMContentLoaded", initializeApp);
+
+// HOLY QURAN ULTIMATE
+// Offline System Registration
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", async () => {
+    try {
+      const registration =
+        await navigator.serviceWorker.register(
+          "./service-worker.js"
+        );
+
+      console.log(
+        "Offline system activated!",
+        registration.scope
+      );
+    } catch (error) {
+      console.error(
+        "Offline system registration failed:",
+        error
+      );
+    }
+  });
+}
