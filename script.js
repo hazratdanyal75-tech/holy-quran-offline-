@@ -1617,3 +1617,198 @@ if ("serviceWorker" in navigator) {
   decorateAyahs();
 
 })();
+
+/* =====================================
+   FILE 19: PROFESSIONAL QURAN AUDIO PLAYER
+===================================== */
+
+(function () {
+  const reader = document.getElementById("ayahContainer");
+  if (!reader) return;
+
+  if (document.getElementById("hquAudioPlayer")) return;
+
+  const player = document.createElement("section");
+  player.id = "hquAudioPlayer";
+
+  player.innerHTML = `
+    <h3>🎧 Quran Audio Player</h3>
+
+    <label for="hquQariSelect">Choose Qari</label>
+    <select id="hquQariSelect">
+      <option value="">Loading Qaris...</option>
+    </select>
+
+    <p id="hquQariName">Select your favourite Qari</p>
+
+    <audio id="hquAudio" preload="metadata"></audio>
+
+    <div class="hqu-audio-controls">
+      <button id="hquBack" type="button">⏪ 10s</button>
+      <button id="hquPlay" type="button">▶ Play</button>
+      <button id="hquForward" type="button">10s ⏩</button>
+    </div>
+
+    <input
+      id="hquProgress"
+      type="range"
+      min="0"
+      max="100"
+      value="0"
+    >
+
+    <div class="hqu-audio-time">
+      <span id="hquCurrentTime">00:00</span>
+      <span id="hquDuration">00:00</span>
+    </div>
+
+    <p id="hquAudioMessage">
+      Select a Qari to begin.
+    </p>
+  `;
+
+  reader.parentNode.insertBefore(player, reader);
+
+  const audio = document.getElementById("hquAudio");
+  const select = document.getElementById("hquQariSelect");
+  const play = document.getElementById("hquPlay");
+  const progress = document.getElementById("hquProgress");
+  const message = document.getElementById("hquAudioMessage");
+
+  let qaris = [];
+
+  function formatTime(seconds) {
+    if (!Number.isFinite(seconds)) return "00:00";
+
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60);
+
+    return String(min).padStart(2, "0") + ":" +
+      String(sec).padStart(2, "0");
+  }
+
+  async function loadQaris() {
+    try {
+      const response = await fetch("./data/qaris.json");
+
+      if (!response.ok) throw new Error("Qari file not found");
+
+      const data = await response.json();
+      qaris = data.qaris || [];
+
+      select.innerHTML = "";
+
+      qaris.forEach(qari => {
+        const option = document.createElement("option");
+        option.value = qari.id;
+        option.textContent = qari.name;
+        select.appendChild(option);
+      });
+
+      select.value = data.selectedQari || "mishary";
+
+      if (!select.value && qaris.length) {
+        select.selectedIndex = 0;
+      }
+
+      select.dispatchEvent(new Event("change"));
+
+    } catch (error) {
+      select.innerHTML = "<option>Qaris unavailable</option>";
+      message.textContent = "Could not load Qari list.";
+    }
+  }
+
+  function selectQari() {
+    const qari = qaris.find(item => item.id === select.value);
+
+    audio.pause();
+    audio.removeAttribute("src");
+    audio.load();
+
+    play.textContent = "▶ Play";
+    progress.value = 0;
+
+    document.getElementById("hquQariName").textContent =
+      qari ? qari.name : "No Qari selected";
+
+    document.getElementById("hquCurrentTime").textContent = "00:00";
+    document.getElementById("hquDuration").textContent = "00:00";
+
+    if (!qari || !qari.audioSource) {
+      message.textContent =
+        "Audio link is not added yet. Add a verified audio URL to enable playback.";
+      return;
+    }
+
+    audio.src = qari.audioSource;
+    message.textContent = "Qari selected. Press Play to listen.";
+  }
+
+  select.addEventListener("change", selectQari);
+
+  play.addEventListener("click", async () => {
+    if (!audio.src) {
+      message.textContent = "No audio source available yet.";
+      return;
+    }
+
+    if (audio.paused) {
+      try {
+        await audio.play();
+        play.textContent = "⏸ Pause";
+        message.textContent = "Now playing Quran recitation.";
+      } catch (error) {
+        message.textContent = "Audio could not play. Check the audio link.";
+      }
+    } else {
+      audio.pause();
+      play.textContent = "▶ Play";
+    }
+  });
+
+  document.getElementById("hquBack").addEventListener("click", () => {
+    audio.currentTime = Math.max(0, audio.currentTime - 10);
+  });
+
+  document.getElementById("hquForward").addEventListener("click", () => {
+    if (Number.isFinite(audio.duration)) {
+      audio.currentTime = Math.min(
+        audio.duration,
+        audio.currentTime + 10
+      );
+    }
+  });
+
+  audio.addEventListener("timeupdate", () => {
+    if (Number.isFinite(audio.duration) && audio.duration > 0) {
+      progress.value = (audio.currentTime / audio.duration) * 100;
+    }
+
+    document.getElementById("hquCurrentTime").textContent =
+      formatTime(audio.currentTime);
+  });
+
+  audio.addEventListener("loadedmetadata", () => {
+    document.getElementById("hquDuration").textContent =
+      formatTime(audio.duration);
+  });
+
+  progress.addEventListener("input", () => {
+    if (Number.isFinite(audio.duration)) {
+      audio.currentTime = (Number(progress.value) / 100) * audio.duration;
+    }
+  });
+
+  audio.addEventListener("ended", () => {
+    play.textContent = "▶ Play";
+    message.textContent = "Recitation completed.";
+  });
+
+  audio.addEventListener("error", () => {
+    play.textContent = "▶ Play";
+    message.textContent = "Audio unavailable. Please check its URL.";
+  });
+
+  loadQaris();
+})();
