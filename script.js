@@ -2418,3 +2418,90 @@ if ("serviceWorker" in navigator) {
   updateProgress();
 
 })();
+
+/* =========================================
+   FILE 35: HIFZ TRACKER IMPROVEMENTS
+========================================= */
+
+(function () {
+  "use strict";
+
+  const KEY = "hquHifzProgress";
+
+  const surahSelect = document.getElementById("hifzSurahSelect");
+  const juzSelect = document.getElementById("hifzJuzSelect");
+
+  const surahCount = document.getElementById("hifzSurahProgress");
+  const juzCount = document.getElementById("hifzJuzProgress");
+  const progressBar = document.getElementById("hifzProgressBar");
+  const progressText = document.getElementById("hifzOverallProgress");
+
+  if (!surahSelect || !juzSelect) return;
+
+  function getProgress() {
+    try {
+      const data = JSON.parse(localStorage.getItem(KEY));
+
+      if (data && Array.isArray(data.surahs) && Array.isArray(data.juz)) {
+        return data;
+      }
+    } catch (error) {
+      console.warn("Could not read Hifz progress:", error);
+    }
+
+    return { surahs: [], juz: [] };
+  }
+
+  function updateHifzDisplay() {
+    const data = getProgress();
+
+    const memorizedSurahs = new Set(
+      data.surahs.filter(n => Number.isInteger(n) && n >= 1 && n <= 114)
+    );
+
+    const completedJuz = new Set(
+      data.juz.filter(n => Number.isInteger(n) && n >= 1 && n <= 30)
+    );
+
+    const surahs = memorizedSurahs.size;
+    const juz = completedJuz.size;
+
+    const percent = Math.round(
+      ((surahs + juz) / 144) * 100
+    );
+
+    if (surahCount) surahCount.textContent = surahs + " / 114";
+    if (juzCount) juzCount.textContent = juz + " / 30";
+
+    if (progressBar) progressBar.style.width = percent + "%";
+    if (progressText) progressText.textContent = percent + "% Completed";
+  }
+
+  function cleanSurahOptions() {
+    const seen = new Set();
+
+    Array.from(surahSelect.options).forEach(option => {
+      if (!option.value) return;
+
+      const value = Number(option.value);
+
+      if (seen.has(value)) {
+        option.remove();
+      } else {
+        seen.add(value);
+      }
+    });
+  }
+
+  cleanSurahOptions();
+  updateHifzDisplay();
+
+  window.addEventListener("storage", function (event) {
+    if (event.key === KEY) {
+      updateHifzDisplay();
+    }
+  });
+
+  console.log("Hifz Tracker improvements loaded successfully.");
+
+})();
