@@ -2541,5 +2541,286 @@ content="Complete Quran, translations, recitation and Islamic companion.">
 
 <!-- END PACKAGE 5 HTML -->
 
+<!-- ==========================================
+ HOLY QURAN ULTIMATE
+ PACKAGE 6 — 30 ADVANCED FEATURES
+========================================== -->
+
+<section id="hquP6Dashboard" class="hqu-p6-section">
+
+    <header class="hqu-p6-header">
+        <div class="hqu-p6-icon">📖</div>
+        <h2>Quran Advanced Explorer</h2>
+        <p>Explore, navigate and organize your Quran reading</p>
+        <span class="hqu-p6-version">30 Advanced Features</span>
+    </header>
+
+    <!-- 1. Advanced Surah Search -->
+    <article class="hqu-p6-card">
+        <h3>1. Advanced Surah Search</h3>
+        <input id="hquP6SurahSearch"
+               type="search"
+               placeholder="Search Surah by name or number">
+        <div id="hquP6SearchResults"></div>
+    </article>
+
+    <!-- 2. Surah Category Filter -->
+    <article class="hqu-p6-card">
+        <h3>2. Surah Category Filter</h3>
+        <select id="hquP6Category">
+            <option value="all">All Surahs</option>
+            <option value="meccan">Meccan</option>
+            <option value="medinan">Medinan</option>
+        </select>
+        <div id="hquP6CategoryResults"></div>
+    </article>
+
+    <!-- 3. Juz Index -->
+    <article class="hqu-p6-card">
+        <h3>3. Juz Index</h3>
+        <select id="hquP6Juz">
+            <option value="">Select Juz</option>
+        </select>
+        <button id="hquP6OpenJuz">Open Juz</button>
+        <div id="hquP6JuzInfo"></div>
+    </article>
+
+    <!-- 4. Para Navigation -->
+    <article class="hqu-p6-card">
+        <h3>4. Para Navigation</h3>
+        <select id="hquP6Para">
+            <option value="">Select Para</option>
+        </select>
+        <button id="hquP6OpenPara">Open Para</button>
+        <div id="hquP6ParaInfo"></div>
+    </article>
+
+    <!-- 5. Hizb Navigation -->
+    <article class="hqu-p6-card">
+        <h3>5. Hizb Navigation</h3>
+        <select id="hquP6Hizb">
+            <option value="">Select Hizb</option>
+        </select>
+        <button id="hquP6OpenHizb">Open Hizb</button>
+        <div id="hquP6HizbInfo"></div>
+    </article>
+
+    <!-- 6. Ruku Navigation -->
+    <article class="hqu-p6-card">
+        <h3>6. Ruku Navigation</h3>
+        <input id="hquP6Ruku" type="number"
+               min="1" placeholder="Enter Ruku number">
+        <button id="hquP6OpenRuku">Find Ruku</button>
+        <div id="hquP6RukuInfo"></div>
+    </article>
+
+    <!-- 7. Sajdah Guide -->
+    <article class="hqu-p6-card">
+        <h3>7. Sajdah Ayah Guide</h3>
+        <button id="hquP6SajdahList">Show Sajdah Information</button>
+        <div id="hquP6SajdahInfo"></div>
+    </article>
+
+    <!-- 8. Revelation Place Filter -->
+    <article class="hqu-p6-card">
+        <h3>8. Revelation Place Filter</h3>
+        <select id="hquP6RevelationFilter">
+            <option value="all">All Places</option>
+            <option value="meccan">Meccan</option>
+            <option value="medinan">Medinan</option>
+        </select>
+        <div id="hquP6RevelationResults"></div>
+    </article>
+
+    <!-- 9. Revelation Information -->
+    <article class="hqu-p6-card">
+        <h3>9. Surah Revelation Information</h3>
+        <select id="hquP6InfoSurah">
+            <option value="">Select Surah</option>
+        </select>
+        <button id="hquP6ShowRevelation">Show Information</button>
+        <div id="hquP6RevelationInfo"></div>
+    </article>
+
+    <!-- 10. Ayah Number Navigator -->
+    <article class="hqu-p6-card">
+        <h3>10. Ayah Number Navigator</h3>
+        <input id="hquP6AyahNumber"
+               type="number"
+               min="1"
+               placeholder="Ayah number">
+        <button id="hquP6GoAyah">Go to Ayah</button>
+        <div id="hquP6AyahInfo"></div>
+    </article>
+
+    <!-- 11. Jump to Surah -->
+    <article class="hqu-p6-card">
+        <h3>11. Jump to Surah</h3>
+        <select id="hquP6JumpSurah">
+            <option value="">Choose Surah</option>
+        </select>
+        <button id="hquP6JumpButton">Jump to Surah</button>
+    </article>
+
+    <!-- 12. Jump to Ayah -->
+    <article class="hqu-p6-card">
+        <h3>12. Jump to Specific Ayah</h3>
+        <input id="hquP6JumpAyah" type="number"
+               min="1" placeholder="Ayah number">
+        <button id="hquP6JumpAyahButton">Jump to Ayah</button>
+    </article>
+
+    <!-- 13. Last Read Position -->
+    <article class="hqu-p6-card">
+        <h3>13. Last Read Position</h3>
+        <button id="hquP6SaveLastRead">Save Current Position</button>
+        <button id="hquP6RestoreLastRead">Restore Last Position</button>
+        <div id="hquP6LastReadInfo"></div>
+    </article>
+
+    <!-- 14. Continue Reading -->
+    <article class="hqu-p6-card">
+        <h3>14. Continue Reading</h3>
+        <button id="hquP6ContinueReading">Continue Reading</button>
+        <div id="hquP6ContinueInfo"></div>
+    </article>
+
+    <!-- 15. Reading History -->
+    <article class="hqu-p6-card">
+        <h3>15. Reading History</h3>
+        <button id="hquP6RefreshHistory">Refresh History</button>
+        <div id="hquP6History"></div>
+    </article>
+
+    <!-- 16. Recently Opened Surahs -->
+    <article class="hqu-p6-card">
+        <h3>16. Recently Opened Surahs</h3>
+        <div id="hquP6RecentSurahs"></div>
+    </article>
+
+    <!-- 17. Surah Completion Tracker -->
+    <article class="hqu-p6-card">
+        <h3>17. Surah Completion Tracker</h3>
+        <select id="hquP6CompleteSurah">
+            <option value="">Select Surah</option>
+        </select>
+        <button id="hquP6MarkComplete">Mark as Completed</button>
+        <div id="hquP6CompletionList"></div>
+    </article>
+
+    <!-- 18. Ayah Range Selection -->
+    <article class="hqu-p6-card">
+        <h3>18. Ayah Range Selection</h3>
+        <input id="hquP6RangeStart"
+               type="number" min="1" placeholder="Start Ayah">
+        <input id="hquP6RangeEnd"
+               type="number" min="1" placeholder="End Ayah">
+        <button id="hquP6SelectRange">Select Range</button>
+        <div id="hquP6RangeInfo"></div>
+    </article>
+
+    <!-- 19. Selected Ayahs Reader -->
+    <article class="hqu-p6-card">
+        <h3>19. Selected Ayahs Reader</h3>
+        <button id="hquP6ReadSelection">Read Selected Ayahs</button>
+        <div id="hquP6SelectedReader"></div>
+    </article>
+
+    <!-- 20. Focus Mode -->
+    <article class="hqu-p6-card">
+        <h3>20. Quran Reading Focus Mode</h3>
+        <button id="hquP6FocusMode">Activate Focus Mode</button>
+    </article>
+
+    <!-- 21. Full Screen -->
+    <article class="hqu-p6-card">
+        <h3>21. Full-Screen Reading</h3>
+        <button id="hquP6Fullscreen">Enter Full Screen</button>
+    </article>
+
+    <!-- 22. Orientation Friendly Layout -->
+    <article class="hqu-p6-card">
+        <h3>22. Screen Layout</h3>
+        <select id="hquP6Orientation">
+            <option value="auto">Automatic Layout</option>
+            <option value="portrait">Portrait</option>
+            <option value="landscape">Landscape</option>
+        </select>
+        <button id="hquP6ApplyOrientation">Apply Layout</button>
+    </article>
+
+    <!-- 23. Reading Font Size -->
+    <article class="hqu-p6-card">
+        <h3>23. Arabic Reading Font Size</h3>
+        <input id="hquP6ArabicSize"
+               type="range" min="20" max="48" value="30">
+        <span id="hquP6ArabicSizeValue">30px</span>
+        <button id="hquP6ApplyArabicSize">Apply Font Size</button>
+    </article>
+
+    <!-- 24. Arabic Alignment -->
+    <article class="hqu-p6-card">
+        <h3>24. Arabic Text Alignment</h3>
+        <select id="hquP6Alignment">
+            <option value="right">Right</option>
+            <option value="center">Center</option>
+            <option value="justify">Justify</option>
+        </select>
+        <button id="hquP6ApplyAlignment">Apply Alignment</button>
+    </article>
+
+    <!-- 25. Translation Font -->
+    <article class="hqu-p6-card">
+        <h3>25. Translation Font Control</h3>
+        <input id="hquP6TranslationSize"
+               type="range" min="12" max="30" value="17">
+        <span id="hquP6TranslationSizeValue">17px</span>
+        <button id="hquP6ApplyTranslationSize">Apply Translation Size</button>
+    </article>
+
+    <!-- 26. Translation Search -->
+    <article class="hqu-p6-card">
+        <h3>26. Translation Search</h3>
+        <input id="hquP6TranslationSearch"
+               type="search"
+               placeholder="Search loaded translations">
+        <div id="hquP6TranslationResults"></div>
+    </article>
+
+    <!-- 27. Surah Information Panel -->
+    <article class="hqu-p6-card">
+        <h3>27. Surah Information Panel</h3>
+        <select id="hquP6PanelSurah">
+            <option value="">Select Surah</option>
+        </select>
+        <button id="hquP6OpenPanel">Open Information Panel</button>
+        <div id="hquP6SurahPanel"></div>
+    </article>
+
+    <!-- 28. Reading Statistics -->
+    <article class="hqu-p6-card">
+        <h3>28. Reading Statistics</h3>
+        <button id="hquP6StatisticsRefresh">Refresh Statistics</button>
+        <div id="hquP6Statistics"></div>
+    </article>
+
+    <!-- 29. Daily Reading Streak -->
+    <article class="hqu-p6-card">
+        <h3>29. Daily Reading Streak</h3>
+        <button id="hquP6RecordReading">Record Today's Reading</button>
+        <div id="hquP6Streak"></div>
+    </article>
+
+    <!-- 30. Personal Quran Dashboard -->
+    <article class="hqu-p6-card">
+        <h3>30. Personal Quran Dashboard</h3>
+        <button id="hquP6RefreshDashboard">Refresh Dashboard</button>
+        <div id="hquP6PersonalDashboard"></div>
+    </article>
+
+</section>
+
+<!-- END PACKAGE 6 HTML -->
+
 </body>
 </html>
