@@ -1882,3 +1882,120 @@ body {
     font-size: 13px;
   }
 }
+
+/* =====================================
+   FILE 20: ISLAMIC AUDIO PLAYER DESIGN
+===================================== */
+
+#hquAudioPlayer {
+  background: linear-gradient(145deg, #064b38, #087b59);
+  color: white;
+  padding: 22px;
+  margin: 20px 0;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 50, 35, 0.2);
+  border: 1px solid rgba(230, 195, 105, 0.35);
+}
+
+#hquAudioPlayer h3 {
+  color: #f5d47b;
+  text-align: center;
+  font-size: 21px;
+  margin: 0 0 20px;
+}
+
+#hquAudioPlayer label {
+  display: block;
+  margin-bottom: 8px;
+  color: #f7e8bd;
+  font-weight: bold;
+}
+
+#hquQariSelect {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #d6b65d;
+  border-radius: 11px;
+  background: #ffffff;
+  color: #164532;
+  font-size: 15px;
+  outline: none;
+}
+
+#hquQariName {
+  text-align: center;
+  color: #ffe5a0;
+  font-weight: bold;
+  margin: 17px 0;
+}
+
+.hqu-audio-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 18px 0;
+}
+
+.hqu-audio-controls button {
+  background: #f0cc70;
+  color: #16432f;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#hquPlay {
+  background: #ffffff;
+  color: #075b40;
+  min-width: 105px;
+}
+
+.hqu-audio-controls button:active {
+  transform: scale(0.95);
+}
+
+#hquProgress {
+  width: 100%;
+  accent-color: #f5d47b;
+  cursor: pointer;
+}
+
+.hqu-audio-time {
+  display: flex;
+  justify-content: space-between;
+  color: #f5e7c2;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+#hquAudioMessage {
+  text-align: center;
+  background: rgba(255,255,255,0.10);
+  padding: 12px;
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 13px;
+  line-height: 1.6;
+  margin-top: 17px;
+}
+
+@media (max-width: 480px) {
+  #hquAudioPlayer {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .hqu-audio-controls {
+    gap: 7px;
+  }
+
+  .hqu-audio-controls button {
+    padding: 11px;
+    font-size: 13px;
+  }
+}
