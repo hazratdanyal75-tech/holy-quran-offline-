@@ -4589,3 +4589,692 @@ if ("serviceWorker" in navigator) {
 })();
 
 /* ============== END PACKAGE 2 ============== */
+
+/* ==========================================
+   HOLY QURAN ULTIMATE
+   PACKAGE 3 - ALL 10 FEATURES
+========================================== */
+
+(function () {
+  "use strict";
+
+  const KEYS = {
+    plans: "hquPackage3Plans",
+    folders: "hquPackage3Folders",
+    library: "hquPackage3Library",
+    history: "hquPackage3SearchHistory",
+    settings: "hquPackage3Settings"
+  };
+
+  const $ = id => document.getElementById(id);
+
+  function read(key, fallback) {
+    try {
+      const value = JSON.parse(localStorage.getItem(key));
+      return value ?? fallback;
+    } catch {
+      return fallback;
+    }
+  }
+
+  function save(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  function safeText(value) {
+    return String(value ?? "");
+  }
+
+  function make(tag, text, className) {
+    const element = document.createElement(tag);
+    element.textContent = text;
+    if (className) element.className = className;
+    return element;
+  }
+
+  function clear(element) {
+    if (element) element.replaceChildren();
+  }
+
+  function emptyMessage(element, message) {
+    if (element) element.appendChild(make("p", message));
+  }
+
+  function getArray(data) {
+    if (Array.isArray(data)) return data;
+    if (data && Array.isArray(data.surahs)) return data.surahs;
+    return [];
+  }
+
+  let surahs = [];
+
+  async function loadSurahs() {
+    try {
+      const response = await fetch("./data/surahs.json");
+      if (!response.ok) throw new Error("Surah data unavailable");
+      surahs = getArray(await response.json());
+      populateSurahSelect();
+      renderSurahCards();
+    } catch (error) {
+      console.warn("Package 3: Surah data could not load.", error);
+      const cards = $("hquP3SurahCards");
+      emptyMessage(cards, "Surah information load nahi hui. data/surahs.json check karein.");
+    }
+  }
+
+  function surahNumber(s) {
+    return Number(s.number || s.surahNumber || s.id || 0);
+  }
+
+  function surahEnglish(s) {
+    return s.englishName || s.nameEnglish || s.english_name || s.name || "Surah";
+  }
+
+  function surahArabic(s) {
+    return s.arabicName || s.nameArabic || "";
+  }
+
+  function ayahCount(s) {
+    return Number(s.numberOfAyahs || s.ayahCount || s.versesCount ||
+      (Array.isArray(s.ayahs) ? s.ayahs.length : 0));
+  }
+
+  function revelation(s) {
+    return safeText(s.revelationType || s.type || s.revelation || "Unknown");
+  }
+
+  /* ==========================================
+     1. QURAN PROGRESS DASHBOARD
+  ========================================== */
+
+  function countItems(keys) {
+    for (const key of keys) {
+      const value = read(key, null);
+      if (value !== null) {
+        if (Array.isArray(value)) return value.length;
+        if (typeof value === "object") return Object.keys(value).length;
+      }
+    }
+    return 0;
+  }
+
+  function readSurahHistory() {
+    const history = read("hquReadingHistory", []);
+    const entries = Array.isArray(history)
+      ? history
+      : Object.values(history || {});
+
+    const numbers = new Set();
+
+    entries.forEach(item => {
+      if (typeof item === "number") {
+        if (item >= 1 && item <= 114) numbers.add(item);
+        return;
+      }
+
+      if (item && typeof item === "object") {
+        const number = Number(
+          item.surahNumber || item.surah || item.number || item.surahId
+        );
+        if (number >= 1 && number <= 114) numbers.add(number);
+      }
+    });
+
+    return numbers.size;
+  }
+
+  function renderDashboard() {
+    const readCount = readSurahHistory();
+    const bookmarks = countItems([
+      "hquBookmarks",
+      "quranBookmarks",
+      "bookmarks"
+    ]);
+    const notes = countItems(["hquPackage2Notes"]);
+    const favorites = countItems(["hquPackage2Favorites"]);
+
+    const values = {
+      hquP3ReadSurahs: readCount,
+      hquP3Bookmarks: bookmarks,
+      hquP3Notes: notes,
+      hquP3Favorites: favorites
+    };
+
+    Object.entries(values).forEach(([id, value]) => {
+      if ($(id)) $(id).textContent = value;
+    });
+
+    const percent = Math.min(100, Math.round((readCount / 114) * 100));
+
+    if ($("hquP3ProgressBar")) {
+      $("hquP3ProgressBar").style.width = percent + "%";
+    }
+
+    if ($("hquP3ProgressText")) {
+      $("hquP3ProgressText").textContent =
+        readCount + " of 114 Surahs read (" + percent + "%)";
+    }
+  }
+
+  $("hquP3RefreshDashboard")?.addEventListener("click", renderDashboard);
+
+  /* ==========================================
+     2. READING PLANNER
+  ========================================== */
+
+  function populateSurahSelect() {
+    const select = $("hquP3PlanSurah");
+    if (!select || !surahs.length) return;
+
+    const previous = select.value;
+    clear(select);
+
+    const placeholder = make("option", "Select Surah");
+    placeholder.value = "";
+    select.appendChild(placeholder);
+
+    surahs.forEach(s => {
+      const option = make(
+        "option",
+        surahNumber(s) + ". " + surahEnglish(s)
+      );
+      option.value = surahNumber(s);
+      select.appendChild(option);
+    });
+
+    if (previous) select.value = previous;
+  }
+
+  function renderPlans() {
+    const list = $("hquP3PlansList");
+    if (!list) return;
+
+    clear(list);
+    const plans = read(KEYS.plans, []);
+
+    if (!plans.length) {
+      emptyMessage(list, "Abhi koi reading plan nahi hai.");
+      return;
+    }
+
+    plans.forEach((plan, index) => {
+      const card = make("div", "", "hqu-p3-item");
+
+      const title = make("h4", plan.name);
+      const detail = make(
+        "p",
+        "Date: " + plan.date + " | Target: " + plan.target + " Ayahs"
+      );
+
+      const status = make(
+        "p",
+        plan.completed ? "Completed ✓" : "Pending"
+      );
+
+      const complete = make(
+        "button",
+        plan.completed ? "Mark Pending" : "Complete"
+      );
+
+      complete.type = "button";
+      complete.addEventListener("click", () => {
+        const current = read(KEYS.plans, []);
+        current[index].completed = !current[index].completed;
+        save(KEYS.plans, current);
+        renderPlans();
+      });
+
+      const remove = make("button", "Delete");
+      remove.type = "button";
+      remove.addEventListener("click", () => {
+        const current = read(KEYS.plans, []);
+        current.splice(index, 1);
+        save(KEYS.plans, current);
+        renderPlans();
+      });
+
+      card.append(title, detail, status, complete, remove);
+      list.appendChild(card);
+    });
+  }
+
+  $("hquP3AddPlan")?.addEventListener("click", () => {
+    const number = Number($("hquP3PlanSurah")?.value);
+    const date = $("hquP3PlanDate")?.value;
+    const target = Number($("hquP3PlanTarget")?.value);
+    const selected = surahs.find(s => surahNumber(s) === number);
+    const message = $("hquP3PlanMessage");
+
+    if (!selected || !date || !Number.isInteger(target) || target <= 0) {
+      if (message) message.textContent =
+        "Surah, date aur valid Ayah target select karein.";
+      return;
+    }
+
+    const plans = read(KEYS.plans, []);
+    plans.push({
+      name: surahEnglish(selected),
+      number,
+      date,
+      target,
+      completed: false
+    });
+
+    save(KEYS.plans, plans);
+    if (message) message.textContent = "Reading plan save ho gaya!";
+    renderPlans();
+  });
+
+  /* ==========================================
+     3. SURAH INFORMATION CARDS
+  ========================================== */
+
+  function renderSurahCards() {
+    const container = $("hquP3SurahCards");
+    if (!container) return;
+
+    clear(container);
+
+    const query = safeText($("hquP3SurahSearch")?.value).toLowerCase();
+    const filter = $("hquP3SurahFilter")?.value || "all";
+
+    const filtered = surahs.filter(s => {
+      const name = surahEnglish(s).toLowerCase();
+      const arabic = surahArabic(s);
+      const number = String(surahNumber(s));
+      const type = revelation(s).toLowerCase();
+
+      const matchesSearch =
+        name.includes(query) ||
+        arabic.includes(query) ||
+        number.includes(query);
+
+      const matchesType =
+        filter === "all" || type.includes(filter.toLowerCase());
+
+      return matchesSearch && matchesType;
+    });
+
+    if (!filtered.length) {
+      emptyMessage(container, "Koi Surah nahi mili.");
+      return;
+    }
+
+    filtered.forEach(s => {
+      const card = make("div", "", "hqu-p3-item");
+      card.appendChild(make("h3", surahNumber(s) + ". " + surahEnglish(s)));
+
+      if (surahArabic(s)) {
+        card.appendChild(make("p", surahArabic(s), "arabic-text"));
+      }
+
+      card.appendChild(make("p", "Ayahs: " + ayahCount(s)));
+      card.appendChild(make("p", "Revelation: " + revelation(s)));
+      container.appendChild(card);
+    });
+  }
+
+  $("hquP3SurahSearch")?.addEventListener("input", renderSurahCards);
+  $("hquP3SurahFilter")?.addEventListener("change", renderSurahCards);
+
+  /* ==========================================
+     4. BOOKMARK FOLDERS
+  ========================================== */
+
+  function renderFolders() {
+    const list = $("hquP3FoldersList");
+    if (!list) return;
+
+    clear(list);
+    const folders = read(KEYS.folders, []);
+
+    if (!folders.length) {
+      emptyMessage(list, "Abhi koi folder nahi bana.");
+      return;
+    }
+
+    folders.forEach((folder, index) => {
+      const row = make("div", "", "hqu-p3-item");
+      row.appendChild(make("span", folder.name));
+
+      const remove = make("button", "Delete Folder");
+      remove.type = "button";
+      remove.addEventListener("click", () => {
+        const current = read(KEYS.folders, []);
+        current.splice(index, 1);
+        save(KEYS.folders, current);
+        renderFolders();
+      });
+
+      row.appendChild(remove);
+      list.appendChild(row);
+    });
+  }
+
+  $("hquP3CreateFolder")?.addEventListener("click", () => {
+    const input = $("hquP3FolderName");
+    const message = $("hquP3FolderMessage");
+    const name = safeText(input?.value).trim();
+
+    if (!name) {
+      if (message) message.textContent = "Folder ka naam likhein.";
+      return;
+    }
+
+    const folders = read(KEYS.folders, []);
+
+    if (folders.some(f => f.name.toLowerCase() === name.toLowerCase())) {
+      if (message) message.textContent = "Ye folder pehle se mojood hai.";
+      return;
+    }
+
+    folders.push({ name });
+    save(KEYS.folders, folders);
+    input.value = "";
+    if (message) message.textContent = "Folder create ho gaya!";
+    renderFolders();
+  });
+
+  /* ==========================================
+     5. SEARCH HISTORY
+  ========================================== */
+
+  function renderSearchHistory() {
+    const list = $("hquP3SearchHistoryList");
+    if (!list) return;
+
+    clear(list);
+    const history = read(KEYS.history, []);
+
+    if (!history.length) {
+      emptyMessage(list, "Quran Reader mein search karein, history yahan nazar aayegi.");
+      return;
+    }
+
+    history.slice(0, 30).forEach(item => {
+      list.appendChild(make("p", item.query + " — " + item.date));
+    });
+  }
+
+  function addSearchHistory(query) {
+    query = safeText(query).trim();
+    if (!query) return;
+
+    const history = read(KEYS.history, []);
+    if (history[0]?.query.toLowerCase() === query.toLowerCase()) return;
+
+    history.unshift({
+      query,
+      date: new Date().toLocaleDateString()
+    });
+
+    save(KEYS.history, history.slice(0, 30));
+    renderSearchHistory();
+  }
+
+  const searchIds = [
+    "hquSearchInput",
+    "hquSearch",
+    "quranSearchInput",
+    "searchInput",
+    "hquAdvancedSearchInput",
+    "hquSearchQuery"
+  ];
+
+  searchIds.forEach(id => {
+    const input = $(id);
+    if (!input) return;
+
+    input.addEventListener("keydown", event => {
+      if (event.key === "Enter") addSearchHistory(input.value);
+    });
+  });
+
+  ["hquSearchButton", "hquAdvancedSearchButton", "searchBtn"].forEach(id => {
+    $(id)?.addEventListener("click", () => {
+      searchIds.forEach(searchId => {
+        const input = $(searchId);
+        if (input?.value.trim()) addSearchHistory(input.value);
+      });
+    });
+  });
+
+  $("hquP3ClearSearchHistory")?.addEventListener("click", () => {
+    save(KEYS.history, []);
+    renderSearchHistory();
+  });
+
+  /* ==========================================
+     6. PERSONAL STUDY LIBRARY
+  ========================================== */
+
+  function renderLibrary() {
+    const list = $("hquP3LibraryList");
+    if (!list) return;
+
+    clear(list);
+    const items = read(KEYS.library, []);
+
+    if (!items.length) {
+      emptyMessage(list, "Aapki study library abhi khali hai.");
+      return;
+    }
+
+    items.forEach((item, index) => {
+      const card = make("div", "", "hqu-p3-item");
+      card.appendChild(make("h4", item.title));
+      card.appendChild(make("p", "Category: " + item.category));
+      card.appendChild(make("p", item.details));
+
+      const remove = make("button", "Delete");
+      remove.type = "button";
+      remove.addEventListener("click", () => {
+        const current = read(KEYS.library, []);
+        current.splice(index, 1);
+        save(KEYS.library, current);
+        renderLibrary();
+      });
+
+      card.appendChild(remove);
+      list.appendChild(card);
+    });
+  }
+
+  $("hquP3SaveResource")?.addEventListener("click", () => {
+    const title = safeText($("hquP3ResourceTitle")?.value).trim();
+    const category = $("hquP3ResourceCategory")?.value || "General";
+    const details = safeText($("hquP3ResourceDetails")?.value).trim();
+    const message = $("hquP3LibraryMessage");
+
+    if (!title) {
+      if (message) message.textContent = "Resource ka title likhein.";
+      return;
+    }
+
+    const items = read(KEYS.library, []);
+    items.unshift({ title, category, details });
+    save(KEYS.library, items);
+
+    $("hquP3ResourceTitle").value = "";
+    $("hquP3ResourceDetails").value = "";
+
+    if (message) message.textContent = "Study resource save ho gaya!";
+    renderLibrary();
+  });
+
+  /* ==========================================
+     7. ARABIC FONT SETTINGS
+  ========================================== */
+
+  function applyArabicSize(size) {
+    const selectors = [
+      ".ayah-arabic",
+      ".arabic-text",
+      ".quran-arabic",
+      ".quran-ayah-arabic",
+      "[data-quran-arabic]",
+      "#quranArabic"
+    ];
+
+    document.querySelectorAll(selectors.join(",")).forEach(element => {
+      element.style.fontSize = size + "px";
+    });
+
+    if ($("hquP3ArabicPreview")) {
+      $("hquP3ArabicPreview").style.fontSize = size + "px";
+    }
+
+    if ($("hquP3ArabicSizeValue")) {
+      $("hquP3ArabicSizeValue").textContent = size + "px";
+    }
+  }
+
+  const savedSettings = read(KEYS.settings, {});
+  const savedArabicSize = Number(savedSettings.arabicSize || 30);
+
+  if ($("hquP3ArabicSize")) {
+    $("hquP3ArabicSize").value = savedArabicSize;
+    applyArabicSize(savedArabicSize);
+    $("hquP3ArabicSize").addEventListener("input", () => {
+      applyArabicSize(Number($("hquP3ArabicSize").value));
+    });
+  }
+
+  $("hquP3ApplyArabicSize")?.addEventListener("click", () => {
+    const settings = read(KEYS.settings, {});
+    settings.arabicSize = Number($("hquP3ArabicSize")?.value || 30);
+    save(KEYS.settings, settings);
+    applyArabicSize(settings.arabicSize);
+  });
+
+  /* ==========================================
+     8. LANGUAGE PREFERENCE
+  ========================================== */
+
+  if ($("hquP3LanguageSelect")) {
+    $("hquP3LanguageSelect").value =
+      savedSettings.language || "English";
+  }
+
+  $("hquP3SaveLanguage")?.addEventListener("click", () => {
+    const settings = read(KEYS.settings, {});
+    settings.language = $("hquP3LanguageSelect")?.value || "English";
+    save(KEYS.settings, settings);
+
+    if ($("hquP3LanguageMessage")) {
+      $("hquP3LanguageMessage").textContent =
+        "Language preference save ho gayi. App translation ke liye translated text add karna hoga.";
+    }
+  });
+
+  /* ==========================================
+     9. NOTES EXPORT
+  ========================================== */
+
+  $("hquP3ExportNotes")?.addEventListener("click", () => {
+    const notes = read("hquPackage2Notes", []);
+    const message = $("hquP3ExportMessage");
+
+    if (!Array.isArray(notes) || !notes.length) {
+      if (message) message.textContent = "Export karne ke liye koi saved notes nahi hain.";
+      return;
+    }
+
+    const content = notes.map((note, index) => {
+      if (typeof note === "string") {
+        return (index + 1) + ". " + note;
+      }
+
+      return [
+        (index + 1) + ". " + (note.title || note.name || "Quran Note"),
+        note.text || note.note || note.content || "",
+        note.date || ""
+      ].join("\n");
+    }).join("\n\n----------------------\n\n");
+
+    const blob = new Blob(
+      ["HOLY QURAN ULTIMATE - MY NOTES\n\n" + content],
+      { type: "text/plain;charset=utf-8" }
+    );
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "Holy-Quran-My-Notes.txt";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+    if (message) message.textContent = "Notes export file tayyar hai!";
+  });
+
+  /* ==========================================
+     10. ACCESSIBILITY SETTINGS
+  ========================================== */
+
+  function applyAccessibility(settings) {
+    document.body.classList.toggle(
+      "hqu-p3-large-text",
+      !!settings.largeText
+    );
+
+    document.body.classList.toggle(
+      "hqu-p3-high-contrast",
+      !!settings.highContrast
+    );
+
+    document.body.classList.toggle(
+      "hqu-p3-reduce-motion",
+      !!settings.reduceMotion
+    );
+  }
+
+  const accessibility = savedSettings.accessibility || {};
+
+  if ($("hquP3LargeText")) {
+    $("hquP3LargeText").checked = !!accessibility.largeText;
+  }
+
+  if ($("hquP3HighContrast")) {
+    $("hquP3HighContrast").checked = !!accessibility.highContrast;
+  }
+
+  if ($("hquP3ReduceMotion")) {
+    $("hquP3ReduceMotion").checked = !!accessibility.reduceMotion;
+  }
+
+  applyAccessibility(accessibility);
+
+  $("hquP3ApplyAccessibility")?.addEventListener("click", () => {
+    const settings = read(KEYS.settings, {});
+
+    settings.accessibility = {
+      largeText: !!$("hquP3LargeText")?.checked,
+      highContrast: !!$("hquP3HighContrast")?.checked,
+      reduceMotion: !!$("hquP3ReduceMotion")?.checked
+    };
+
+    save(KEYS.settings, settings);
+    applyAccessibility(settings.accessibility);
+
+    if ($("hquP3AccessibilityMessage")) {
+      $("hquP3AccessibilityMessage").textContent =
+        "Accessibility settings save ho gayi!";
+    }
+  });
+
+  /* ==========================================
+     START PACKAGE 3
+  ========================================== */
+
+  renderDashboard();
+  renderPlans();
+  renderFolders();
+  renderSearchHistory();
+  renderLibrary();
+  loadSurahs();
+
+  console.log("Holy Quran Ultimate - Package 3 Loaded Successfully!");
+
+})();
