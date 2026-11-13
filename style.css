@@ -4900,3 +4900,425 @@ body.hqu-p3-reduce-motion .hqu-p5-section *::after {
 }
 
 /* End of Package 5 CSS */
+
+/* ============================================
+   HOLY QURAN ULTIMATE
+   PACKAGE 6 — 30 FEATURES DESIGN
+============================================ */
+
+.hqu-p6-section {
+    --p6-primary: #087b59;
+    --p6-primary-dark: #055c42;
+    --p6-bg: #f0f7f3;
+    --p6-card: #ffffff;
+    --p6-text: #20372b;
+    --p6-muted: #71847a;
+    --p6-border: #d9e8df;
+    --p6-gold: #d7aa42;
+
+    width: 100%;
+    padding: 18px;
+    margin: 20px auto;
+    background: var(--p6-bg);
+    color: var(--p6-text);
+    border-radius: 20px;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.hqu-p6-section *,
+.hqu-p6-section *::before,
+.hqu-p6-section *::after {
+    box-sizing: border-box;
+}
+
+/* Header */
+
+.hqu-p6-header {
+    text-align: center;
+    padding: 30px 15px;
+    margin-bottom: 22px;
+    color: white;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #064e3b, #0b9870);
+    box-shadow: 0 7px 20px rgba(0, 80, 55, 0.16);
+}
+
+.hqu-p6-header h2 {
+    color: white;
+    font-size: 25px;
+    margin: 10px 0;
+}
+
+.hqu-p6-header p {
+    color: #e0fff0;
+    line-height: 1.7;
+}
+
+.hqu-p6-icon {
+    font-size: 42px;
+    margin-bottom: 8px;
+}
+
+.hqu-p6-version {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 7px 15px;
+    border-radius: 30px;
+    background: rgba(255,255,255,0.16);
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+/* Feature cards */
+
+.hqu-p6-card {
+    background: var(--p6-card);
+    border: 1px solid var(--p6-border);
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 14px rgba(20, 65, 45, 0.055);
+    min-width: 0;
+    transition: box-shadow 0.2s ease;
+}
+
+.hqu-p6-card:hover {
+    box-shadow: 0 7px 20px rgba(20, 65, 45, 0.10);
+}
+
+.hqu-p6-card h3 {
+    font-size: 17px;
+    line-height: 1.5;
+    margin: 0 0 13px;
+    color: var(--p6-primary);
+}
+
+/* Form fields */
+
+.hqu-p6-section input,
+.hqu-p6-section select,
+.hqu-p6-section textarea {
+    width: 100%;
+    min-height: 44px;
+    display: block;
+    padding: 11px 13px;
+    margin: 9px 0;
+    border: 1px solid var(--p6-border);
+    border-radius: 10px;
+    background: var(--p6-card);
+    color: var(--p6-text);
+    font-size: 15px;
+    outline: none;
+}
+
+.hqu-p6-section input:focus,
+.hqu-p6-section select:focus,
+.hqu-p6-section textarea:focus {
+    border-color: var(--p6-primary);
+    box-shadow: 0 0 0 3px rgba(8, 123, 89, 0.12);
+}
+
+.hqu-p6-section input[type="range"] {
+    padding: 0;
+    accent-color: var(--p6-primary);
+    min-height: 25px;
+}
+
+.hqu-p6-section input[type="number"] {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Buttons */
+
+.hqu-p6-section button {
+    min-height: 42px;
+    padding: 10px 15px;
+    margin: 5px 4px 5px 0;
+    border: none;
+    border-radius: 10px;
+    background: var(--p6-primary);
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.hqu-p6-section button:hover {
+    background: var(--p6-primary-dark);
+    transform: translateY(-1px);
+}
+
+.hqu-p6-section button:active {
+    transform: scale(0.98);
+}
+
+.hqu-p6-section button:focus-visible {
+    outline: 3px solid var(--p6-gold);
+    outline-offset: 3px;
+}
+
+/* Results */
+
+.hqu-p6-card > div:not(.hqu-p6-header) {
+    line-height: 1.8;
+}
+
+#hquP6SearchResults,
+#hquP6CategoryResults,
+#hquP6JuzInfo,
+#hquP6ParaInfo,
+#hquP6HizbInfo,
+#hquP6RukuInfo,
+#hquP6SajdahInfo,
+#hquP6RevelationResults,
+#hquP6RevelationInfo,
+#hquP6AyahInfo,
+#hquP6LastReadInfo,
+#hquP6ContinueInfo,
+#hquP6History,
+#hquP6RecentSurahs,
+#hquP6CompletionList,
+#hquP6RangeInfo,
+#hquP6SelectedReader,
+#hquP6TranslationResults,
+#hquP6SurahPanel,
+#hquP6Statistics,
+#hquP6Streak,
+#hquP6PersonalDashboard {
+    padding: 12px;
+    margin-top: 12px;
+    border-radius: 11px;
+    background: var(--p6-bg);
+    overflow-wrap: anywhere;
+}
+
+/* Search result buttons */
+
+#hquP6SearchResults button,
+#hquP6CategoryResults button,
+#hquP6RevelationResults button,
+#hquP6RecentSurahs button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin: 7px 0;
+}
+
+/* Quran Arabic reader */
+
+#hquP6SelectedReader {
+    direction: rtl;
+    text-align: right;
+    font-family: "Traditional Arabic", "Noto Naskh Arabic", serif;
+    font-size: 25px;
+    line-height: 2.2;
+    min-height: 60px;
+}
+
+#hquP6SelectedReader p {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--p6-border);
+}
+
+/* Information panels */
+
+#hquP6SurahPanel h4,
+#hquP6Statistics h4,
+#hquP6PersonalDashboard h4 {
+    color: var(--p6-primary);
+    margin: 8px 0;
+}
+
+#hquP6SurahPanel p,
+#hquP6Statistics p,
+#hquP6PersonalDashboard p {
+    line-height: 1.8;
+    margin: 6px 0;
+}
+
+/* Focus mode */
+
+.hqu-p6-focus-active .hqu-p6-header,
+.hqu-p6-focus-active .hqu-p6-card:not(:nth-of-type(19)) {
+    display: none;
+}
+
+.hqu-p6-focus-active .hqu-p6-card:nth-of-type(19) {
+    width: 100%;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 25px;
+    box-shadow: none;
+    border: none;
+}
+
+/* Full screen */
+
+.hqu-p6-section:fullscreen {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 20px;
+    background: var(--p6-bg);
+}
+
+/* Orientation layout */
+
+.hqu-p6-landscape {
+    max-width: 1200px;
+}
+
+.hqu-p6-portrait {
+    max-width: 650px;
+}
+
+/* Arabic font controls */
+
+.hqu-p6-section .ayah-arabic,
+.hqu-p6-section .arabic-text,
+.hqu-p6-section .quran-arabic,
+.hqu-p6-section [data-quran-arabic] {
+    direction: rtl;
+    text-align: right;
+    line-height: 2;
+}
+
+/* Translation controls */
+
+.hqu-p6-section .ayah-translation,
+.hqu-p6-section .quran-translation,
+.hqu-p6-section [data-quran-translation] {
+    line-height: 1.9;
+    overflow-wrap: anywhere;
+}
+
+/* History and dashboard cards */
+
+#hquP6History > *,
+#hquP6RecentSurahs > *,
+#hquP6CompletionList > *,
+#hquP6PersonalDashboard > * {
+    padding: 10px;
+    margin: 7px 0;
+    border-bottom: 1px solid var(--p6-border);
+}
+
+/* Dark theme */
+
+body.dark-mode .hqu-p6-section,
+body.dark-theme .hqu-p6-section {
+    --p6-bg: #17251f;
+    --p6-card: #20332a;
+    --p6-text: #e8f3ec;
+    --p6-muted: #b4c5ba;
+    --p6-border: #3b5547;
+    background: var(--p6-bg);
+    color: var(--p6-text);
+}
+
+body.dark-mode .hqu-p6-card,
+body.dark-theme .hqu-p6-card {
+    background: var(--p6-card);
+    border-color: var(--p6-border);
+}
+
+body.dark-mode .hqu-p6-section input,
+body.dark-mode .hqu-p6-section select,
+body.dark-theme .hqu-p6-section input,
+body.dark-theme .hqu-p6-section select {
+    background: #17251f;
+    color: white;
+    border-color: var(--p6-border);
+}
+
+body.dark-mode #hquP6SearchResults,
+body.dark-mode #hquP6History,
+body.dark-mode #hquP6RecentSurahs,
+body.dark-mode #hquP6Statistics,
+body.dark-mode #hquP6Streak,
+body.dark-mode #hquP6PersonalDashboard,
+body.dark-theme #hquP6SearchResults,
+body.dark-theme #hquP6History,
+body.dark-theme #hquP6RecentSurahs,
+body.dark-theme #hquP6Statistics,
+body.dark-theme #hquP6Streak,
+body.dark-theme #hquP6PersonalDashboard {
+    background: #17251f;
+}
+
+/* Accessibility compatibility */
+
+body.hqu-p3-large-text .hqu-p6-section {
+    font-size: 19px;
+}
+
+body.hqu-p3-large-text .hqu-p6-section button,
+body.hqu-p3-large-text .hqu-p6-section input,
+body.hqu-p3-large-text .hqu-p6-section select {
+    font-size: 17px;
+}
+
+body.hqu-p3-high-contrast .hqu-p6-card {
+    border: 2px solid currentColor;
+}
+
+body.hqu-p3-reduce-motion .hqu-p6-section *,
+body.hqu-p3-reduce-motion .hqu-p6-section *::before,
+body.hqu-p3-reduce-motion .hqu-p6-section *::after {
+    animation: none !important;
+    transition: none !important;
+}
+
+/* Mobile responsive */
+
+@media (max-width: 600px) {
+    .hqu-p6-section {
+        padding: 10px;
+        border-radius: 14px;
+    }
+
+    .hqu-p6-header {
+        padding: 22px 10px;
+    }
+
+    .hqu-p6-header h2 {
+        font-size: 21px;
+    }
+
+    .hqu-p6-card {
+        padding: 13px;
+        margin-bottom: 12px;
+    }
+
+    .hqu-p6-card h3 {
+        font-size: 16px;
+    }
+
+    .hqu-p6-section button {
+        padding: 10px 12px;
+    }
+
+    #hquP6SelectedReader {
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 360px) {
+    .hqu-p6-section {
+        padding: 7px;
+    }
+
+    .hqu-p6-card {
+        padding: 10px;
+    }
+
+    .hqu-p6-section button {
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+
+/* End Package 6 CSS */
