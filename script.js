@@ -3301,3 +3301,271 @@ if ("serviceWorker" in navigator) {
   loadSearchDatabase();
 
 })();
+
+/* =========================================
+   FILE 46 — ADVANCED QURAN AUDIO CONTROLS
+========================================= */
+
+(function () {
+  "use strict";
+
+  const audio = document.getElementById("hquAudio");
+  const playButton = document.getElementById("hquPlay");
+  const previousButton = document.getElementById("hquPreviousAyah");
+  const nextButton = document.getElementById("hquNextAyah");
+  const progress = document.getElementById("hquProgress");
+  const volume = document.getElementById("hquVolume");
+  const speed = document.getElementById("hquSpeed");
+  const currentTime = document.getElementById("hquAudioCurrentTime");
+  const duration = document.getElementById("hquAudioDuration");
+  const message = document.getElementById("hquAudioMessage");
+  const surahTitle = document.getElementById("hquAudioSurah");
+  const ayahTitle = document.getElementById("hquAudioAyah");
+
+  if (
+    !audio || !playButton || !progress ||
+    !volume || !speed || !message
+  ) {
+    return;
+  }
+
+  let audioTracks = [];
+  let currentTrackIndex = 0;
+
+  function showMessage(text) {
+    message.textContent = text;
+  }
+
+  function formatTime(seconds) {
+    if (!Number.isFinite(seconds)) return "0:00";
+
+    const minutes = Math.floor(seconds / 60);
+    const remaining = Math.floor(seconds % 60);
+
+    return minutes + ":" + String(remaining).padStart(2, "0");
+  }
+
+  function updatePlayButton() {
+    playButton.textContent = audio.paused ? "▶" : "⏸";
+    playButton.setAttribute(
+      "aria-label",
+      audio.paused ? "Play audio" : "Pause audio"
+    );
+  }
+
+  function updateTrackInformation() {
+    const track = audioTracks[currentTrackIndex];
+
+    if (!track) return;
+
+    surahTitle.textContent = track.surahName || "Quran Recitation";
+
+    ayahTitle.textContent =
+      track.ayahNumber ? "Ayah " + track.ayahNumber : "Full Surah";
+  }
+
+  function loadTrack(index, autoplay) {
+    if (!audioTracks.length) {
+      showMessage("Verified audio source abhi available nahi hai.");
+      return;
+    }
+
+    if (index < 0 || index >= audioTracks.length) {
+      showMessage("Audio track available nahi hai.");
+      return;
+    }
+
+    currentTrackIndex = index;
+
+    const track = audioTracks[currentTrackIndex];
+
+    if (!track.url) {
+      showMessage("Is track ka verified audio URL add nahi hua.");
+      updateTrackInformation();
+      return;
+    }
+
+    audio.src = track.url;
+    audio.load();
+
+    updateTrackInformation();
+    progress.value = 0;
+    currentTime.textContent = "0:00";
+    duration.textContent = "0:00";
+
+    showMessage("Audio loading...");
+
+    if (autoplay) {
+      audio.play().catch(() => {
+        showMessage("Audio play nahi hua. Dobara Play press karein.");
+      });
+    }
+  }
+
+  async function loadAudioLibrary() {
+    try {
+      const response = await fetch("./data/audio-library.json");
+
+      if (!response.ok) {
+        throw new Error("Audio library not found");
+      }
+
+      const library = await response.json();
+
+      const qariSelect = document.getElementById("hquQariSelect");
+
+      if (!qariSelect) return;
+
+      const qaris = library.qaris || {};
+
+      qariSelect.replaceChildren();
+
+      Object.keys(qaris).forEach(qariId => {
+        const option = document.createElement("option");
+
+        option.value = qariId;
+        option.textContent =
+          qaris[qariId].name || qariId;
+
+        qariSelect.appendChild(option);
+      });
+
+      const firstQari = qariSelect.value;
+
+      if (firstQari) {
+        loadQariTracks(firstQari, qaris);
+      }
+
+      qariSelect.addEventListener("change", () => {
+        loadQariTracks(qariSelect.value, qaris);
+      });
+
+    } catch (error) {
+      showMessage("Audio library load nahi ho saki.");
+    }
+  }
+
+  function loadQariTracks(qariId, qaris) {
+    const qari = qaris[qariId];
+
+    if (!qari) {
+      audioTracks = [];
+      showMessage("Qari data available nahi hai.");
+      return;
+    }
+
+    const surahs = qari.surahs || {};
+
+    audioTracks = Object.keys(surahs)
+      .map(number => {
+        const item = surahs[number];
+
+        return {
+          surahNumber: Number(number),
+          surahName:
+            item.name || "Surah " + number,
+          ayahNumber: item.ayahNumber || null,
+          url:
+            typeof item === "string"
+              ? item
+              : item.audioUrl || item.url || ""
+        };
+      })
+      .sort((a, b) => a.surahNumber - b.surahNumber);
+
+    currentTrackIndex = 0;
+
+    if (!audioTracks.length) {
+      audio.pause();
+      audio.removeAttribute("src");
+      audio.load();
+
+      surahTitle.textContent = "No Audio Available";
+      ayahTitle.textContent = "Verified audio sources required";
+
+      showMessage(
+        "Is Qari ke liye verified audio URLs abhi add nahi kiye gaye."
+      );
+
+      updatePlayButton();
+      return;
+    }
+
+    loadTrack(0, false);
+  }
+
+  playButton.addEventListener("click", () => {
+    if (!audio.src) {
+      showMessage("Pehle verified audio source add karein.");
+      return;
+    }
+
+    if (audio.paused) {
+      audio.play().catch(() => {
+        showMessage("Audio play nahi ho saka.");
+      });
+    } else {
+      audio.pause();
+    }
+  });
+
+  if (previousButton) {
+    previousButton.addEventListener("click", () => {
+      loadTrack(currentTrackIndex - 1, true);
+    });
+  }
+
+  if (nextButton) {
+    nextButton.addEventListener("click", () => {
+      loadTrack(currentTrackIndex + 1, true);
+    });
+  }
+
+  volume.addEventListener("input", () => {
+    audio.volume = Number(volume.value);
+  });
+
+  speed.addEventListener("change", () => {
+    audio.playbackRate = Number(speed.value);
+  });
+
+  progress.addEventListener("input", () => {
+    if (Number.isFinite(audio.duration) && audio.duration > 0) {
+      audio.currentTime =
+        (Number(progress.value) / 100) * audio.duration;
+    }
+  });
+
+  audio.addEventListener("timeupdate", () => {
+    if (Number.isFinite(audio.duration) && audio.duration > 0) {
+      progress.value =
+        (audio.currentTime / audio.duration) * 100;
+    }
+
+    currentTime.textContent = formatTime(audio.currentTime);
+  });
+
+  audio.addEventListener("loadedmetadata", () => {
+    duration.textContent = formatTime(audio.duration);
+    showMessage("Audio ready.");
+  });
+
+  audio.addEventListener("play", updatePlayButton);
+  audio.addEventListener("pause", updatePlayButton);
+
+  audio.addEventListener("ended", () => {
+    if (currentTrackIndex < audioTracks.length - 1) {
+      loadTrack(currentTrackIndex + 1, true);
+    } else {
+      showMessage("Recitation completed.");
+    }
+  });
+
+  audio.addEventListener("error", () => {
+    showMessage("Audio load nahi hui. URL check karein.");
+    updatePlayButton();
+  });
+
+  loadAudioLibrary();
+
+})();
