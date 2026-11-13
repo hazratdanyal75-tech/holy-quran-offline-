@@ -1,0 +1,66 @@
+
+{
+  "description": "Verified Surah-wise Quran recitation audio library",
+  "qaris": [
+    {
+      "id": "mishary",
+      "name": "Mishary Rashid Alafasy",
+      "surahs": {
+        "1": "",
+        "2": "",
+        "3": "",
+        "4": ""
+      }
+    },
+    {
+      "id": "abdulbasit",
+      "name": "Abdul Basit Abdul Samad",
+      "surahs": {
+        "1": "",
+        "2": "",
+        "3": "",
+        "4": ""
+      }
+    },
+    {
+      "id": "sudais",
+      "name": "Abdul Rahman Al-Sudais",
+      "surahs": {
+        "1": "",
+        "2": "",
+        "3": "",
+        "4": ""
+      }
+    },
+    {
+      "id": "shuraim",
+      "name": "Saud Al-Shuraim",
+      "surahs": {
+        "1": "",
+        "2": "",
+        "3": "",
+        "4": ""
+      }
+    },
+    {
+      "id": "maher",
+      "name": "Maher Al-Muaiqly",
+      "surahs": {
+        "1": "",
+        "2": "",
+        "3": "",
+        "4": ""
+      }
+    },
+    {
+      "id": "hussary",
+      "name": "Mahmoud Khalil Al-Hussary",
+      "surahs": {
+        "1": "",
+        "2": "",
+        "3": "",
+        "4": ""
+      }
+    }
+  ]
+}
