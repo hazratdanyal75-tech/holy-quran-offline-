@@ -1573,3 +1573,168 @@ body.theme-night .ayah-translation {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ==================================
+   HOLY QURAN ULTIMATE
+   FILE 14 - QURAN READER DESIGN
+================================== */
+
+:root {
+  --quran-green: #075c43;
+  --quran-gold: #c9a34c;
+  --quran-bg: #f4f7f4;
+  --quran-card: #ffffff;
+  --quran-text: #24352e;
+  --quran-muted: #718078;
+}
+
+body {
+  background: var(--quran-bg);
+  color: var(--quran-text);
+}
+
+/* Surah list */
+
+#surahList {
+  display: grid;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.surah-item {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 100%;
+  padding: 16px;
+  border: 1px solid #e2eae4;
+  border-left: 4px solid var(--quran-gold);
+  border-radius: 14px;
+  background: var(--quran-card);
+  color: var(--quran-text);
+  text-align: left;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.surah-item:hover {
+  background: #edf6f0;
+  transform: translateY(-2px);
+}
+
+.surah-item span:first-child {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.surah-item span:nth-child(2) {
+  font-size: 23px;
+  color: var(--quran-green);
+  text-align: right;
+  direction: rtl;
+}
+
+.surah-item small {
+  color: var(--quran-muted);
+  font-size: 12px;
+}
+
+/* Reader heading */
+
+#readerSurahName {
+  color: var(--quran-green);
+  font-size: 25px;
+  text-align: center;
+  font-weight: 800;
+  margin: 20px 0 8px;
+}
+
+#readerSurahDetails {
+  color: var(--quran-muted);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Ayah cards */
+
+#ayahContainer {
+  display: grid;
+  gap: 16px;
+  padding: 10px 0;
+}
+
+.ayah-card {
+  background: var(--quran-card);
+  border: 1px solid #e5ebe5;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 14px rgba(0, 50, 30, 0.05);
+}
+
+.ayah-card small {
+  display: inline-block;
+  color: var(--quran-gold);
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.ayah-arabic {
+  font-family: "Amiri", "Noto Naskh Arabic", serif;
+  font-size: 29px;
+  line-height: 2.2;
+  text-align: right;
+  direction: rtl;
+  color: #173f30;
+  margin: 8px 0 18px;
+}
+
+.ayah-translation {
+  border-top: 1px solid #e9eee9;
+  padding-top: 15px;
+  font-size: 16px;
+  line-height: 1.9;
+  color: #52645a;
+  text-align: left;
+}
+
+/* Search and language selector */
+
+#surahSearch,
+#translationLanguage {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #dce6dd;
+  border-radius: 12px;
+  background: white;
+  color: var(--quran-text);
+  font-size: 15px;
+  margin: 8px 0;
+  outline: none;
+}
+
+#surahSearch:focus,
+#translationLanguage:focus {
+  border-color: var(--quran-green);
+  box-shadow: 0 0 0 3px rgba(7, 92, 67, 0.10);
+}
+
+/* Mobile screen */
+
+@media (max-width: 600px) {
+  .ayah-card {
+    padding: 16px;
+  }
+
+  .ayah-arabic {
+    font-size: 25px;
+    line-height: 2.1;
+  }
+
+  .ayah-translation {
+    font-size: 15px;
+  }
+
+  #readerSurahName {
+    font-size: 22px;
+  }
+}
