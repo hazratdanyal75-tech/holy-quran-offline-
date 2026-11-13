@@ -2078,3 +2078,99 @@ if ("serviceWorker" in navigator) {
   updateDisplay();
 
 })();
+
+/* =====================================
+   FILE 30: DAILY TASBEEH STATISTICS
+===================================== */
+
+(function () {
+  const countButton = document.getElementById("tasbeehIncrement");
+  const todayDisplay = document.getElementById("todayTasbeehCount");
+  const goalInput = document.getElementById("dailyTasbeehGoal");
+  const saveGoalButton = document.getElementById("saveTasbeehGoal");
+  const progressBar = document.getElementById("goalProgressBar");
+  const progressText = document.getElementById("goalProgressText");
+  const completedDisplay = document.getElementById("completedTasbeehDays");
+
+  if (
+    !countButton ||
+    !todayDisplay ||
+    !goalInput ||
+    !saveGoalButton ||
+    !progressBar
+  ) return;
+
+  const today = new Date().toLocaleDateString("en-CA");
+
+  function readStorage(key, fallback) {
+    try {
+      const value = JSON.parse(localStorage.getItem(key));
+      return value ?? fallback;
+    } catch {
+      return fallback;
+    }
+  }
+
+  let dailyRecords = readStorage("hquDailyTasbeeh", {});
+  let goal = Number(localStorage.getItem("hquDailyGoal")) || 100;
+
+  if (!Number.isFinite(goal) || goal < 1) goal = 100;
+
+  function updateStatistics() {
+    const todayCount = Number(dailyRecords[today]) || 0;
+    const percentage = Math.min(100, (todayCount / goal) * 100);
+
+    todayDisplay.textContent = todayCount;
+    goalInput.value = goal;
+
+    progressBar.style.width = percentage + "%";
+
+    progressText.textContent =
+      Math.round(percentage) + "% completed (" +
+      todayCount + " / " + goal + ")";
+
+    const completedDays = Object.values(dailyRecords)
+      .filter(count => Number(count) >= goal)
+      .length;
+
+    completedDisplay.textContent = completedDays;
+  }
+
+  // Count every Tasbeeh button press
+  countButton.addEventListener("click", () => {
+    dailyRecords[today] =
+      (Number(dailyRecords[today]) || 0) + 1;
+
+    localStorage.setItem(
+      "hquDailyTasbeeh",
+      JSON.stringify(dailyRecords)
+    );
+
+    updateStatistics();
+  });
+
+  // Save daily goal
+  saveGoalButton.addEventListener("click", () => {
+    const newGoal = Number(goalInput.value);
+
+    if (
+      !Number.isInteger(newGoal) ||
+      newGoal < 1 ||
+      newGoal > 100000
+    ) {
+      alert("Please enter a goal between 1 and 100000.");
+      return;
+    }
+
+    goal = newGoal;
+
+    localStorage.setItem("hquDailyGoal", goal);
+
+    updateStatistics();
+
+    alert("Daily goal saved successfully!");
+  });
+
+  updateStatistics();
+
+})();
