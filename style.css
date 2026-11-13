@@ -2312,3 +2312,209 @@ body {
     font-size: 20px;
   }
 }
+
+/* =========================================
+   FILE 34: HIFZ TRACKER PROFESSIONAL DESIGN
+========================================= */
+
+.hifz-section {
+  width: 100%;
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 22px;
+  border-radius: 22px;
+  background: var(--card-bg, #ffffff);
+  color: var(--text-color, #202b35);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+}
+
+.hifz-heading {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.hifz-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 65px;
+  height: 65px;
+  border-radius: 20px;
+  background: #e4f5ed;
+  font-size: 34px;
+}
+
+.hifz-heading h2 {
+  margin: 12px 0 7px;
+  font-size: 25px;
+  color: #16845b;
+}
+
+.hifz-heading p,
+.hifz-control-card p {
+  opacity: 0.75;
+  font-size: 14px;
+}
+
+.hifz-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.hifz-stat {
+  padding: 20px 12px;
+  text-align: center;
+  border-radius: 17px;
+  background: #edf8f2;
+}
+
+.hifz-stat span {
+  font-size: 28px;
+}
+
+.hifz-stat h3 {
+  margin: 10px 0 5px;
+  color: #16845b;
+  font-size: 23px;
+}
+
+.hifz-stat p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.hifz-progress-card,
+.hifz-control-card {
+  padding: 20px;
+  margin-bottom: 17px;
+  border: 1px solid rgba(100, 150, 120, 0.18);
+  border-radius: 17px;
+  background: var(--card-bg, #ffffff);
+}
+
+.hifz-progress-card h3,
+.hifz-control-card h3 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+.hifz-progress-track {
+  width: 100%;
+  height: 13px;
+  overflow: hidden;
+  margin: 15px 0 10px;
+  border-radius: 20px;
+  background: #e4e9e6;
+}
+
+#hifzProgressBar {
+  width: 0%;
+  height: 100%;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #20a66d, #75d69b);
+  transition: width 0.4s ease;
+}
+
+#hifzOverallProgress {
+  margin-bottom: 0;
+  color: #16845b;
+  font-weight: bold;
+  text-align: right;
+}
+
+.hifz-control-card select {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #cbd9d0;
+  border-radius: 11px;
+  background: var(--card-bg, #ffffff);
+  color: var(--text-color, #202b35);
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+.hifz-control-card > button {
+  width: 100%;
+  min-height: 47px;
+  padding: 12px;
+  border: none;
+  border-radius: 11px;
+  background: #16845b;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.hifz-control-card > button:active {
+  transform: scale(0.98);
+}
+
+#hifzSurahMessage,
+#hifzJuzMessage {
+  min-height: 20px;
+  margin: 10px 0;
+  color: #16845b;
+  font-size: 13px;
+}
+
+.hifz-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px;
+  margin-top: 9px;
+  border-radius: 10px;
+  background: #edf8f2;
+  font-size: 14px;
+}
+
+.hifz-remove-btn {
+  padding: 7px 11px;
+  border: none;
+  border-radius: 8px;
+  background: #ffe8e8;
+  color: #c0392b;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.hifz-note {
+  padding: 15px;
+  border-radius: 12px;
+  background: #fff8e6;
+  color: #70551a;
+  font-size: 13px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .hifz-section {
+    padding: 14px;
+  }
+
+  .hifz-summary {
+    gap: 9px;
+  }
+
+  .hifz-stat {
+    padding: 15px 7px;
+  }
+
+  .hifz-stat h3 {
+    font-size: 20px;
+  }
+
+  .hifz-control-card,
+  .hifz-progress-card {
+    padding: 15px;
+  }
+}
