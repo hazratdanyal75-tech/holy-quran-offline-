@@ -4385,3 +4385,518 @@ body.hqu-p3-reduce-motion .hqu-p4-section * {
   animation: none !important;
   transition: none !important;
 }
+
+/* ==========================================
+   HOLY QURAN ULTIMATE
+   PACKAGE 5 — 20 ADVANCED FEATURES
+   MOBILE RESPONSIVE DESIGN
+========================================== */
+
+.hqu-p5-section {
+    --p5-primary: #087b59;
+    --p5-primary-dark: #056044;
+    --p5-bg: #f3f8f5;
+    --p5-card: #ffffff;
+    --p5-text: #20352c;
+    --p5-muted: #718078;
+    --p5-border: #dce9e1;
+    --p5-gold: #d6a83e;
+
+    width: 100%;
+    padding: 18px;
+    margin: 20px auto;
+    color: var(--p5-text);
+    background: var(--p5-bg);
+    border-radius: 20px;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.hqu-p5-section *,
+.hqu-p5-section *::before,
+.hqu-p5-section *::after {
+    box-sizing: border-box;
+}
+
+.hqu-p5-header {
+    text-align: center;
+    padding: 25px 15px;
+    margin-bottom: 22px;
+    border-radius: 18px;
+    color: white;
+    background: linear-gradient(135deg, #075b43, #11966c);
+}
+
+.hqu-p5-header h2,
+.hqu-p5-header h3 {
+    color: white;
+    margin: 8px 0;
+}
+
+.hqu-p5-header p {
+    color: #e2fff1;
+    line-height: 1.7;
+}
+
+.hqu-p5-card {
+    background: var(--p5-card);
+    border: 1px solid var(--p5-border);
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 17px;
+    box-shadow: 0 4px 14px rgba(20, 70, 45, 0.06);
+    min-width: 0;
+}
+
+.hqu-p5-card h3 {
+    color: var(--p5-primary);
+    font-size: 18px;
+    margin: 0 0 12px;
+}
+
+.hqu-p5-card p {
+    line-height: 1.8;
+}
+
+.hqu-p5-card label {
+    display: block;
+    font-weight: 600;
+    margin: 12px 0 7px;
+    color: var(--p5-text);
+}
+
+.hqu-p5-section input,
+.hqu-p5-section select,
+.hqu-p5-section textarea {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    padding: 11px 13px;
+    border: 1px solid var(--p5-border);
+    border-radius: 10px;
+    background: var(--p5-card);
+    color: var(--p5-text);
+    font-size: 15px;
+    outline: none;
+    margin-bottom: 10px;
+}
+
+.hqu-p5-section textarea {
+    min-height: 105px;
+    resize: vertical;
+    line-height: 1.7;
+}
+
+.hqu-p5-section input:focus,
+.hqu-p5-section select:focus,
+.hqu-p5-section textarea:focus {
+    border-color: var(--p5-primary);
+    box-shadow: 0 0 0 3px rgba(8, 123, 89, 0.12);
+}
+
+.hqu-p5-section button {
+    border: none;
+    border-radius: 10px;
+    padding: 11px 16px;
+    margin: 5px 4px 5px 0;
+    background: var(--p5-primary);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.hqu-p5-section button:hover {
+    background: var(--p5-primary-dark);
+    transform: translateY(-1px);
+}
+
+.hqu-p5-section button:focus-visible {
+    outline: 3px solid var(--p5-gold);
+    outline-offset: 3px;
+}
+
+.hqu-p5-section button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.hqu-p5-section button:active {
+    transform: scale(0.98);
+}
+
+/* Arabic Quran display */
+
+#hquP5WordDisplay,
+#hquP5MemorizeContent,
+#hquP5HiddenAyah,
+#hquP5CompareResults {
+    padding: 15px;
+    margin-top: 12px;
+    border-radius: 12px;
+    background: var(--p5-bg);
+    line-height: 2.1;
+    overflow-wrap: anywhere;
+}
+
+#hquP5WordDisplay,
+#hquP5MemorizeContent,
+#hquP5HiddenAyah {
+    direction: rtl;
+    text-align: right;
+    font-size: 23px;
+    font-family: "Traditional Arabic", "Noto Naskh Arabic", serif;
+}
+
+#hquP5WordDisplay button {
+    display: inline-block;
+    margin: 5px;
+    padding: 9px 12px;
+    font-size: 23px;
+    direction: rtl;
+}
+
+#hquP5WordMeaning,
+#hquP5TafsirContent {
+    line-height: 2;
+    padding: 12px;
+    border-radius: 10px;
+    background: var(--p5-bg);
+}
+
+/* Tajweed color guide */
+
+.hqu-p5-color-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.hqu-p5-color {
+    padding: 9px 13px;
+    border-radius: 9px;
+    font-weight: 700;
+    border: 1px solid var(--p5-border);
+}
+
+.hqu-p5-red {
+    color: #a32222;
+    background: #ffe4e4;
+}
+
+.hqu-p5-green {
+    color: #08733c;
+    background: #dcf8e7;
+}
+
+.hqu-p5-blue {
+    color: #1554a3;
+    background: #e0edff;
+}
+
+.hqu-p5-orange {
+    color: #9a5300;
+    background: #fff0d9;
+}
+
+/* Memorization and hidden Ayah */
+
+#hquP5HiddenAyah {
+    min-height: 65px;
+    border: 1px dashed var(--p5-primary);
+}
+
+#hquP5HiddenAyah:empty {
+    display: none;
+}
+
+/* Daily goal and progress */
+
+#hquP5GoalProgress,
+#hquP5ProgressStats {
+    margin-top: 12px;
+    padding: 12px;
+    background: var(--p5-bg);
+    border-radius: 10px;
+    line-height: 1.8;
+}
+
+.hqu-p5-progress-track {
+    width: 100%;
+    height: 14px;
+    margin: 12px 0;
+    background: #dce9e1;
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+#hquP5ProgressBar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #087b59, #49bd85);
+    border-radius: 30px;
+    transition: width 0.4s ease;
+}
+
+/* Reading timer */
+
+#hquP5TimerDisplay {
+    font-size: 35px;
+    font-weight: 800;
+    text-align: center;
+    color: var(--p5-primary);
+    padding: 18px;
+    background: var(--p5-bg);
+    border-radius: 12px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Notes and collections */
+
+#hquP5NotesList,
+#hquP5CollectionsList {
+    margin-top: 12px;
+}
+
+#hquP5NotesList > *,
+#hquP5CollectionsList > * {
+    padding: 12px;
+    margin: 9px 0;
+    border: 1px solid var(--p5-border);
+    border-radius: 10px;
+    background: var(--p5-bg);
+    overflow-wrap: anywhere;
+}
+
+#hquP5NotesList button,
+#hquP5CollectionsList button {
+    background: #a83232;
+}
+
+/* Copy and share messages */
+
+#hquP5CopyMessage,
+#hquP5ShareMessage {
+    color: var(--p5-primary);
+    font-weight: 600;
+    min-height: 22px;
+    margin-top: 8px;
+}
+
+/* Quiz */
+
+#hquP5QuizQuestion {
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.8;
+    margin: 14px 0;
+}
+
+#hquP5QuizOptions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 9px;
+}
+
+#hquP5QuizOptions button {
+    width: 100%;
+    min-height: 46px;
+    text-align: left;
+    margin: 0;
+    background: var(--p5-bg);
+    color: var(--p5-text);
+    border: 1px solid var(--p5-border);
+}
+
+#hquP5QuizOptions button:hover {
+    background: #e2f4e9;
+    color: #075b43;
+}
+
+#hquP5QuizResult {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    background: var(--p5-bg);
+    font-weight: 600;
+    line-height: 1.7;
+}
+
+/* Reading display modes */
+
+.hqu-p5-view-compact {
+    font-size: 14px;
+}
+
+.hqu-p5-view-comfortable {
+    font-size: 17px;
+    line-height: 1.9;
+}
+
+.hqu-p5-view-large {
+    font-size: 20px;
+    line-height: 2.1;
+}
+
+/* Translation visibility */
+
+.hqu-p5-hide-translations .ayah-translation,
+.hqu-p5-hide-translations .quran-translation,
+.hqu-p5-hide-translations [data-quran-translation] {
+    display: none !important;
+}
+
+/* Arabic reader accessibility */
+
+.hqu-p5-section .ayah-arabic,
+.hqu-p5-section .arabic-text,
+.hqu-p5-section .quran-arabic {
+    direction: rtl;
+    text-align: right;
+    line-height: 2;
+}
+
+/* Dark mode support */
+
+body.dark-mode .hqu-p5-section,
+body.dark-theme .hqu-p5-section {
+    --p5-bg: #17251f;
+    --p5-card: #20332a;
+    --p5-text: #e8f3ec;
+    --p5-muted: #b3c5ba;
+    --p5-border: #3b5547;
+    background: var(--p5-bg);
+    color: var(--p5-text);
+}
+
+body.dark-mode .hqu-p5-card,
+body.dark-theme .hqu-p5-card {
+    background: var(--p5-card);
+    border-color: var(--p5-border);
+}
+
+body.dark-mode .hqu-p5-section input,
+body.dark-mode .hqu-p5-section select,
+body.dark-mode .hqu-p5-section textarea,
+body.dark-theme .hqu-p5-section input,
+body.dark-theme .hqu-p5-section select,
+body.dark-theme .hqu-p5-section textarea {
+    background: #17251f;
+    color: #ffffff;
+    border-color: var(--p5-border);
+}
+
+body.dark-mode #hquP5QuizOptions button,
+body.dark-theme #hquP5QuizOptions button {
+    background: #263c31;
+    color: #ffffff;
+}
+
+body.dark-mode .hqu-p5-red,
+body.dark-theme .hqu-p5-red {
+    background: #552d32;
+    color: #ffb7b7;
+}
+
+body.dark-mode .hqu-p5-green,
+body.dark-theme .hqu-p5-green {
+    background: #214b35;
+    color: #b7f2c9;
+}
+
+body.dark-mode .hqu-p5-blue,
+body.dark-theme .hqu-p5-blue {
+    background: #243e60;
+    color: #c4ddff;
+}
+
+body.dark-mode .hqu-p5-orange,
+body.dark-theme .hqu-p5-orange {
+    background: #55402a;
+    color: #ffdbad;
+}
+
+/* Package 3 accessibility compatibility */
+
+body.hqu-p3-large-text .hqu-p5-section {
+    font-size: 19px;
+}
+
+body.hqu-p3-large-text .hqu-p5-section button,
+body.hqu-p3-large-text .hqu-p5-section input,
+body.hqu-p3-large-text .hqu-p5-section select {
+    font-size: 17px;
+}
+
+body.hqu-p3-high-contrast .hqu-p5-card {
+    border: 2px solid currentColor;
+}
+
+body.hqu-p3-high-contrast .hqu-p5-section button {
+    outline: 1px solid currentColor;
+}
+
+body.hqu-p3-reduce-motion .hqu-p5-section *,
+body.hqu-p3-reduce-motion .hqu-p5-section *::before,
+body.hqu-p3-reduce-motion .hqu-p5-section *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+}
+
+/* Mobile responsive */
+
+@media (max-width: 600px) {
+    .hqu-p5-section {
+        padding: 10px;
+        border-radius: 13px;
+    }
+
+    .hqu-p5-header {
+        padding: 20px 10px;
+    }
+
+    .hqu-p5-card {
+        padding: 13px;
+        margin-bottom: 12px;
+    }
+
+    .hqu-p5-card h3 {
+        font-size: 16px;
+    }
+
+    .hqu-p5-section button {
+        min-height: 42px;
+        padding: 10px 12px;
+    }
+
+    #hquP5TimerDisplay {
+        font-size: 30px;
+    }
+
+    #hquP5WordDisplay,
+    #hquP5MemorizeContent,
+    #hquP5HiddenAyah {
+        font-size: 21px;
+    }
+}
+
+@media (max-width: 360px) {
+    .hqu-p5-section {
+        padding: 7px;
+    }
+
+    .hqu-p5-card {
+        padding: 10px;
+    }
+
+    .hqu-p5-section button {
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+
+/* End of Package 5 CSS */
