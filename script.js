@@ -1281,3 +1281,97 @@ if ("serviceWorker" in navigator) {
   window.addEventListener("DOMContentLoaded", loadQuranFiles);
 
 })();
+
+/* =====================================
+   HOLY QURAN ULTIMATE
+   FILE 15 - READING CONTROLS
+===================================== */
+
+(function () {
+  "use strict";
+
+  function setupReadingControls() {
+    const reader = document.getElementById("ayahContainer");
+
+    if (!reader || document.getElementById("readingToolbar")) {
+      return;
+    }
+
+    let fontSize = 29;
+
+    const toolbar = document.createElement("div");
+    toolbar.id = "readingToolbar";
+    toolbar.className = "reading-toolbar";
+
+    const label = document.createElement("span");
+    label.textContent = "Arabic Text Size";
+
+    const decrease = document.createElement("button");
+    decrease.type = "button";
+    decrease.textContent = "A−";
+    decrease.setAttribute("aria-label", "Decrease Arabic font size");
+
+    const sizeDisplay = document.createElement("span");
+    sizeDisplay.textContent = fontSize + "px";
+
+    const increase = document.createElement("button");
+    increase.type = "button";
+    increase.textContent = "A+";
+    increase.setAttribute("aria-label", "Increase Arabic font size");
+
+    const reset = document.createElement("button");
+    reset.type = "button";
+    reset.textContent = "Reset";
+
+    function applyFontSize() {
+      document.querySelectorAll(".ayah-arabic").forEach((ayah) => {
+        ayah.style.fontSize = fontSize + "px";
+      });
+
+      sizeDisplay.textContent = fontSize + "px";
+    }
+
+    decrease.addEventListener("click", () => {
+      fontSize = Math.max(20, fontSize - 2);
+      applyFontSize();
+    });
+
+    increase.addEventListener("click", () => {
+      fontSize = Math.min(48, fontSize + 2);
+      applyFontSize();
+    });
+
+    reset.addEventListener("click", () => {
+      fontSize = 29;
+      applyFontSize();
+    });
+
+    toolbar.append(
+      label,
+      decrease,
+      sizeDisplay,
+      increase,
+      reset
+    );
+
+    reader.parentNode.insertBefore(toolbar, reader);
+
+    const observer = new MutationObserver(applyFontSize);
+
+    observer.observe(reader, {
+      childList: true
+    });
+
+    applyFontSize();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      setupReadingControls
+    );
+  } else {
+    setupReadingControls();
+  }
+
+})();
