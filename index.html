@@ -1362,5 +1362,114 @@ content="Complete Quran, translations, recitation and Islamic companion.">
 
 </section>
 
+<!-- FILE 39: QURAN DAILY GOALS & STREAK -->
+
+<section id="hquDailyGoals" class="daily-goals-section">
+
+  <div class="daily-goals-heading">
+    <span>🌙</span>
+    <h2>Quran Daily Goals</h2>
+    <p>Build a consistent Quran reading habit.</p>
+  </div>
+
+  <div class="streak-card">
+    <span>🔥</span>
+    <h3 id="quranStreakCount">0 Days</h3>
+    <p>Current Reading Streak</p>
+  </div>
+
+  <div class="daily-goal-card">
+
+    <h3>🎯 Set Your Daily Goal</h3>
+
+    <label for="quranDailyTarget">
+      Daily Ayah Reading Target
+    </label>
+
+    <input
+      type="number"
+      id="quranDailyTarget"
+      min="1"
+      max="6236"
+      value="20"
+      placeholder="Enter your daily target"
+    >
+
+    <button type="button" id="saveQuranGoal">
+      Save Daily Goal
+    </button>
+
+    <p id="quranGoalMessage"></p>
+
+  </div>
+
+  <div class="daily-reading-card">
+
+    <h3>📖 Today's Reading</h3>
+
+    <p>How many Ayahs did you read today?</p>
+
+    <label for="quranAyahsRead">Ayahs Read Today</label>
+
+    <input
+      type="number"
+      id="quranAyahsRead"
+      min="0"
+      max="6236"
+      value="0"
+      placeholder="Enter Ayahs read"
+    >
+
+    <button type="button" id="saveQuranReading">
+      Save Today's Reading ✓
+    </button>
+
+    <p id="quranReadingMessage"></p>
+
+    <div class="daily-goal-progress">
+
+      <div class="daily-goal-progress-track">
+        <div id="quranDailyProgressBar"></div>
+      </div>
+
+      <p id="quranDailyProgressText">
+        0% of daily goal completed
+      </p>
+
+    </div>
+
+  </div>
+
+  <div class="reading-summary-card">
+
+    <h3>🏆 Reading Summary</h3>
+
+    <div class="reading-summary-grid">
+
+      <div>
+        <strong id="quranTodayTotal">0</strong>
+        <span>Today's Ayahs</span>
+      </div>
+
+      <div>
+        <strong id="quranTotalDays">0</strong>
+        <span>Active Days</span>
+      </div>
+
+      <div>
+        <strong id="quranTotalAyahs">0</strong>
+        <span>Total Ayahs Read</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <p class="daily-goal-note">
+    🤍 A little Quran reading every day can help build a lasting habit.
+  </p>
+
+</section>
+
 </body>
 </html>
