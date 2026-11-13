@@ -2030,5 +2030,253 @@ content="Complete Quran, translations, recitation and Islamic companion.">
 
 <!-- END PACKAGE 3 HTML -->
 
+<!-- =========================================
+ HOLY QURAN ULTIMATE - PACKAGE 4
+ AUDIO & RECITATION CENTER
+========================================= -->
+
+<section id="hquP4AudioCenter" class="hqu-p4-section">
+
+  <div class="hqu-p4-header">
+    <h2>🎧 Quran Audio & Recitation Center</h2>
+    <p>Listen, learn and enjoy Quran recitation</p>
+  </div>
+
+  <!-- 1. QARI SELECTION -->
+
+  <div class="hqu-p4-card">
+    <h3>🎙️ 1. Select Your Qari</h3>
+
+    <label for="hquP4Qari">Choose Reciter</label>
+    <select id="hquP4Qari">
+      <option value="mishary">Mishary Rashid Alafasy</option>
+      <option value="abdulbasit">Abdul Basit</option>
+      <option value="sudais">Abdul Rahman Al-Sudais</option>
+      <option value="shuraim">Saud Al-Shuraim</option>
+      <option value="maher">Maher Al-Muaiqly</option>
+      <option value="minshawi">Mohamed Siddiq Al-Minshawi</option>
+      <option value="husary">Mahmoud Khalil Al-Husary</option>
+      <option value="ghamdi">Saad Al-Ghamdi</option>
+    </select>
+
+    <p id="hquP4QariMessage">
+      Select a reciter for your listening session.
+    </p>
+  </div>
+
+  <!-- 2. AUDIO PLAYER -->
+
+  <div class="hqu-p4-card hqu-p4-player">
+    <h3>🎵 2. Quran Audio Player</h3>
+
+    <div class="hqu-p4-now-playing">
+      <div class="hqu-p4-audio-icon">📖</div>
+      <h3 id="hquP4NowPlaying">Select a Surah</h3>
+      <p id="hquP4NowQari">Qari: Not selected</p>
+    </div>
+
+    <audio id="hquP4AudioElement" preload="none"></audio>
+
+    <div class="hqu-p4-progress">
+      <span id="hquP4CurrentTime">00:00</span>
+      <input
+        type="range"
+        id="hquP4Seek"
+        min="0"
+        max="100"
+        value="0"
+        aria-label="Audio progress"
+      />
+      <span id="hquP4Duration">00:00</span>
+    </div>
+
+    <div class="hqu-p4-controls">
+      <button id="hquP4Previous" type="button">⏮</button>
+      <button id="hquP4Play" type="button">▶ Play</button>
+      <button id="hquP4Pause" type="button">⏸ Pause</button>
+      <button id="hquP4Next" type="button">⏭</button>
+    </div>
+
+    <p id="hquP4PlayerMessage">
+      Select a Surah to begin.
+    </p>
+  </div>
+
+  <!-- 3. RECITATION SPEED -->
+
+  <div class="hqu-p4-card">
+    <h3>⚡ 3. Recitation Speed</h3>
+
+    <label for="hquP4Speed">Playback Speed</label>
+    <select id="hquP4Speed">
+      <option value="0.5">0.5x</option>
+      <option value="0.75">0.75x</option>
+      <option value="1" selected>Normal 1x</option>
+      <option value="1.25">1.25x</option>
+      <option value="1.5">1.5x</option>
+      <option value="2">2x</option>
+    </select>
+
+    <p>Choose a comfortable listening speed.</p>
+  </div>
+
+  <!-- 4. REPEAT SETTINGS -->
+
+  <div class="hqu-p4-card">
+    <h3>🔁 4. Repeat Settings</h3>
+
+    <label for="hquP4RepeatMode">Repeat Mode</label>
+    <select id="hquP4RepeatMode">
+      <option value="none">No Repeat</option>
+      <option value="ayah">Repeat Ayah</option>
+      <option value="surah">Repeat Surah</option>
+      <option value="three">Repeat 3 Times</option>
+      <option value="five">Repeat 5 Times</option>
+    </select>
+
+    <p id="hquP4RepeatMessage">Repeat is off.</p>
+  </div>
+
+  <!-- 5. AUDIO PLAYLIST -->
+
+  <div class="hqu-p4-card">
+    <h3>📚 5. Audio Playlist</h3>
+
+    <label for="hquP4PlaylistSurah">Add Surah</label>
+    <select id="hquP4PlaylistSurah">
+      <option value="">Loading Surahs...</option>
+    </select>
+
+    <button id="hquP4AddPlaylist" type="button">
+      + Add to Playlist
+    </button>
+
+    <div id="hquP4PlaylistList"></div>
+
+    <button id="hquP4ClearPlaylist" type="button">
+      Clear Playlist
+    </button>
+  </div>
+
+  <!-- 6. OFFLINE DOWNLOADS -->
+
+  <div class="hqu-p4-card">
+    <h3>📥 6. Offline Audio Downloads</h3>
+
+    <p>
+      Download supported recitations to your device for later listening.
+    </p>
+
+    <label for="hquP4DownloadSurah">Select Surah</label>
+    <select id="hquP4DownloadSurah">
+      <option value="">Loading Surahs...</option>
+    </select>
+
+    <button id="hquP4DownloadButton" type="button">
+      Download Audio
+    </button>
+
+    <p id="hquP4DownloadMessage">
+      Downloaded audio will appear here.
+    </p>
+
+    <div id="hquP4DownloadsList"></div>
+  </div>
+
+  <!-- 7. TRANSLATION DISPLAY -->
+
+  <div class="hqu-p4-card">
+    <h3>🌍 7. Translation Display</h3>
+
+    <label for="hquP4TranslationLanguage">
+      Translation Language
+    </label>
+
+    <select id="hquP4TranslationLanguage">
+      <option value="en">English</option>
+      <option value="ur">Urdu</option>
+      <option value="ps">Pashto</option>
+    </select>
+
+    <div id="hquP4TranslationBox">
+      <p>Select an Ayah from the Quran reader to view its translation.</p>
+    </div>
+  </div>
+
+  <!-- 8. AUDIO BOOKMARKS -->
+
+  <div class="hqu-p4-card">
+    <h3>🔖 8. Audio Bookmarks</h3>
+
+    <label for="hquP4BookmarkName">Bookmark Name</label>
+    <input
+      type="text"
+      id="hquP4BookmarkName"
+      placeholder="Enter bookmark name"
+    />
+
+    <button id="hquP4SaveBookmark" type="button">
+      Save Audio Bookmark
+    </button>
+
+    <div id="hquP4BookmarksList"></div>
+    <p id="hquP4BookmarkMessage"></p>
+  </div>
+
+  <!-- 9. SLEEP TIMER -->
+
+  <div class="hqu-p4-card">
+    <h3>🌙 9. Sleep Timer</h3>
+
+    <label for="hquP4SleepTimer">Stop Audio After</label>
+
+    <select id="hquP4SleepTimer">
+      <option value="0">Timer Off</option>
+      <option value="5">5 Minutes</option>
+      <option value="10">10 Minutes</option>
+      <option value="15">15 Minutes</option>
+      <option value="30">30 Minutes</option>
+      <option value="45">45 Minutes</option>
+      <option value="60">60 Minutes</option>
+    </select>
+
+    <p id="hquP4SleepMessage">Sleep timer is off.</p>
+
+    <button id="hquP4CancelSleep" type="button">
+      Cancel Timer
+    </button>
+  </div>
+
+  <!-- 10. AUDIO SETTINGS -->
+
+  <div class="hqu-p4-card">
+    <h3>⚙️ 10. Audio Settings</h3>
+
+    <label>
+      <input type="checkbox" id="hquP4Autoplay" />
+      Auto Play Next Surah
+    </label>
+
+    <label>
+      <input type="checkbox" id="hquP4RememberQari" checked />
+      Remember Selected Qari
+    </label>
+
+    <label>
+      <input type="checkbox" id="hquP4KeepScreen" />
+      Keep Screen Awake While Listening
+    </label>
+
+    <button id="hquP4SaveSettings" type="button">
+      Save Audio Settings
+    </button>
+
+    <p id="hquP4SettingsMessage"></p>
+  </div>
+
+</section>
+
+<!-- END PACKAGE 4 HTML -->
+
 </body>
 </html>
