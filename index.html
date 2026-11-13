@@ -1616,5 +1616,196 @@ content="Complete Quran, translations, recitation and Islamic companion.">
 
 </section>
 
+<!-- ==========================================
+ HOLY QURAN ULTIMATE
+ PACKAGE 2: 10 ADVANCED FEATURES
+ HTML SECTIONS
+=========================================== -->
+
+<!-- 1. PERSONAL QURAN NOTES -->
+<section class="hqu-p2-section" id="hquP2Notes">
+  <h2>📝 My Quran Notes</h2>
+  <p>Save your personal Quran study notes.</p>
+
+  <label for="hquP2NoteSurah">Select Surah</label>
+  <select id="hquP2NoteSurah">
+    <option value="">Loading Surahs...</option>
+  </select>
+
+  <label for="hquP2NoteAyah">Ayah Number (Optional)</label>
+  <input id="hquP2NoteAyah" type="number" min="1" placeholder="Enter Ayah number">
+
+  <label for="hquP2NoteText">Your Note</label>
+  <textarea id="hquP2NoteText" placeholder="Write your Quran study note..."></textarea>
+
+  <button type="button" id="hquP2SaveNote">💾 Save Note</button>
+  <div id="hquP2NotesList"></div>
+  <p id="hquP2NoteMessage" aria-live="polite"></p>
+</section>
+
+<!-- 2. FAVORITE AYahs -->
+<section class="hqu-p2-section" id="hquP2Favorites">
+  <h2>⭐ Favorite Ayahs</h2>
+  <p>Save the Ayahs you want to revisit. Enter the text from a verified Quran source.</p>
+
+  <label for="hquP2FavSurah">Surah</label>
+  <select id="hquP2FavSurah">
+    <option value="">Loading Surahs...</option>
+  </select>
+
+  <label for="hquP2FavAyah">Ayah Number</label>
+  <input id="hquP2FavAyah" type="number" min="1" placeholder="Ayah number">
+
+  <label for="hquP2FavText">Ayah Text (Optional)</label>
+  <textarea id="hquP2FavText" placeholder="Paste verified Ayah text here..."></textarea>
+
+  <button type="button" id="hquP2SaveFavorite">⭐ Save Favorite</button>
+  <div id="hquP2FavoritesList"></div>
+  <p id="hquP2FavMessage" aria-live="polite"></p>
+</section>
+
+<!-- 3. DAILY ISLAMIC CHECKLIST -->
+<section class="hqu-p2-section" id="hquP2Checklist">
+  <h2>📋 Daily Islamic Checklist</h2>
+  <p>Track your personal daily learning and worship goals.</p>
+
+  <div id="hquP2ChecklistItems">
+    <label><input type="checkbox" value="Quran Reading"> Quran Reading</label>
+    <label><input type="checkbox" value="Dhikr"> Dhikr</label>
+    <label><input type="checkbox" value="Dua"> Dua</label>
+    <label><input type="checkbox" value="Islamic Learning"> Islamic Learning</label>
+    <label><input type="checkbox" value="Personal Reflection"> Personal Reflection</label>
+  </div>
+
+  <p id="hquP2ChecklistProgress">Today's progress: 0/5</p>
+  <button type="button" id="hquP2ResetChecklist">Reset Today's Checklist</button>
+</section>
+
+<!-- 4. 99 NAMES OF ALLAH -->
+<section class="hqu-p2-section" id="hquP2Names">
+  <h2>🤲 Asma ul Husna</h2>
+  <p>The 99 Beautiful Names of Allah.</p>
+
+  <input id="hquP2NameSearch" type="search" placeholder="Search names...">
+  <div id="hquP2NamesList">
+    <p>Verified Asma ul Husna data will appear here when added to the app.</p>
+  </div>
+  <p class="hqu-p2-info">Names and meanings should be checked against a reliable Islamic source.</p>
+</section>
+
+<!-- 5. DAILY DUAS -->
+<section class="hqu-p2-section" id="hquP2Duas">
+  <h2>🤲 Daily Duas</h2>
+  <p>Browse and search a collection of daily Duas.</p>
+
+  <input id="hquP2DuaSearch" type="search" placeholder="Search Duas...">
+
+  <select id="hquP2DuaCategory">
+    <option value="all">All Categories</option>
+    <option value="morning">Morning Duas</option>
+    <option value="evening">Evening Duas</option>
+    <option value="sleep">Before Sleep</option>
+    <option value="food">Food Duas</option>
+    <option value="travel">Travel Duas</option>
+  </select>
+
+  <div id="hquP2DuasList">
+    <p>Verified Dua collection will appear here when its data file is added.</p>
+  </div>
+</section>
+
+<!-- 6. QURAN QUIZ -->
+<section class="hqu-p2-section" id="hquP2Quiz">
+  <h2>🧠 Quran Knowledge Quiz</h2>
+  <p>Test your knowledge of Surah names and information.</p>
+
+  <div id="hquP2QuizQuestion">
+    Press Start Quiz to begin.
+  </div>
+
+  <div id="hquP2QuizOptions"></div>
+
+  <button type="button" id="hquP2StartQuiz">▶ Start Quiz</button>
+  <p id="hquP2QuizResult" aria-live="polite"></p>
+  <p id="hquP2QuizScore">Score: 0</p>
+</section>
+
+<!-- 7. ADVANCED TASBEEH -->
+<section class="hqu-p2-section" id="hquP2AdvancedTasbeeh">
+  <h2>📿 Advanced Tasbeeh</h2>
+  <p>Choose a Dhikr and track your count.</p>
+
+  <select id="hquP2TasbeehType">
+    <option value="SubhanAllah">SubhanAllah</option>
+    <option value="Alhamdulillah">Alhamdulillah</option>
+    <option value="AllahuAkbar">Allahu Akbar</option>
+    <option value="Astaghfirullah">Astaghfirullah</option>
+    <option value="Custom">Custom Dhikr</option>
+  </select>
+
+  <input id="hquP2CustomDhikr" type="text" placeholder="Enter your Dhikr">
+
+  <div id="hquP2TasbeehCount">0</div>
+
+  <button type="button" id="hquP2TasbeehAdd">+ Count</button>
+  <button type="button" id="hquP2TasbeehReset">Reset</button>
+
+  <label for="hquP2TasbeehGoal">Daily Goal</label>
+  <input id="hquP2TasbeehGoal" type="number" min="1" value="100">
+
+  <p id="hquP2TasbeehProgress">Progress: 0%</p>
+</section>
+
+<!-- 8. ISLAMIC CALENDAR -->
+<section class="hqu-p2-section" id="hquP2Calendar">
+  <h2>🗓 Islamic Calendar</h2>
+  <p>View today's Gregorian and estimated Hijri date.</p>
+
+  <div class="hqu-p2-date-card">
+    <h3>Gregorian Date</h3>
+    <p id="hquP2GregorianDate">Loading...</p>
+
+    <h3>Estimated Hijri Date</h3>
+    <p id="hquP2HijriDate">Loading...</p>
+  </div>
+
+  <p class="hqu-p2-info">
+    Hijri dates are approximate and may differ according to local moon sighting.
+  </p>
+</section>
+
+<!-- 9. DARK & LIGHT MODE -->
+<section class="hqu-p2-section" id="hquP2Theme">
+  <h2>🎨 Appearance Settings</h2>
+  <p>Choose your preferred app appearance.</p>
+
+  <button type="button" id="hquP2LightMode">☀ Light Mode</button>
+  <button type="button" id="hquP2DarkMode">🌙 Dark Mode</button>
+
+  <p id="hquP2ThemeMessage" aria-live="polite">Choose a theme.</p>
+</section>
+
+<!-- 10. SETTINGS & DATA BACKUP -->
+<section class="hqu-p2-section" id="hquP2Settings">
+  <h2>⚙ App Settings & Backup</h2>
+  <p>Manage your app data and personal backup.</p>
+
+  <button type="button" id="hquP2ExportBackup">📥 Export My Backup</button>
+
+  <label for="hquP2ImportBackup">Restore Backup File</label>
+  <input id="hquP2ImportBackup" type="file" accept=".json,application/json">
+
+  <button type="button" id="hquP2ImportButton">📤 Restore Backup</button>
+
+  <p id="hquP2BackupMessage" aria-live="polite"></p>
+
+  <p class="hqu-p2-info">
+    Your personal notes and saved data may be included in the backup.
+    Keep your backup file private.
+  </p>
+</section>
+
+<!-- END PACKAGE 2 HTML -->
+
 </body>
 </html>
