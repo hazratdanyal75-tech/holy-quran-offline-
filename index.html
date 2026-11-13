@@ -1297,5 +1297,70 @@ content="Complete Quran, translations, recitation and Islamic companion.">
 
 </section>
 
+<!-- FILE 36: DAILY HIFZ REVISION TRACKER -->
+
+<section id="hquRevisionTracker" class="revision-section">
+
+  <div class="revision-heading">
+    <span>📖</span>
+    <h2>Daily Hifz Revision</h2>
+    <p>Keep your Quran revision journey organized.</p>
+  </div>
+
+  <div class="revision-form">
+
+    <h3>➕ Add New Revision</h3>
+
+    <label for="revisionSurah">Select Surah</label>
+    <select id="revisionSurah">
+      <option value="">Loading Surahs...</option>
+    </select>
+
+    <label for="revisionDate">Revision Date</label>
+    <input type="date" id="revisionDate">
+
+    <label for="revisionNotes">Revision Notes (Optional)</label>
+    <textarea
+      id="revisionNotes"
+      rows="3"
+      placeholder="Write your revision notes..."
+    ></textarea>
+
+    <button type="button" id="saveRevision">
+      Save Revision ✓
+    </button>
+
+    <p id="revisionMessage"></p>
+
+  </div>
+
+  <div class="revision-history">
+
+    <h3>📚 Revision History</h3>
+
+    <div class="revision-stats">
+      <div>
+        <strong id="revisionTotal">0</strong>
+        <span>Total Revisions</span>
+      </div>
+
+      <div>
+        <strong id="revisionToday">0</strong>
+        <span>Today's Revisions</span>
+      </div>
+    </div>
+
+    <div id="revisionHistoryList">
+      <p>No revision records yet.</p>
+    </div>
+
+  </div>
+
+  <p class="revision-note">
+    🤍 Consistent revision helps you maintain what you have memorized.
+  </p>
+
+</section>
+
 </body>
 </html>
