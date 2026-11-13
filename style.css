@@ -2518,3 +2518,198 @@ body {
     padding: 15px;
   }
 }
+
+/* =========================================
+   FILE 38: REVISION TRACKER DESIGN
+========================================= */
+
+.revision-section {
+  width: 100%;
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 22px;
+  box-sizing: border-box;
+  border-radius: 22px;
+  background: var(--card-bg, #ffffff);
+  color: var(--text-color, #202b35);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+}
+
+.revision-heading {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.revision-heading > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 65px;
+  height: 65px;
+  border-radius: 20px;
+  background: #e8f1ff;
+  font-size: 34px;
+}
+
+.revision-heading h2 {
+  margin: 12px 0 7px;
+  color: #2864ad;
+  font-size: 25px;
+}
+
+.revision-heading p {
+  font-size: 14px;
+  opacity: 0.75;
+}
+
+.revision-form,
+.revision-history {
+  padding: 20px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(80, 130, 180, 0.17);
+  border-radius: 17px;
+  background: var(--card-bg, #ffffff);
+}
+
+.revision-form h3,
+.revision-history h3 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+.revision-form label {
+  display: block;
+  margin-top: 14px;
+  margin-bottom: 7px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.revision-form select,
+.revision-form input,
+.revision-form textarea {
+  display: block;
+  width: 100%;
+  min-height: 46px;
+  padding: 12px;
+  box-sizing: border-box;
+  border: 1px solid #ccd8e5;
+  border-radius: 10px;
+  background: var(--card-bg, #ffffff);
+  color: var(--text-color, #202b35);
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.revision-form textarea {
+  resize: vertical;
+}
+
+#saveRevision {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 17px;
+  padding: 12px;
+  border: none;
+  border-radius: 11px;
+  background: #2864ad;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#saveRevision:active {
+  transform: scale(0.98);
+}
+
+#revisionMessage {
+  min-height: 20px;
+  margin: 10px 0 0;
+  color: #16845b;
+  font-size: 13px;
+}
+
+.revision-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 15px 0;
+}
+
+.revision-stats > div {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 17px 10px;
+  border-radius: 13px;
+  background: #edf4ff;
+  text-align: center;
+}
+
+.revision-stats strong {
+  color: #2864ad;
+  font-size: 25px;
+}
+
+.revision-stats span {
+  font-size: 12px;
+}
+
+.revision-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  margin-top: 10px;
+  border-radius: 12px;
+  background: #edf4ff;
+}
+
+.revision-item strong {
+  color: #2864ad;
+  font-size: 15px;
+}
+
+.revision-item p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.revision-delete {
+  flex-shrink: 0;
+  padding: 8px 11px;
+  border: none;
+  border-radius: 8px;
+  background: #ffe8e8;
+  color: #c0392b;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.revision-note {
+  padding: 15px;
+  border-radius: 12px;
+  background: #fff8e6;
+  color: #70551a;
+  font-size: 13px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .revision-section {
+    padding: 14px;
+  }
+
+  .revision-form,
+  .revision-history {
+    padding: 15px;
+  }
+
+  .revision-item {
+    align-items: flex-start;
+  }
+}
