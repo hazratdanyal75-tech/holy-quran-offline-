@@ -1520,5 +1520,68 @@ content="Complete Quran, translations, recitation and Islamic companion.">
 
 </section>
 
+<!-- FILE 45: ADVANCED QURAN AUDIO PLAYER -->
+
+<section id="hquAdvancedAudio" class="hqu-advanced-audio">
+
+  <div class="hqu-audio-heading">
+    <span class="hqu-audio-icon">🎧</span>
+    <h2>Quran Audio Recitation</h2>
+    <p>Listen to beautiful Quran recitation</p>
+  </div>
+
+  <label for="hquQariSelect">Select Qari</label>
+  <select id="hquQariSelect">
+    <option value="">Select a Qari</option>
+  </select>
+
+  <div class="hqu-audio-current">
+    <h3 id="hquAudioSurah">Select Surah</h3>
+    <p id="hquAudioAyah">Ready to listen</p>
+  </div>
+
+  <audio id="hquAudio" preload="none"></audio>
+
+  <div class="hqu-audio-controls">
+
+    <button id="hquPreviousAyah" type="button" aria-label="Previous Ayah">⏮</button>
+
+    <button id="hquPlay" type="button" aria-label="Play audio">▶</button>
+
+    <button id="hquNextAyah" type="button" aria-label="Next Ayah">⏭</button>
+
+  </div>
+
+  <div class="hqu-audio-progress">
+    <span id="hquAudioCurrentTime">0:00</span>
+    <input id="hquProgress" type="range" min="0" max="100" value="0">
+    <span id="hquAudioDuration">0:00</span>
+  </div>
+
+  <div class="hqu-audio-options">
+
+    <div>
+      <label for="hquVolume">Volume</label>
+      <input id="hquVolume" type="range" min="0" max="1" step="0.05" value="1">
+    </div>
+
+    <div>
+      <label for="hquSpeed">Playback Speed</label>
+      <select id="hquSpeed">
+        <option value="0.75">0.75x</option>
+        <option value="1" selected>Normal 1x</option>
+        <option value="1.25">1.25x</option>
+        <option value="1.5">1.5x</option>
+      </select>
+    </div>
+
+  </div>
+
+  <p id="hquAudioMessage" role="status">
+    Please select a Qari and Surah.
+  </p>
+
+</section>
+
 </body>
 </html>
