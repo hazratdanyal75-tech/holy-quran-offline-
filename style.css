@@ -2053,3 +2053,146 @@ body {
     font-size: 14px;
   }
 }
+
+/* =====================================
+   FILE 28: PREMIUM TASBEEH DESIGN
+===================================== */
+
+#hquTasbeeh {
+  padding: 22px 15px;
+  margin: 25px 0;
+  text-align: center;
+  background: linear-gradient(145deg, #063d30, #087653);
+  color: white;
+  border-radius: 22px;
+  box-shadow: 0 8px 25px rgba(0, 40, 25, 0.2);
+}
+
+#hquTasbeeh h2 {
+  color: #f5d47b;
+  font-size: 25px;
+  margin-bottom: 5px;
+}
+
+.tasbeeh-subtitle {
+  color: #e4f0e8;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.tasbeeh-card {
+  max-width: 430px;
+  margin: auto;
+  padding: 20px 14px;
+  background: rgba(255,255,255,0.09);
+  border: 1px solid rgba(240,205,115,0.35);
+  border-radius: 18px;
+}
+
+.tasbeeh-selector {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.tasbeeh-type {
+  padding: 10px 12px;
+  border: 1px solid #d8b95e;
+  border-radius: 10px;
+  background: transparent;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.tasbeeh-type.active {
+  background: #f1ce72;
+  color: #16412f;
+  font-weight: bold;
+}
+
+#tasbeehDhikr {
+  color: #f8df9a;
+  font-size: 29px;
+  margin: 18px 0;
+}
+
+.tasbeeh-circle {
+  width: 175px;
+  height: 175px;
+  margin: 20px auto;
+  border: 7px solid #e8c66c;
+  border-radius: 50%;
+  background: radial-gradient(circle, #0b7654, #064331);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 25px rgba(240,205,115,0.2);
+}
+
+#tasbeehCount {
+  color: #ffffff;
+  font-size: 55px;
+  font-weight: bold;
+}
+
+.tasbeeh-target {
+  color: #f3dfaa;
+  font-size: 15px;
+  margin: 15px 0;
+}
+
+#tasbeehIncrement {
+  width: 85%;
+  max-width: 260px;
+  padding: 17px;
+  margin: 10px auto;
+  display: block;
+  background: #f0cc70;
+  color: #153e2e;
+  border: none;
+  border-radius: 14px;
+  font-size: 19px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#tasbeehReset {
+  padding: 11px 25px;
+  margin-top: 8px;
+  background: rgba(255,255,255,0.12);
+  color: white;
+  border: 1px solid #e8c66c;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#tasbeehMessage {
+  color: #f5dfa5;
+  font-size: 14px;
+  margin-top: 17px;
+}
+
+#tasbeehIncrement:active,
+#tasbeehReset:active,
+.tasbeeh-type:active {
+  transform: scale(0.96);
+}
+
+@media (max-width: 480px) {
+  #hquTasbeeh {
+    padding: 17px 10px;
+  }
+
+  .tasbeeh-circle {
+    width: 155px;
+    height: 155px;
+  }
+
+  #tasbeehCount {
+    font-size: 48px;
+  }
+}
