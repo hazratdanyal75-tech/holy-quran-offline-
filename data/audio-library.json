@@ -1,66 +1,39 @@
 
 {
-  "description": "Verified Surah-wise Quran recitation audio library",
+  "version": 1,
+  "description": "Surah-wise Quran audio library for six Qaris",
   "qaris": [
     {
       "id": "mishary",
       "name": "Mishary Rashid Alafasy",
-      "surahs": {
-        "1": "",
-        "2": "",
-        "3": "",
-        "4": ""
-      }
+      "surahs": {}
     },
     {
       "id": "abdulbasit",
       "name": "Abdul Basit Abdul Samad",
-      "surahs": {
-        "1": "",
-        "2": "",
-        "3": "",
-        "4": ""
-      }
+      "surahs": {}
     },
     {
       "id": "sudais",
       "name": "Abdul Rahman Al-Sudais",
-      "surahs": {
-        "1": "",
-        "2": "",
-        "3": "",
-        "4": ""
-      }
+      "surahs": {}
     },
     {
       "id": "shuraim",
       "name": "Saud Al-Shuraim",
-      "surahs": {
-        "1": "",
-        "2": "",
-        "3": "",
-        "4": ""
-      }
+      "surahs": {}
     },
     {
       "id": "maher",
       "name": "Maher Al-Muaiqly",
-      "surahs": {
-        "1": "",
-        "2": "",
-        "3": "",
-        "4": ""
-      }
+      "surahs": {}
     },
     {
       "id": "hussary",
       "name": "Mahmoud Khalil Al-Hussary",
-      "surahs": {
-        "1": "",
-        "2": "",
-        "3": "",
-        "4": ""
-      }
+      "surahs": {}
     }
-  ]
+  ],
+  "surahCount": 114,
+  "audioStatus": "awaiting_verified_audio_sources"
 }
