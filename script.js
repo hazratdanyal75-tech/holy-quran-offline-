@@ -1103,3 +1103,181 @@ if ("serviceWorker" in navigator) {
     }
   });
 }
+
+/* =====================================
+   HOLY QURAN ULTIMATE
+   FILE 13 - QURAN DATA CONNECTION
+===================================== */
+
+(function () {
+  "use strict";
+
+  let surahData = [];
+  let arabicData = {};
+  let urduData = {};
+  let englishData = {};
+  let currentSurah = 1;
+
+  const getElement = (id) =>
+    document.getElementById(id);
+
+  async function loadQuranFiles() {
+    try {
+      const files = await Promise.all([
+        fetch("./data/surahs.json").then(r => {
+          if (!r.ok) throw new Error("Surah file error");
+          return r.json();
+        }),
+        fetch("./data/quran.json").then(r => {
+          if (!r.ok) throw new Error("Quran file error");
+          return r.json();
+        }),
+        fetch("./data/urdu.json").then(r => {
+          if (!r.ok) throw new Error("Urdu file error");
+          return r.json();
+        }),
+        fetch("./data/english.json").then(r => {
+          if (!r.ok) throw new Error("English file error");
+          return r.json();
+        })
+      ]);
+
+      surahData = files[0].surahs;
+      arabicData = files[1];
+      urduData = files[2];
+      englishData = files[3];
+
+      showSurahList();
+      openSurah(1);
+
+      console.log("Quran data loaded successfully!");
+
+    } catch (error) {
+      console.error("Quran loading error:", error);
+
+      const list = getElement("surahList");
+      if (list) {
+        list.textContent =
+          "Quran data could not load. Please check your files.";
+      }
+    }
+  }
+
+  function showSurahList(filter = "") {
+    const list = getElement("surahList");
+    if (!list) return;
+
+    list.innerHTML = "";
+
+    const results = surahData.filter(surah =>
+      surah.name.toLowerCase().includes(filter.toLowerCase()) ||
+      surah.arabic.includes(filter)
+    );
+
+    results.forEach(surah => {
+      const button = document.createElement("button");
+
+      button.type = "button";
+      button.className = "surah-item";
+      button.innerHTML = `
+        <span>${surah.id}. ${surah.name}</span>
+        <span>${surah.arabic}</span>
+        <small>${surah.ayahs} Ayahs · ${surah.type}</small>
+      `;
+
+      button.addEventListener("click", () => {
+        openSurah(surah.id);
+      });
+
+      list.appendChild(button);
+    });
+  }
+
+  function openSurah(id) {
+    currentSurah = id;
+
+    const surah = surahData.find(s => s.id === id);
+    if (!surah) return;
+
+    const name = getElement("readerSurahName");
+    const details = getElement("readerSurahDetails");
+    const container = getElement("ayahContainer");
+
+    if (name) {
+      name.textContent =
+        surah.arabic + " — " + surah.name;
+    }
+
+    if (details) {
+      details.textContent =
+        surah.ayahs + " Ayahs · " + surah.type;
+    }
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    const arabic = arabicData[String(id)] || [];
+    const urdu = urduData[String(id)] || [];
+    const english = englishData[String(id)] || [];
+
+    if (arabic.length === 0) {
+      container.textContent =
+        "Is Surah ka verified Arabic data abhi add nahi hua. Please check back later.";
+      return;
+    }
+
+    const language =
+      getElement("translationLanguage")?.value || "urdu";
+
+    arabic.forEach((ayah, index) => {
+      const card = document.createElement("article");
+      card.className = "ayah-card";
+
+      const arabicText = document.createElement("p");
+      arabicText.className = "ayah-arabic";
+      arabicText.dir = "rtl";
+      arabicText.textContent = ayah;
+
+      const number = document.createElement("small");
+      number.textContent = "Ayah " + (index + 1);
+
+      card.appendChild(number);
+      card.appendChild(arabicText);
+
+      const translation = document.createElement("p");
+      translation.className = "ayah-translation";
+
+      if (language === "english") {
+        translation.textContent =
+          english[index] || "Translation not available.";
+      } else {
+        translation.textContent =
+          urdu[index] || "ترجمہ دستیاب نہیں ہے۔";
+      }
+
+      card.appendChild(translation);
+      container.appendChild(card);
+    });
+  }
+
+  const search = getElement("surahSearch");
+
+  if (search) {
+    search.addEventListener("input", () => {
+      showSurahList(search.value);
+    });
+  }
+
+  const languageSelect =
+    getElement("translationLanguage");
+
+  if (languageSelect) {
+    languageSelect.addEventListener("change", () => {
+      openSurah(currentSurah);
+    });
+  }
+
+  window.addEventListener("DOMContentLoaded", loadQuranFiles);
+
+})();
