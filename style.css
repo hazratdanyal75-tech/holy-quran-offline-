@@ -3280,3 +3280,175 @@ body {
     gap: 15px;
   }
 }
+
+/* =========================================
+   FILE 50 — QURAN READING HISTORY DESIGN
+========================================= */
+
+#hquReadingHistory {
+  width: 100%;
+  max-width: 850px;
+  margin: 25px auto;
+  padding: 23px;
+  box-sizing: border-box;
+  background: linear-gradient(145deg, #ffffff, #f0faf5);
+  border: 1px solid #d8eadf;
+  border-radius: 22px;
+  box-shadow: 0 8px 24px rgba(0, 70, 40, 0.08);
+}
+
+.hqu-history-heading {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.hqu-history-heading span {
+  font-size: 42px;
+}
+
+.hqu-history-heading h2 {
+  color: #075c3b;
+  font-size: 24px;
+  margin: 8px 0;
+}
+
+.hqu-history-heading p {
+  color: #718177;
+  font-size: 14px;
+}
+
+.hqu-history-last {
+  padding: 20px;
+  border-radius: 17px;
+  background: linear-gradient(135deg, #075b3b, #098453);
+  color: #ffffff;
+  margin-bottom: 24px;
+}
+
+.hqu-history-last h3 {
+  font-size: 18px;
+  margin: 0 0 12px;
+}
+
+#hquLastReadName {
+  color: #e1f8e9;
+  font-size: 17px;
+  margin: 0 0 15px;
+  font-weight: 600;
+}
+
+#hquContinueReading {
+  padding: 12px 20px;
+  background: #ffffff;
+  color: #075c3b;
+  border: none;
+  border-radius: 11px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.hqu-history-list-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.hqu-history-list-heading h3 {
+  color: #075c3b;
+  font-size: 18px;
+  margin: 0;
+}
+
+#hquClearHistory {
+  padding: 9px 13px;
+  border: 1px solid #e8c6c6;
+  border-radius: 9px;
+  background: #fff5f5;
+  color: #a13b3b;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+#hquHistoryList {
+  display: grid;
+  gap: 11px;
+}
+
+.hqu-history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 15px;
+  background: #ffffff;
+  border: 1px solid #e0eee5;
+  border-left: 4px solid #098453;
+  border-radius: 13px;
+}
+
+.hqu-history-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.hqu-history-info strong {
+  color: #075c3b;
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+
+.hqu-history-info small {
+  color: #7a8980;
+  font-size: 11px;
+}
+
+.hqu-history-item button {
+  flex-shrink: 0;
+  padding: 9px 15px;
+  background: #087b4b;
+  color: #ffffff;
+  border: none;
+  border-radius: 9px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+#hquHistoryMessage {
+  text-align: center;
+  color: #087448;
+  font-size: 13px;
+  margin-top: 15px;
+}
+
+#hquReadingHistory button:focus-visible {
+  outline: 3px solid #e3a72f;
+  outline-offset: 3px;
+}
+
+@media (max-width: 500px) {
+  #hquReadingHistory {
+    padding: 16px;
+    border-radius: 17px;
+  }
+
+  .hqu-history-heading h2 {
+    font-size: 21px;
+  }
+
+  .hqu-history-item {
+    padding: 12px;
+  }
+
+  .hqu-history-info strong {
+    font-size: 13px;
+  }
+
+  .hqu-history-item button {
+    padding: 8px 11px;
+  }
+}
