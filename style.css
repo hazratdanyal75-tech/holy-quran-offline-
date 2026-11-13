@@ -2938,3 +2938,162 @@ body {
     font-size: 10px;
   }
 }
+
+/* =========================================
+   FILE 44 — ADVANCED QURAN SEARCH DESIGN
+========================================= */
+
+#hquAdvancedSearch {
+  width: 100%;
+  max-width: 950px;
+  margin: 25px auto;
+  padding: 22px;
+  background: linear-gradient(145deg, #ffffff, #f0faf5);
+  border: 1px solid #d7eadf;
+  border-radius: 22px;
+  box-shadow: 0 8px 25px rgba(0, 70, 40, 0.09);
+  box-sizing: border-box;
+}
+
+#hquAdvancedSearch h2 {
+  color: #075c3b;
+  font-size: 25px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+#hquAdvancedSearch p {
+  color: #64756b;
+  line-height: 1.7;
+}
+
+#quranSearchInput {
+  width: 100%;
+  padding: 15px 17px;
+  border: 2px solid #c9e5d5;
+  border-radius: 13px;
+  outline: none;
+  background: #ffffff;
+  color: #173c2b;
+  font-size: 16px;
+  box-sizing: border-box;
+  margin: 12px 0;
+  transition: 0.25s;
+}
+
+#quranSearchInput:focus {
+  border-color: #07834e;
+  box-shadow: 0 0 0 4px rgba(7, 131, 78, 0.10);
+}
+
+#quranSearchType {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #c9e5d5;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #075c3b;
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+#quranSearchButton {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #087b4b, #064d35);
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+#quranSearchButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 90, 50, 0.2);
+}
+
+#quranSearchStatus {
+  text-align: center;
+  padding: 13px 5px;
+  color: #087448;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+#quranSearchResults {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 13px;
+  margin-top: 12px;
+}
+
+.hqu-search-result {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 17px;
+  border: 1px solid #d9e9df;
+  border-left: 5px solid #07834e;
+  border-radius: 14px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: 0.25s;
+  color: #263b30;
+}
+
+.hqu-search-result:hover {
+  background: #f0faf4;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(0, 70, 40, 0.08);
+}
+
+.hqu-search-result strong {
+  display: block;
+  color: #087448;
+  font-size: 16px;
+  margin-bottom: 7px;
+}
+
+.hqu-search-result-details {
+  color: #718177;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.hqu-search-result p {
+  color: #253b30;
+  font-size: 16px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+  margin: 0;
+}
+
+.hqu-search-result:focus-visible,
+#quranSearchButton:focus-visible {
+  outline: 3px solid #e3a72f;
+  outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+  #hquAdvancedSearch {
+    padding: 16px;
+    margin: 18px auto;
+    border-radius: 17px;
+  }
+
+  #hquAdvancedSearch h2 {
+    font-size: 21px;
+  }
+
+  #quranSearchInput,
+  #quranSearchType {
+    font-size: 14px;
+  }
+
+  .hqu-search-result {
+    padding: 14px;
+  }
+}
