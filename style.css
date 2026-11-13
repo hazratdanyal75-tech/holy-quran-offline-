@@ -5322,3 +5322,502 @@ body.hqu-p3-reduce-motion .hqu-p6-section *::after {
 }
 
 /* End Package 6 CSS */
+
+<!-- ==========================================
+ HOLY QURAN ULTIMATE
+ PACKAGE 7 — 50 ADVANCED FEATURES
+ HTML PART
+=========================================== -->
+
+<section id="hquP7Main" class="hqu-p7-section">
+
+  <header class="hqu-p7-header">
+    <span class="hqu-p7-label">HOLY QURAN ULTIMATE</span>
+    <h2>Advanced Quran Center</h2>
+    <p>Audio, Translation, Tafsir, Learning & Personal Library</p>
+  </header>
+
+  <!-- 1. MULTIPLE RECITERS LIBRARY -->
+  <article class="hqu-p7-card">
+    <h3>01. Multiple Quran Reciters Library</h3>
+    <p>Select your preferred Quran reciter.</p>
+    <select id="hquP7Reciter">
+      <option value="">Select Reciter</option>
+      <option value="alafasy">Mishary Rashid Alafasy</option>
+      <option value="abdulbasit">Abdul Basit</option>
+      <option value="sudais">Abdur Rahman Al-Sudais</option>
+      <option value="shuraim">Saud Al-Shuraim</option>
+      <option value="husary">Mahmoud Khalil Al-Husary</option>
+    </select>
+    <button id="hquP7SaveReciter">Save Reciter</button>
+    <div id="hquP7ReciterInfo"></div>
+  </article>
+
+  <!-- 2. RECITER PROFILE -->
+  <article class="hqu-p7-card">
+    <h3>02. Reciter Profile Cards</h3>
+    <button id="hquP7ShowProfiles">Show Reciter Profiles</button>
+    <div id="hquP7Profiles"></div>
+  </article>
+
+  <!-- 3. AUDIO QUALITY -->
+  <article class="hqu-p7-card">
+    <h3>03. Audio Quality Selector</h3>
+    <select id="hquP7AudioQuality">
+      <option value="low">Low Data</option>
+      <option value="medium">Standard</option>
+      <option value="high">High Quality</option>
+    </select>
+    <button id="hquP7SaveQuality">Save Quality</button>
+    <p id="hquP7QualityInfo"></p>
+  </article>
+
+  <!-- 4. AUDIO DOWNLOAD MANAGER -->
+  <article class="hqu-p7-card">
+    <h3>04. Audio Download Manager</h3>
+    <input id="hquP7DownloadSurah" type="number"
+      min="1" max="114" placeholder="Surah number">
+    <button id="hquP7StartDownload">Start Download</button>
+    <div id="hquP7DownloadStatus"></div>
+    <progress id="hquP7DownloadProgress" value="0" max="100"></progress>
+  </article>
+
+  <!-- 5. DOWNLOADED AUDIO LIBRARY -->
+  <article class="hqu-p7-card">
+    <h3>05. Downloaded Audio Library</h3>
+    <button id="hquP7ShowDownloads">Show Downloads</button>
+    <div id="hquP7DownloadedLibrary"></div>
+  </article>
+
+  <!-- 6. AUDIO STORAGE MANAGER -->
+  <article class="hqu-p7-card">
+    <h3>06. Audio Storage Manager</h3>
+    <button id="hquP7CheckAudioStorage">Check Storage</button>
+    <div id="hquP7AudioStorageInfo"></div>
+  </article>
+
+  <!-- 7. SURAH AUDIO QUEUE -->
+  <article class="hqu-p7-card">
+    <h3>07. Surah Audio Queue</h3>
+    <input id="hquP7QueueSurah" type="number"
+      min="1" max="114" placeholder="Surah number">
+    <button id="hquP7AddQueue">Add to Queue</button>
+    <button id="hquP7ShowQueue">Show Queue</button>
+    <div id="hquP7AudioQueue"></div>
+  </article>
+
+  <!-- 8. CUSTOM PLAYLISTS -->
+  <article class="hqu-p7-card">
+    <h3>08. Custom Audio Playlists</h3>
+    <input id="hquP7PlaylistName"
+      placeholder="New playlist name">
+    <button id="hquP7CreatePlaylist">Create Playlist</button>
+    <div id="hquP7PlaylistList"></div>
+  </article>
+
+  <!-- 9. PLAYLIST MANAGEMENT -->
+  <article class="hqu-p7-card">
+    <h3>09. Playlist Rename & Delete</h3>
+    <select id="hquP7ManagePlaylist">
+      <option value="">Select Playlist</option>
+    </select>
+    <input id="hquP7RenamePlaylist"
+      placeholder="New playlist name">
+    <button id="hquP7RenameButton">Rename</button>
+    <button id="hquP7DeletePlaylist">Delete</button>
+    <p id="hquP7PlaylistManageInfo"></p>
+  </article>
+
+  <!-- 10. AUDIO HISTORY -->
+  <article class="hqu-p7-card">
+    <h3>10. Audio Playback History</h3>
+    <button id="hquP7ShowAudioHistory">Show History</button>
+    <div id="hquP7AudioHistory"></div>
+  </article>
+
+  <!-- 11. TRANSLATION LIBRARY -->
+  <article class="hqu-p7-card">
+    <h3>11. Translation Library</h3>
+    <select id="hquP7Translation">
+      <option value="">Select Translation</option>
+      <option value="english">English</option>
+      <option value="urdu">Urdu</option>
+      <option value="arabic">Arabic</option>
+      <option value="pashto">Pashto</option>
+    </select>
+    <button id="hquP7SelectTranslation">Select Translation</button>
+    <div id="hquP7TranslationInfo"></div>
+  </article>
+
+  <!-- 12. TRANSLATION LANGUAGE FILTER -->
+  <article class="hqu-p7-card">
+    <h3>12. Translation Language Filter</h3>
+    <select id="hquP7LanguageFilter">
+      <option value="all">All Languages</option>
+      <option value="english">English</option>
+      <option value="urdu">Urdu</option>
+      <option value="arabic">Arabic</option>
+      <option value="pashto">Pashto</option>
+    </select>
+    <button id="hquP7FilterLanguages">Filter Languages</button>
+    <div id="hquP7LanguageResults"></div>
+  </article>
+
+  <!-- 13. TRANSLATION COMPARISON -->
+  <article class="hqu-p7-card">
+    <h3>13. Translation Comparison</h3>
+    <select id="hquP7CompareOne">
+      <option value="english">English</option>
+      <option value="urdu">Urdu</option>
+      <option value="pashto">Pashto</option>
+    </select>
+    <select id="hquP7CompareTwo">
+      <option value="urdu">Urdu</option>
+      <option value="english">English</option>
+      <option value="pashto">Pashto</option>
+    </select>
+    <button id="hquP7CompareButton">Compare</button>
+    <div id="hquP7ComparisonResults"></div>
+  </article>
+
+  <!-- 14. TRANSLATION FAVORITES -->
+  <article class="hqu-p7-card">
+    <h3>14. Translation Favorites</h3>
+    <button id="hquP7SaveTranslationFavorite">Save Current Translation</button>
+    <button id="hquP7ShowTranslationFavorites">Show Favorites</button>
+    <div id="hquP7TranslationFavorites"></div>
+  </article>
+
+  <!-- 15. TRANSLATION DOWNLOAD STATUS -->
+  <article class="hqu-p7-card">
+    <h3>15. Translation Download Status</h3>
+    <button id="hquP7CheckTranslationData">Check Translation Data</button>
+    <div id="hquP7TranslationStatus"></div>
+  </article>
+
+  <!-- 16. TAFSIR LIBRARY -->
+  <article class="hqu-p7-card">
+    <h3>16. Tafsir Book Library</h3>
+    <select id="hquP7TafsirBook">
+      <option value="">Select Tafsir</option>
+      <option value="ibn-kathir">Tafsir Ibn Kathir</option>
+      <option value="maariful-quran">Maariful Quran</option>
+      <option value="tabari">Tafsir Al-Tabari</option>
+    </select>
+    <button id="hquP7SelectTafsir">Open Tafsir</button>
+    <div id="hquP7TafsirInfo"></div>
+  </article>
+
+  <!-- 17. TAFSIR SEARCH -->
+  <article class="hqu-p7-card">
+    <h3>17. Tafsir Search</h3>
+    <input id="hquP7TafsirSearch"
+      placeholder="Search Tafsir text">
+    <button id="hquP7SearchTafsir">Search</button>
+    <div id="hquP7TafsirResults"></div>
+  </article>
+
+  <!-- 18. TAFSIR FAVORITES -->
+  <article class="hqu-p7-card">
+    <h3>18. Tafsir Favorites</h3>
+    <button id="hquP7SaveTafsir">Save Current Tafsir</button>
+    <button id="hquP7ShowTafsirFavorites">Show Favorites</button>
+    <div id="hquP7TafsirFavorites"></div>
+  </article>
+
+  <!-- 19. TAFSIR FONT SETTINGS -->
+  <article class="hqu-p7-card">
+    <h3>19. Tafsir Font Settings</h3>
+    <input id="hquP7TafsirFontSize"
+      type="range" min="12" max="32" value="18">
+    <span id="hquP7TafsirFontValue">18px</span>
+    <button id="hquP7ApplyTafsirFont">Apply Font</button>
+  </article>
+
+  <!-- 20. TAFSIR HISTORY -->
+  <article class="hqu-p7-card">
+    <h3>20. Tafsir Reading History</h3>
+    <button id="hquP7ShowTafsirHistory">Show History</button>
+    <div id="hquP7TafsirHistory"></div>
+  </article>
+
+  <!-- 21. REVISION PLANNER -->
+  <article class="hqu-p7-card">
+    <h3>21. Memorization Revision Planner</h3>
+    <input id="hquP7RevisionSurah"
+      type="number" min="1" max="114"
+      placeholder="Surah number">
+    <input id="hquP7RevisionAyah"
+      type="number" min="1"
+      placeholder="Ayah number">
+    <button id="hquP7AddRevision">Add Revision</button>
+    <div id="hquP7RevisionList"></div>
+  </article>
+
+  <!-- 22. REVISION SCHEDULE -->
+  <article class="hqu-p7-card">
+    <h3>22. Revision Schedule</h3>
+    <input id="hquP7RevisionDate" type="date">
+    <button id="hquP7SaveRevisionDate">Save Schedule</button>
+    <div id="hquP7RevisionSchedule"></div>
+  </article>
+
+  <!-- 23. MEMORIZATION CHECKLIST -->
+  <article class="hqu-p7-card">
+    <h3>23. Memorization Checklist</h3>
+    <input id="hquP7MemoryTask"
+      placeholder="Enter memorization task">
+    <button id="hquP7AddMemoryTask">Add Task</button>
+    <div id="hquP7MemoryChecklist"></div>
+  </article>
+
+  <!-- 24. MEMORIZATION REMINDERS -->
+  <article class="hqu-p7-card">
+    <h3>24. Memorization Reminder Settings</h3>
+    <label for="hquP7ReminderTime">Reminder Time</label>
+    <input id="hquP7ReminderTime" type="time">
+    <button id="hquP7SaveReminder">Save Reminder</button>
+    <p id="hquP7ReminderInfo"></p>
+  </article>
+
+  <!-- 25. MEMORIZATION TEST HISTORY -->
+  <article class="hqu-p7-card">
+    <h3>25. Memorization Test History</h3>
+    <input id="hquP7TestScore"
+      type="number" min="0" max="100"
+      placeholder="Score out of 100">
+    <button id="hquP7SaveTestScore">Save Test Score</button>
+    <div id="hquP7TestHistory"></div>
+  </article>
+
+  <!-- 26. DAILY TARGET -->
+  <article class="hqu-p7-card">
+    <h3>26. Daily Reading Target</h3>
+    <input id="hquP7DailyGoal"
+      type="number" min="1"
+      placeholder="Daily Ayah target">
+    <button id="hquP7SaveDailyGoal">Save Daily Goal</button>
+    <div id="hquP7DailyGoalInfo"></div>
+  </article>
+
+  <!-- 27. WEEKLY TARGET -->
+  <article class="hqu-p7-card">
+    <h3>27. Weekly Reading Target</h3>
+    <input id="hquP7WeeklyGoal"
+      type="number" min="1"
+      placeholder="Weekly Ayah target">
+    <button id="hquP7SaveWeeklyGoal">Save Weekly Goal</button>
+    <div id="hquP7WeeklyGoalInfo"></div>
+  </article>
+
+  <!-- 28. MONTHLY REPORT -->
+  <article class="hqu-p7-card">
+    <h3>28. Monthly Reading Report</h3>
+    <button id="hquP7GenerateMonthlyReport">Generate Report</button>
+    <div id="hquP7MonthlyReport"></div>
+  </article>
+
+  <!-- 29. READING CALENDAR -->
+  <article class="hqu-p7-card">
+    <h3>29. Reading Calendar</h3>
+    <input id="hquP7CalendarMonth"
+      type="month">
+    <button id="hquP7ShowCalendar">Show Calendar</button>
+    <div id="hquP7Calendar"></div>
+  </article>
+
+  <!-- 30. ACHIEVEMENTS -->
+  <article class="hqu-p7-card">
+    <h3>30. Reading Goal Achievements</h3>
+    <button id="hquP7ShowAchievements">Show Achievements</button>
+    <div id="hquP7Achievements"></div>
+  </article>
+
+  <!-- 31. PERSONAL DUAS -->
+  <article class="hqu-p7-card">
+    <h3>31. Personal Dua Collection</h3>
+    <input id="hquP7DuaTitle"
+      placeholder="Dua title">
+    <textarea id="hquP7DuaText"
+      placeholder="Enter Dua text"></textarea>
+    <button id="hquP7SaveDua">Save Dua</button>
+    <div id="hquP7DuaCollection"></div>
+  </article>
+
+  <!-- 32. DUA CATEGORIES -->
+  <article class="hqu-p7-card">
+    <h3>32. Dua Categories</h3>
+    <select id="hquP7DuaCategory">
+      <option value="all">All Categories</option>
+      <option value="morning">Morning</option>
+      <option value="evening">Evening</option>
+      <option value="travel">Travel</option>
+      <option value="study">Study</option>
+      <option value="general">General</option>
+    </select>
+    <button id="hquP7FilterDuas">Filter Duas</button>
+    <div id="hquP7DuaCategoryResults"></div>
+  </article>
+
+  <!-- 33. DUA SEARCH -->
+  <article class="hqu-p7-card">
+    <h3>33. Dua Search</h3>
+    <input id="hquP7DuaSearch"
+      placeholder="Search your saved Duas">
+    <button id="hquP7SearchDuas">Search</button>
+    <div id="hquP7DuaSearchResults"></div>
+  </article>
+
+  <!-- 34. DUA FAVORITES -->
+  <article class="hqu-p7-card">
+    <h3>34. Dua Favorites</h3>
+    <button id="hquP7ShowDuaFavorites">Show Favorites</button>
+    <div id="hquP7DuaFavorites"></div>
+  </article>
+
+  <!-- 35. DUA NOTES -->
+  <article class="hqu-p7-card">
+    <h3>35. Dua Notes</h3>
+    <textarea id="hquP7DuaNote"
+      placeholder="Write your personal note"></textarea>
+    <button id="hquP7SaveDuaNote">Save Note</button>
+    <div id="hquP7DuaNotes"></div>
+  </article>
+
+  <!-- 36. PRAYER LEARNING GUIDE -->
+  <article class="hqu-p7-card">
+    <h3>36. Prayer Learning Guide</h3>
+    <select id="hquP7PrayerLesson">
+      <option value="">Select Lesson</option>
+      <option value="wudu">Wudu Learning</option>
+      <option value="prayer">Prayer Steps</option>
+      <option value="rakat">Rakats Information</option>
+      <option value="dua">Prayer Duas</option>
+    </select>
+    <button id="hquP7OpenPrayerLesson">Open Lesson</button>
+    <div id="hquP7PrayerLessonInfo"></div>
+  </article>
+
+  <!-- 37. ISLAMIC KNOWLEDGE -->
+  <article class="hqu-p7-card">
+    <h3>37. Islamic Knowledge Library</h3>
+    <input id="hquP7KnowledgeSearch"
+      placeholder="Search knowledge library">
+    <button id="hquP7SearchKnowledge">Search</button>
+    <div id="hquP7KnowledgeResults"></div>
+  </article>
+
+  <!-- 38. QUIZ CATEGORIES -->
+  <article class="hqu-p7-card">
+    <h3>38. Islamic Quiz Categories</h3>
+    <select id="hquP7QuizCategory">
+      <option value="quran">Quran Knowledge</option>
+      <option value="prophets">Prophets</option>
+      <option value="islam">Islamic Knowledge</option>
+      <option value="arabic">Arabic Vocabulary</option>
+    </select>
+    <button id="hquP7SelectQuizCategory">Select Category</button>
+    <div id="hquP7QuizCategoryInfo"></div>
+  </article>
+
+  <!-- 39. ADVANCED QUIZ -->
+  <article class="hqu-p7-card">
+    <h3>39. Advanced Islamic Quiz</h3>
+    <button id="hquP7StartQuiz">Start Quiz</button>
+    <div id="hquP7QuizQuestion"></div>
+    <div id="hquP7QuizOptions"></div>
+    <button id="hquP7NextQuestion">Next Question</button>
+    <div id="hquP7QuizResult"></div>
+  </article>
+
+  <!-- 40. QUIZ HISTORY -->
+  <article class="hqu-p7-card">
+    <h3>40. Quiz Score History</h3>
+    <button id="hquP7ShowQuizHistory">Show Quiz History</button>
+    <div id="hquP7QuizHistory"></div>
+  </article>
+
+  <!-- 41. QURAN VOCABULARY -->
+  <article class="hqu-p7-card">
+    <h3>41. Quran Vocabulary Library</h3>
+    <button id="hquP7ShowVocabulary">Show Vocabulary</button>
+    <div id="hquP7VocabularyLibrary"></div>
+  </article>
+
+  <!-- 42. ARABIC VOCABULARY SEARCH -->
+  <article class="hqu-p7-card">
+    <h3>42. Arabic Vocabulary Search</h3>
+    <input id="hquP7VocabularySearch"
+      placeholder="Search Arabic words">
+    <button id="hquP7SearchVocabulary">Search Words</button>
+    <div id="hquP7VocabularyResults"></div>
+  </article>
+
+  <!-- 43. VOCABULARY FAVORITES -->
+  <article class="hqu-p7-card">
+    <h3>43. Vocabulary Favorites</h3>
+    <button id="hquP7ShowVocabularyFavorites">Show Favorites</button>
+    <div id="hquP7VocabularyFavorites"></div>
+  </article>
+
+  <!-- 44. ARABIC LEARNING NOTES -->
+  <article class="hqu-p7-card">
+    <h3>44. Arabic Learning Notes</h3>
+    <textarea id="hquP7ArabicNote"
+      placeholder="Write Arabic learning notes"></textarea>
+    <button id="hquP7SaveArabicNote">Save Note</button>
+    <div id="hquP7ArabicNotes"></div>
+  </article>
+
+  <!-- 45. ARABIC LEARNING PROGRESS -->
+  <article class="hqu-p7-card">
+    <h3>45. Arabic Learning Progress</h3>
+    <button id="hquP7ShowArabicProgress">Show Progress</button>
+    <div id="hquP7ArabicProgress"></div>
+  </article>
+
+  <!-- 46. BACKUP & RESTORE -->
+  <article class="hqu-p7-card">
+    <h3>46. Backup & Restore Center</h3>
+    <button id="hquP7CreateBackup">Create Backup</button>
+    <button id="hquP7DownloadBackup">Download Backup</button>
+    <input id="hquP7BackupFile" type="file"
+      accept=".json,application/json">
+    <button id="hquP7RestoreBackup">Restore Backup</button>
+    <div id="hquP7BackupInfo"></div>
+  </article>
+
+  <!-- 47. EXPORT QURAN NOTES -->
+  <article class="hqu-p7-card">
+    <h3>47. Export Quran Notes</h3>
+    <button id="hquP7ExportNotes">Export Notes</button>
+    <div id="hquP7ExportInfo"></div>
+  </article>
+
+  <!-- 48. IMPORT PERSONAL DATA -->
+  <article class="hqu-p7-card">
+    <h3>48. Import Personal Data</h3>
+    <input id="hquP7ImportFile" type="file"
+      accept=".json,application/json">
+    <button id="hquP7ImportData">Import Data</button>
+    <div id="hquP7ImportInfo"></div>
+  </article>
+
+  <!-- 49. APP STORAGE INFORMATION -->
+  <article class="hqu-p7-card">
+    <h3>49. App Storage Information</h3>
+    <button id="hquP7CheckAppStorage">Check App Storage</button>
+    <div id="hquP7AppStorageInfo"></div>
+  </article>
+
+  <!-- 50. QURAN APP DATA MANAGER -->
+  <article class="hqu-p7-card">
+    <h3>50. Quran App Data Manager</h3>
+    <button id="hquP7ShowDataManager">Open Data Manager</button>
+    <button id="hquP7ExportAllData">Export All Personal Data</button>
+    <div id="hquP7DataManager"></div>
+  </article>
+
+</section>
+
+<!-- END PACKAGE 7 HTML -->
