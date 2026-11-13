@@ -2278,5 +2278,268 @@ content="Complete Quran, translations, recitation and Islamic companion.">
 
 <!-- END PACKAGE 4 HTML -->
 
+<!-- =========================================
+ HOLY QURAN ULTIMATE
+ PACKAGE 5 - 20 ADVANCED FEATURES
+========================================= -->
+
+<section id="hquP5LearningCenter" class="hqu-p5-section">
+
+  <header class="hqu-p5-header">
+    <h2>📖 Quran Learning & Study Center</h2>
+    <p>Read, understand, memorize and learn</p>
+  </header>
+
+  <!-- 1 WORD BY WORD -->
+
+  <div class="hqu-p5-card">
+    <h3>1. 🔤 Word-by-Word Quran</h3>
+    <select id="hquP5WordSurah">
+      <option value="">Select Surah</option>
+    </select>
+    <input id="hquP5WordAyah" type="number" min="1"
+      placeholder="Ayah number" />
+    <button id="hquP5LoadWords">Load Words</button>
+    <div id="hquP5WordDisplay"></div>
+  </div>
+
+  <!-- 2 WORD MEANINGS -->
+
+  <div class="hqu-p5-card">
+    <h3>2. 📚 Word Meanings</h3>
+    <select id="hquP5MeaningLanguage">
+      <option value="en">English</option>
+      <option value="ur">Urdu</option>
+      <option value="ps">Pashto</option>
+    </select>
+    <div id="hquP5WordMeaning">
+      Select a word to see its meaning.
+    </div>
+  </div>
+
+  <!-- 3 TAFSIR -->
+
+  <div class="hqu-p5-card">
+    <h3>3. 📘 Tafsir Reader</h3>
+    <select id="hquP5TafsirSource">
+      <option value="">Select Tafsir source</option>
+    </select>
+    <select id="hquP5TafsirSurah">
+      <option value="">Select Surah</option>
+    </select>
+    <input id="hquP5TafsirAyah" type="number"
+      min="1" placeholder="Ayah number" />
+    <button id="hquP5LoadTafsir">View Tafsir</button>
+    <div id="hquP5TafsirContent"></div>
+  </div>
+
+  <!-- 4 TRANSLATION COMPARISON -->
+
+  <div class="hqu-p5-card">
+    <h3>4. 🌍 Translation Comparison</h3>
+    <select id="hquP5CompareLanguage">
+      <option value="ur">Urdu</option>
+      <option value="en">English</option>
+      <option value="ps">Pashto</option>
+    </select>
+    <button id="hquP5CompareButton">Compare Translations</button>
+    <div id="hquP5CompareResults"></div>
+  </div>
+
+  <!-- 5 TAJWEED LEARNING -->
+
+  <div class="hqu-p5-card">
+    <h3>5. 🎓 Tajweed Learning Guide</h3>
+    <select id="hquP5TajweedTopic">
+      <option value="">Select Tajweed Topic</option>
+      <option value="noon">Rules of Noon Sakinah</option>
+      <option value="meem">Rules of Meem Sakinah</option>
+      <option value="madd">Madd Rules</option>
+      <option value="qalqalah">Qalqalah</option>
+      <option value="ghunnah">Ghunnah</option>
+    </select>
+    <button id="hquP5LoadTajweed">Learn Topic</button>
+    <div id="hquP5TajweedContent"></div>
+  </div>
+
+  <!-- 6 TAJWEED COLORS -->
+
+  <div class="hqu-p5-card">
+    <h3>6. 🎨 Tajweed Color Legend</h3>
+    <div class="hqu-p5-color-list">
+      <p><span class="hqu-p5-color hqu-p5-red"></span> Tajweed rule category 1</p>
+      <p><span class="hqu-p5-color hqu-p5-green"></span> Tajweed rule category 2</p>
+      <p><span class="hqu-p5-color hqu-p5-blue"></span> Tajweed rule category 3</p>
+      <p><span class="hqu-p5-color hqu-p5-orange"></span> Tajweed rule category 4</p>
+    </div>
+    <p>Color meanings must be matched to a verified Tajweed source.</p>
+  </div>
+
+  <!-- 7 MEMORIZATION MODE -->
+
+  <div class="hqu-p5-card">
+    <h3>7. 🧠 Memorization Mode</h3>
+    <select id="hquP5MemorizeSurah">
+      <option value="">Select Surah</option>
+    </select>
+    <input id="hquP5MemorizeAyah" type="number"
+      min="1" placeholder="Starting Ayah" />
+    <button id="hquP5StartMemorize">Start Memorization</button>
+    <div id="hquP5MemorizeContent"></div>
+  </div>
+
+  <!-- 8 HIDE REVEAL -->
+
+  <div class="hqu-p5-card">
+    <h3>8. 👁️ Hide / Reveal Ayah</h3>
+    <button id="hquP5HideAyah">Hide Ayah</button>
+    <button id="hquP5RevealAyah">Reveal Ayah</button>
+    <div id="hquP5HiddenAyah">Choose an Ayah in Memorization Mode.</div>
+  </div>
+
+  <!-- 9 DAILY MEMORIZATION GOALS -->
+
+  <div class="hqu-p5-card">
+    <h3>9. 🎯 Daily Memorization Goals</h3>
+    <input id="hquP5DailyGoal" type="number"
+      min="1" max="100" placeholder="Daily Ayah target" />
+    <button id="hquP5SaveGoal">Save Daily Goal</button>
+    <div id="hquP5GoalProgress"></div>
+    <button id="hquP5CompleteGoal">Mark One Ayah Completed</button>
+  </div>
+
+  <!-- 10 READING TIMER -->
+
+  <div class="hqu-p5-card">
+    <h3>10. ⏱️ Reading Session Timer</h3>
+    <div id="hquP5TimerDisplay">00:00</div>
+    <button id="hquP5TimerStart">Start</button>
+    <button id="hquP5TimerPause">Pause</button>
+    <button id="hquP5TimerReset">Reset</button>
+  </div>
+
+  <!-- 11 AYAH NOTES -->
+
+  <div class="hqu-p5-card">
+    <h3>11. 📝 Ayah Notes</h3>
+    <input id="hquP5NoteSurah" type="number"
+      min="1" max="114" placeholder="Surah number" />
+    <input id="hquP5NoteAyah" type="number"
+      min="1" placeholder="Ayah number" />
+    <textarea id="hquP5NoteText"
+      placeholder="Write your personal study note..."></textarea>
+    <button id="hquP5SaveNote">Save Note</button>
+    <div id="hquP5NotesList"></div>
+  </div>
+
+  <!-- 12 AYAH COLLECTIONS -->
+
+  <div class="hqu-p5-card">
+    <h3>12. 📂 Ayah Collections</h3>
+    <input id="hquP5CollectionName"
+      placeholder="Collection name" />
+    <input id="hquP5CollectionSurah" type="number"
+      min="1" max="114" placeholder="Surah number" />
+    <input id="hquP5CollectionAyah" type="number"
+      min="1" placeholder="Ayah number" />
+    <button id="hquP5AddCollection">Add Ayah to Collection</button>
+    <div id="hquP5CollectionsList"></div>
+  </div>
+
+  <!-- 13 COPY AYAH -->
+
+  <div class="hqu-p5-card">
+    <h3>13. 📋 Copy Ayah</h3>
+    <textarea id="hquP5CopyText"
+      placeholder="Ayah text will appear here..."></textarea>
+    <button id="hquP5CopyButton">Copy Text</button>
+    <p id="hquP5CopyMessage"></p>
+  </div>
+
+  <!-- 14 SHARE AYAH -->
+
+  <div class="hqu-p5-card">
+    <h3>14. 🔗 Share Ayah</h3>
+    <button id="hquP5ShareButton">Share Selected Ayah</button>
+    <p id="hquP5ShareMessage"></p>
+  </div>
+
+  <!-- 15 ARABIC FONT -->
+
+  <div class="hqu-p5-card">
+    <h3>15. 🔠 Arabic Font Customization</h3>
+    <select id="hquP5ArabicFont">
+      <option value="serif">Traditional Serif</option>
+      <option value="sans-serif">Sans Serif</option>
+      <option value="Noto Naskh Arabic">Noto Naskh Arabic</option>
+      <option value="Amiri">Amiri</option>
+    </select>
+    <button id="hquP5ApplyFont">Apply Font</button>
+  </div>
+
+  <!-- 16 LINE SPACING -->
+
+  <div class="hqu-p5-card">
+    <h3>16. ↕️ Arabic Line Spacing</h3>
+    <input id="hquP5LineSpacing" type="range"
+      min="1.4" max="3" step="0.1" value="2" />
+    <span id="hquP5SpacingValue">2</span>
+    <button id="hquP5ApplySpacing">Apply Spacing</button>
+  </div>
+
+  <!-- 17 READING DISPLAY -->
+
+  <div class="hqu-p5-card">
+    <h3>17. 📄 Reading Display Mode</h3>
+    <select id="hquP5DisplayMode">
+      <option value="comfortable">Comfortable View</option>
+      <option value="compact">Compact View</option>
+      <option value="large">Large Reading View</option>
+    </select>
+    <button id="hquP5ApplyDisplay">Apply Display</button>
+  </div>
+
+  <!-- 18 TRANSLATION VISIBILITY -->
+
+  <div class="hqu-p5-card">
+    <h3>18. 🌐 Translation Visibility</h3>
+    <label>
+      <input id="hquP5ShowTranslation"
+        type="checkbox" checked />
+      Show Translation
+    </label>
+    <button id="hquP5ApplyTranslation">Apply Preference</button>
+  </div>
+
+  <!-- 19 LEARNING QUIZ -->
+
+  <div class="hqu-p5-card">
+    <h3>19. 🏆 Quran Learning Quiz</h3>
+    <select id="hquP5QuizCategory">
+      <option value="surah">Surah Knowledge</option>
+      <option value="quran">Quran Facts</option>
+      <option value="tajweed">Tajweed Learning</option>
+    </select>
+    <button id="hquP5StartQuiz">Start Quiz</button>
+    <div id="hquP5QuizQuestion"></div>
+    <div id="hquP5QuizOptions"></div>
+    <p id="hquP5QuizResult"></p>
+  </div>
+
+  <!-- 20 LEARNING TRACKER -->
+
+  <div class="hqu-p5-card">
+    <h3>20. 📊 Learning Progress Tracker</h3>
+    <div id="hquP5ProgressStats"></div>
+    <div class="hqu-p5-progress-track">
+      <div id="hquP5ProgressBar"></div>
+    </div>
+    <button id="hquP5RefreshProgress">Refresh Progress</button>
+  </div>
+
+</section>
+
+<!-- END PACKAGE 5 HTML -->
+
 </body>
 </html>
