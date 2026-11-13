@@ -2934,3 +2934,370 @@ if ("serviceWorker" in navigator) {
   console.log("Quran Daily Goals loaded successfully.");
 
 })();
+
+/* =========================================
+   FILE 43 — HOLY QURAN ULTIMATE
+   ADVANCED QURAN SEARCH
+========================================= */
+
+(function () {
+  "use strict";
+
+  const searchInput = document.getElementById("quranSearchInput");
+  const searchButton = document.getElementById("quranSearchButton");
+  const searchType = document.getElementById("quranSearchType");
+  const searchStatus = document.getElementById("quranSearchStatus");
+  const searchResults = document.getElementById("quranSearchResults");
+
+  if (!searchInput || !searchButton || !searchType || !searchResults) {
+    return;
+  }
+
+  let searchDatabase = [];
+  let databaseReady = false;
+
+  const files = [
+    { file: "./data/surahs.json", type: "surah" },
+    { file: "./data/quran.json", type: "arabic" },
+    { file: "./data/urdu.json", type: "urdu" },
+    { file: "./data/english.json", type: "english" }
+  ];
+
+  function normalizeText(value) {
+    return String(value || "")
+      .toLowerCase()
+      .normalize("NFC")
+      .replace(/[\u064B-\u065F\u0670]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function getSurahName(number) {
+    const found = searchDatabase.find(item =>
+      item.type === "surah" &&
+      Number(item.surahNumber) === Number(number)
+    );
+
+    return found ? found.text : "Surah " + number;
+  }
+
+  function addEntry(type, text, surahNumber, ayahNumber) {
+    if (typeof text !== "string" || !text.trim()) return;
+
+    searchDatabase.push({
+      type: type,
+      text: text.trim(),
+      surahNumber: surahNumber || null,
+      ayahNumber: ayahNumber || null
+    });
+  }
+
+  function getNumber(object, keys) {
+    for (const key of keys) {
+      const value = Number(object[key]);
+
+      if (Number.isInteger(value) && value > 0) {
+        return value;
+      }
+    }
+
+    return null;
+  }
+
+  function extractText(data, type) {
+    const seen = new Set();
+
+    const textKeys = {
+      arabic: [
+        "text", "arabic", "arabicText",
+        "textArabic", "uthmani", "ayahText",
+        "content"
+      ],
+      urdu: [
+        "urdu", "urduTranslation", "translation",
+        "meaning", "text", "translationText"
+      ],
+      english: [
+        "english", "englishTranslation", "translation",
+        "meaning", "text", "translationText"
+      ]
+    };
+
+    function walk(node, context, parentKey, depth) {
+      if (depth > 15 || node == null) return;
+
+      if (Array.isArray(node)) {
+        node.forEach((item, index) => {
+          walk(item, context, parentKey, depth + 1);
+        });
+        return;
+      }
+
+      if (typeof node !== "object") {
+        if (
+          typeof node === "string" &&
+          ["arabic", "urdu", "english"].includes(type)
+        ) {
+          const key = type + "|" + context.surah + "|" +
+            context.ayah + "|" + node;
+
+          if (!seen.has(key)) {
+            seen.add(key);
+            addEntry(type, node, context.surah, context.ayah);
+          }
+        }
+        return;
+      }
+
+      const nextContext = { ...context };
+
+      const verseCollections = [
+        "ayahs", "verses", "ayat", "ayah",
+        "verse", "surahAyahs"
+      ];
+
+      const hasVerseCollection = Object.keys(node).some(key =>
+        verseCollections.includes(key.toLowerCase()) &&
+        Array.isArray(node[key])
+      );
+
+      if (hasVerseCollection) {
+        nextContext.surah =
+          getNumber(node, [
+            "surahNumber", "surah_number",
+            "surahNo", "number", "id"
+          ]) || nextContext.surah;
+      }
+
+      const isVerseItem = [
+        "ayahs", "verses", "ayat",
+        "ayah", "verse", "surahAyahs"
+      ].includes(String(parentKey || "").toLowerCase());
+
+      if (isVerseItem) {
+        nextContext.ayah =
+          getNumber(node, [
+            "ayahNumber", "ayah_number",
+            "verseNumber", "number", "id"
+          ]) || nextContext.ayah;
+      }
+
+      if (type === "surah") {
+        const number = getNumber(node, [
+          "number", "surahNumber", "id"
+        ]);
+
+        const name =
+          node.englishName ||
+          node.nameEnglish ||
+          node.english_name ||
+          node.name ||
+          node.transliteration;
+
+        const arabicName =
+          node.arabicName || node.nameArabic || "";
+
+        if (number && (name || arabicName)) {
+          addEntry(
+            "surah",
+            [name, arabicName].filter(Boolean).join(" — "),
+            number,
+            null
+          );
+        }
+      } else {
+        const keys = textKeys[type] || [];
+
+        keys.forEach(key => {
+          const value = node[key];
+
+          if (typeof value === "string" && value.trim()) {
+            const uniqueKey =
+              type + "|" + nextContext.surah + "|" +
+              nextContext.ayah + "|" + value;
+
+            if (!seen.has(uniqueKey)) {
+              seen.add(uniqueKey);
+              addEntry(
+                type,
+                value,
+                nextContext.surah,
+                nextContext.ayah
+              );
+            }
+          }
+        });
+      }
+
+      Object.keys(node).forEach(key => {
+        if (typeof node[key] === "object" && node[key] !== null) {
+          walk(node[key], nextContext, key, depth + 1);
+        }
+      });
+    }
+
+    walk(data, { surah: null, ayah: null }, "", 0);
+  }
+
+  async function loadSearchDatabase() {
+    searchStatus.textContent = "Quran data load ho raha hai...";
+
+    for (const item of files) {
+      try {
+        const response = await fetch(item.file);
+
+        if (!response.ok) {
+          throw new Error("File not found");
+        }
+
+        const data = await response.json();
+        extractText(data, item.type);
+
+      } catch (error) {
+        console.warn("Search data unavailable:", item.file);
+      }
+    }
+
+    databaseReady = true;
+
+    searchStatus.textContent =
+      "Search ready! Available Quran data mein search karein.";
+
+  }
+
+  function createResult(entry) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "hqu-search-result";
+    button.dataset.surahNumber = entry.surahNumber || "";
+
+    const heading = document.createElement("strong");
+    const categoryNames = {
+      surah: "Surah Name",
+      arabic: "Arabic Ayah",
+      urdu: "Urdu Translation",
+      english: "English Translation"
+    };
+
+    heading.textContent = categoryNames[entry.type] || "Quran Result";
+
+    const details = document.createElement("div");
+    details.className = "hqu-search-result-details";
+
+    if (entry.surahNumber) {
+      details.textContent =
+        getSurahName(entry.surahNumber) +
+        (entry.ayahNumber ? " | Ayah " + entry.ayahNumber : "");
+    } else {
+      details.textContent = "Quran text";
+    }
+
+    const content = document.createElement("p");
+    content.textContent = entry.text;
+
+    button.appendChild(heading);
+    button.appendChild(details);
+    button.appendChild(content);
+
+    return button;
+  }
+
+  function runSearch() {
+    const query = normalizeText(searchInput.value);
+
+    searchResults.replaceChildren();
+
+    if (!query) {
+      searchStatus.textContent = "Pehle koi word ya phrase likhein.";
+      return;
+    }
+
+    if (!databaseReady) {
+      searchStatus.textContent = "Data abhi load ho raha hai...";
+      return;
+    }
+
+    const selectedType = searchType.value;
+
+    const matches = searchDatabase.filter(entry => {
+      if (selectedType !== "all" && entry.type !== selectedType) {
+        return false;
+      }
+
+      return normalizeText(entry.text).includes(query);
+    });
+
+    if (matches.length === 0) {
+      searchStatus.textContent =
+        "Is available data mein koi result nahi mila.";
+      return;
+    }
+
+    const limitedMatches = matches.slice(0, 50);
+
+    limitedMatches.forEach(entry => {
+      searchResults.appendChild(createResult(entry));
+    });
+
+    searchStatus.textContent =
+      matches.length + " results mile. " +
+      (matches.length > 50 ? "Pehle 50 results dikhaye gaye." : "");
+  }
+
+  function openSurah(number) {
+    if (!number) return;
+
+    const items = document.querySelectorAll(".surah-item");
+
+    for (const item of items) {
+      const attributes = [
+        item.dataset.surah,
+        item.dataset.number,
+        item.dataset.surahNumber
+      ];
+
+      const matchesNumber = attributes.some(value =>
+        value && Number(value) === Number(number)
+      );
+
+      const name = normalizeText(getSurahName(number));
+      const matchesName =
+        name && normalizeText(item.textContent).includes(name);
+
+      if (matchesNumber || matchesName) {
+        item.click();
+
+        document.getElementById("hquAdvancedSearch")
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+        return;
+      }
+    }
+
+    searchStatus.textContent =
+      "Result mil gaya, lekin Surah list mein uska button nahi mila.";
+  }
+
+  searchButton.addEventListener("click", runSearch);
+
+  searchInput.addEventListener("keydown", event => {
+    if (event.key === "Enter") {
+      runSearch();
+    }
+  });
+
+  searchResults.addEventListener("click", event => {
+    const result = event.target.closest(".hqu-search-result");
+
+    if (!result) return;
+
+    const number = Number(result.dataset.surahNumber);
+
+    if (number) {
+      openSurah(number);
+    }
+  });
+
+  loadSearchDatabase();
+
+})();
