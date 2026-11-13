@@ -6247,3 +6247,902 @@ if ("serviceWorker" in navigator) {
   );
 
 })();
+
+/* =====================================================
+   HOLY QURAN ULTIMATE
+   PACKAGE 5 — 20 ADVANCED LEARNING FEATURES
+===================================================== */
+
+(() => {
+"use strict";
+
+const $ = id => document.getElementById(id);
+
+const STORE = {
+    goals: "hquPackage5Goals",
+    notes: "hquPackage5Notes",
+    collections: "hquPackage5Collections",
+    progress: "hquPackage5Progress",
+    settings: "hquPackage5Settings"
+};
+
+function read(key, fallback) {
+    try {
+        return JSON.parse(localStorage.getItem(key)) ?? fallback;
+    } catch {
+        return fallback;
+    }
+}
+
+function save(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+}
+
+let surahs = [];
+let selectedAyah = null;
+let timerSeconds = 0;
+let timerInterval = null;
+let quizScore = 0;
+let quizTotal = 0;
+let quizQuestions = [];
+let quizIndex = 0;
+
+let goals = read(STORE.goals, { target: 5, completed: 0 });
+let notes = read(STORE.notes, []);
+let collections = read(STORE.collections, []);
+let progress = read(STORE.progress, {
+    memorized: 0,
+    quizCorrect: 0,
+    sessions: 0
+});
+let settings = read(STORE.settings, {});
+
+function message(id, text) {
+    const el = $(id);
+    if (el) el.textContent = text;
+}
+
+function element(id, tag = "div") {
+    const el = $(id);
+    if (el) return el;
+    return null;
+}
+
+function make(tag, text, className) {
+    const node = document.createElement(tag);
+    if (text !== undefined) node.textContent = text;
+    if (className) node.className = className;
+    return node;
+}
+
+function numberValue(id, fallback = 1) {
+    const value = Number($(id)?.value);
+    return Number.isFinite(value) && value > 0 ? value : fallback;
+}
+
+function getSurah(number) {
+    return surahs.find(s =>
+        Number(s.number || s.surahNumber || s.id) === Number(number)
+    );
+}
+
+function surahName(s) {
+    return s?.englishName ||
+        s?.nameEnglish ||
+        s?.english_name ||
+        s?.name ||
+        "Surah";
+}
+
+function ayahNumber(s) {
+    return Number(s?.numberOfAyahs || s?.ayahCount || s?.totalAyahs || 0);
+}
+
+function populateSurah(id) {
+    const select = $(id);
+    if (!select) return;
+
+    select.replaceChildren();
+
+    const first = make("option", "Select Surah");
+    first.value = "";
+    select.appendChild(first);
+
+    surahs.forEach(s => {
+        const n = Number(s.number || s.surahNumber || s.id);
+        const option = make(
+            "option",
+            `${n}. ${surahName(s)}`
+        );
+        option.value = n;
+        select.appendChild(option);
+    });
+}
+
+function getSelectedAyah() {
+    return {
+        surah: numberValue("hquP5MemorizeSurah"),
+        ayah: numberValue("hquP5MemorizeAyah")
+    };
+}
+
+function matchingAyah(detail) {
+    if (!detail || !selectedAyah) return false;
+
+    return Number(detail.surahNumber) === selectedAyah.surah &&
+        Number(detail.ayahNumber) === selectedAyah.ayah;
+}
+
+function showAyahText(id, detail = selectedAyah) {
+    const box = $(id);
+    if (!box) return;
+
+    box.replaceChildren();
+
+    if (!detail || !detail.arabic) {
+        box.textContent =
+            "Quran text data available nahi. Verified Quran text dataset connect karein.";
+        return;
+    }
+
+    box.textContent = detail.arabic;
+    box.dir = "rtl";
+}
+
+/*
+  Integration:
+  Your Quran reader can send:
+  document.dispatchEvent(new CustomEvent("hqu:ayah-selected", {
+    detail: {
+      surahNumber: 1,
+      ayahNumber: 1,
+      arabic: "...",
+      words: [{arabic:"...", en:"...", ur:"...", ps:"..."}],
+      translations: {en:"...", ur:"..."},
+      tafsir: "...",
+      tajweed: "..."
+    }
+  }));
+*/
+
+document.addEventListener("hqu:ayah-selected", event => {
+    const d = event.detail || {};
+
+    selectedAyah = {
+        ...d,
+        surahNumber: Number(d.surahNumber),
+        ayahNumber: Number(d.ayahNumber)
+    };
+
+    const fields = [
+        ["hquP5WordSurah", d.surahNumber],
+        ["hquP5WordAyah", d.ayahNumber],
+        ["hquP5TafsirSurah", d.surahNumber],
+        ["hquP5TafsirAyah", d.ayahNumber],
+        ["hquP5MemorizeSurah", d.surahNumber],
+        ["hquP5MemorizeAyah", d.ayahNumber],
+        ["hquP5NoteSurah", d.surahNumber],
+        ["hquP5NoteAyah", d.ayahNumber],
+        ["hquP5CollectionSurah", d.surahNumber],
+        ["hquP5CollectionAyah", d.ayahNumber]
+    ];
+
+    fields.forEach(([id, value]) => {
+        if ($(id) && value != null) $(id).value = value;
+    });
+
+    renderWords(d);
+    renderTranslations(d);
+    renderTafsir(d);
+    renderMemorization(d);
+    updateCopyText(d);
+});
+
+/* 1. Word-by-Word Quran */
+
+function renderWords(detail) {
+    const box = $("hquP5WordDisplay");
+    if (!box) return;
+
+    box.replaceChildren();
+
+    if (!Array.isArray(detail.words) || !detail.words.length) {
+        box.textContent =
+            "Word-by-word data load nahi. Verified word dataset connect karein.";
+        return;
+    }
+
+    detail.words.forEach(word => {
+        const btn = make("button", word.arabic || "Word");
+        btn.type = "button";
+
+        btn.addEventListener("click", () => {
+            const language = $("hquP5MeaningLanguage")?.value || "ur";
+            const meaning = word[language] || "Is word ka meaning available nahi.";
+            message("hquP5WordMeaning", meaning);
+        });
+
+        box.appendChild(btn);
+    });
+}
+
+$("hquP5LoadWords")?.addEventListener("click", () => {
+    if (!selectedAyah) {
+        message("hquP5WordDisplay", "Pehle Quran reader se Ayah select karein.");
+        return;
+    }
+    renderWords(selectedAyah);
+});
+
+/* 2. Word Meanings */
+
+$("hquP5MeaningLanguage")?.addEventListener("change", () => {
+    message("hquP5WordMeaning", "Meaning dekhne ke liye Arabic word select karein.");
+});
+
+/* 3. Tafsir Reader */
+
+function renderTafsir(detail) {
+    const box = $("hquP5TafsirContent");
+    if (!box) return;
+
+    box.textContent = detail.tafsir ||
+        "Verified Tafsir dataset connect nahi hai. Is jagah authentic Tafsir data show hoga.";
+}
+
+$("hquP5LoadTafsir")?.addEventListener("click", () => {
+    const surah = numberValue("hquP5TafsirSurah");
+    const ayah = numberValue("hquP5TafsirAyah");
+
+    if (selectedAyah &&
+        matchingAyah({
+            surahNumber: surah,
+            ayahNumber: ayah
+        })) {
+        renderTafsir(selectedAyah);
+    } else {
+        message(
+            "hquP5TafsirContent",
+            "Is Ayah ka verified Tafsir data available nahi."
+        );
+    }
+});
+
+/* 4. Multiple Translation Comparison */
+
+function renderTranslations(detail) {
+    const box = $("hquP5CompareResults");
+    if (!box) return;
+
+    box.replaceChildren();
+
+    const translations = detail.translations || {};
+    const languages = Object.keys(translations);
+
+    if (!languages.length) {
+        box.textContent = "Verified translation data connect karein.";
+        return;
+    }
+
+    languages.forEach(language => {
+        const card = make("div");
+        card.appendChild(make("h4", language.toUpperCase()));
+        card.appendChild(make("p", String(translations[language])));
+        box.appendChild(card);
+    });
+}
+
+$("hquP5CompareButton")?.addEventListener("click", () => {
+    if (!selectedAyah) {
+        message("hquP5CompareResults", "Pehle Ayah select karein.");
+        return;
+    }
+    renderTranslations(selectedAyah);
+});
+
+/* 5. Tajweed Learning Guide */
+
+const tajweedTopics = {
+    all: "Verified Tajweed lessons dataset connect karein.",
+    noon: "Noon Sakinah aur Tanween ka authentic lesson add karein.",
+    meem: "Meem Sakinah ka authentic lesson add karein.",
+    madd: "Madd ke rules ka verified lesson add karein.",
+    qalqalah: "Qalqalah ka verified lesson add karein.",
+    ghunnah: "Ghunnah ka verified lesson add karein."
+};
+
+$("hquP5LoadTajweed")?.addEventListener("click", () => {
+    const topic = $("hquP5TajweedTopic")?.value || "all";
+    message(
+        "hquP5TajweedContent",
+        tajweedTopics[topic] || tajweedTopics.all
+    );
+});
+
+/* 6. Tajweed Color Legend */
+
+const legend = $("hquP5LearningCenter")?.querySelector(".hqu-p5-color-list");
+if (legend) {
+    legend.setAttribute(
+        "aria-label",
+        "Illustrative Tajweed color legend"
+    );
+}
+
+/* 7. Memorization Mode */
+
+function renderMemorization(detail = selectedAyah) {
+    if (!detail) {
+        message(
+            "hquP5MemorizeContent",
+            "Quran reader se Ayah select karein."
+        );
+        return;
+    }
+
+    showAyahText("hquP5MemorizeContent", detail);
+}
+
+$("hquP5StartMemorize")?.addEventListener("click", () => {
+    selectedAyah = selectedAyah || null;
+
+    if (!selectedAyah) {
+        message(
+            "hquP5MemorizeContent",
+            "Pehle Quran reader mein Ayah select karein."
+        );
+        return;
+    }
+
+    renderMemorization(selectedAyah);
+});
+
+/* 8. Hide and Reveal Ayah */
+
+$("hquP5HideAyah")?.addEventListener("click", () => {
+    const box = $("hquP5HiddenAyah");
+    if (!box) return;
+
+    box.textContent = "Ayah hidden — pehle yaad karein, phir reveal karein.";
+});
+
+$("hquP5RevealAyah")?.addEventListener("click", () => {
+    if (!selectedAyah?.arabic) {
+        message("hquP5HiddenAyah", "Ayah text data available nahi.");
+        return;
+    }
+
+    showAyahText("hquP5HiddenAyah", selectedAyah);
+});
+
+/* 9. Daily Memorization Goals */
+
+function renderGoal() {
+    goals.target = Math.max(1, Number(goals.target) || 1);
+    goals.completed = Math.max(0, Number(goals.completed) || 0);
+
+    const percent = Math.min(
+        100,
+        Math.round(goals.completed / goals.target * 100)
+    );
+
+    message(
+        "hquP5GoalProgress",
+        `Daily goal: ${goals.completed} / ${goals.target} Ayahs (${percent}%)`
+    );
+}
+
+$("hquP5SaveGoal")?.addEventListener("click", () => {
+    goals.target = numberValue("hquP5DailyGoal", 5);
+    save(STORE.goals, goals);
+    renderGoal();
+});
+
+$("hquP5CompleteGoal")?.addEventListener("click", () => {
+    goals.completed++;
+    progress.memorized++;
+    save(STORE.goals, goals);
+    save(STORE.progress, progress);
+    renderGoal();
+    renderProgress();
+});
+
+/* 10. Reading Session Timer */
+
+function renderTimer() {
+    const minutes = Math.floor(timerSeconds / 60);
+    const seconds = timerSeconds % 60;
+
+    message(
+        "hquP5TimerDisplay",
+        `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`
+    );
+}
+
+$("hquP5TimerStart")?.addEventListener("click", () => {
+    if (timerInterval) return;
+
+    timerInterval = setInterval(() => {
+        timerSeconds++;
+        renderTimer();
+    }, 1000);
+});
+
+$("hquP5TimerPause")?.addEventListener("click", () => {
+    clearInterval(timerInterval);
+    timerInterval = null;
+});
+
+$("hquP5TimerReset")?.addEventListener("click", () => {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    timerSeconds = 0;
+    renderTimer();
+});
+
+/* 11. Ayah Notes */
+
+function renderNotes() {
+    const box = $("hquP5NotesList");
+    if (!box) return;
+
+    box.replaceChildren();
+
+    if (!notes.length) {
+        box.textContent = "Abhi koi personal note save nahi.";
+        return;
+    }
+
+    notes.forEach((note, index) => {
+        const card = make("div");
+        card.appendChild(
+            make("p", `Surah ${note.surah} — Ayah ${note.ayah}`)
+        );
+        card.appendChild(make("p", note.text));
+        card.appendChild(make("small", note.date));
+
+        const remove = make("button", "Delete Note");
+        remove.type = "button";
+
+        remove.addEventListener("click", () => {
+            notes.splice(index, 1);
+            save(STORE.notes, notes);
+            renderNotes();
+        });
+
+        card.appendChild(remove);
+        box.appendChild(card);
+    });
+}
+
+$("hquP5SaveNote")?.addEventListener("click", () => {
+    const text = $("hquP5NoteText")?.value?.trim();
+    if (!text) {
+        message("hquP5NotesList", "Pehle note likhein.");
+        return;
+    }
+
+    notes.unshift({
+        surah: numberValue("hquP5NoteSurah"),
+        ayah: numberValue("hquP5NoteAyah"),
+        text,
+        date: new Date().toLocaleString()
+    });
+
+    save(STORE.notes, notes);
+
+    if ($("hquP5NoteText")) $("hquP5NoteText").value = "";
+
+    renderNotes();
+});
+
+/* 12. Ayah Collections */
+
+function renderCollections() {
+    const box = $("hquP5CollectionsList");
+    if (!box) return;
+
+    box.replaceChildren();
+
+    if (!collections.length) {
+        box.textContent = "Abhi koi collection nahi.";
+        return;
+    }
+
+    collections.forEach((item, index) => {
+        const card = make("div");
+        card.appendChild(make("h4", item.name));
+        card.appendChild(
+            make("p", `Surah ${item.surah} — Ayah ${item.ayah}`)
+        );
+
+        const remove = make("button", "Remove");
+        remove.type = "button";
+
+        remove.addEventListener("click", () => {
+            collections.splice(index, 1);
+            save(STORE.collections, collections);
+            renderCollections();
+        });
+
+        card.appendChild(remove);
+        box.appendChild(card);
+    });
+}
+
+$("hquP5AddCollection")?.addEventListener("click", () => {
+    const name = $("hquP5CollectionName")?.value?.trim();
+
+    if (!name) {
+        message("hquP5CollectionsList", "Collection ka naam likhein.");
+        return;
+    }
+
+    collections.unshift({
+        name,
+        surah: numberValue("hquP5CollectionSurah"),
+        ayah: numberValue("hquP5CollectionAyah")
+    });
+
+    save(STORE.collections, collections);
+    renderCollections();
+
+    if ($("hquP5CollectionName")) {
+        $("hquP5CollectionName").value = "";
+    }
+});
+
+/* 13. Copy Ayah */
+
+function updateCopyText(detail) {
+    const input = $("hquP5CopyText");
+    if (input && detail?.arabic) {
+        input.value = detail.arabic;
+    }
+}
+
+async function copyText(text) {
+    try {
+        if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(text);
+        } else {
+            const temp = document.createElement("textarea");
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand("copy");
+            temp.remove();
+        }
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+$("hquP5CopyButton")?.addEventListener("click", async () => {
+    const text = $("hquP5CopyText")?.value?.trim();
+
+    if (!text) {
+        message("hquP5CopyMessage", "Copy karne ke liye Ayah select karein.");
+        return;
+    }
+
+    const ok = await copyText(text);
+
+    message(
+        "hquP5CopyMessage",
+        ok ? "Ayah copied successfully!" : "Copy nahi ho saka."
+    );
+});
+
+/* 14. Share Ayah */
+
+$("hquP5ShareButton")?.addEventListener("click", async () => {
+    const text = $("hquP5CopyText")?.value?.trim();
+
+    if (!text) {
+        message("hquP5ShareMessage", "Pehle Ayah select karein.");
+        return;
+    }
+
+    try {
+        if (navigator.share) {
+            await navigator.share({
+                title: "Holy Quran",
+                text
+            });
+            message("hquP5ShareMessage", "Share request complete.");
+        } else {
+            const ok = await copyText(text);
+            message(
+                "hquP5ShareMessage",
+                ok ? "Share supported nahi — text copied." : "Share nahi ho saka."
+            );
+        }
+    } catch (error) {
+        if (error.name !== "AbortError") {
+            message("hquP5ShareMessage", "Sharing unavailable.");
+        }
+    }
+});
+
+/* 15. Arabic Font Customization */
+
+$("hquP5ApplyFont")?.addEventListener("click", () => {
+    const font = $("hquP5ArabicFont")?.value || "Traditional Arabic";
+
+    const targets = document.querySelectorAll(
+        "#hquP5LearningCenter, .ayah-arabic, .arabic-text, .quran-arabic, [data-quran-arabic]"
+    );
+
+    targets.forEach(node => {
+        node.style.fontFamily = `"${font}", "Noto Naskh Arabic", serif`;
+    });
+
+    settings.font = font;
+    save(STORE.settings, settings);
+});
+
+/* 16. Arabic Line Spacing */
+
+$("hquP5ApplySpacing")?.addEventListener("click", () => {
+    const spacing = Number($("hquP5LineSpacing")?.value || 2);
+
+    document.querySelectorAll(
+        "#hquP5LearningCenter .ayah-arabic, #hquP5LearningCenter .arabic-text, #hquP5LearningCenter .quran-arabic, [data-quran-arabic]"
+    ).forEach(node => {
+        node.style.lineHeight = spacing;
+    });
+
+    message("hquP5SpacingValue", `${spacing}`);
+    settings.spacing = spacing;
+    save(STORE.settings, settings);
+});
+
+/* 17. Reading Display Mode */
+
+$("hquP5ApplyDisplay")?.addEventListener("click", () => {
+    const mode = $("hquP5DisplayMode")?.value || "comfortable";
+    const section = $("hquP5LearningCenter");
+
+    if (!section) return;
+
+    section.classList.remove(
+        "hqu-p5-view-compact",
+        "hqu-p5-view-comfortable",
+        "hqu-p5-view-large"
+    );
+
+    section.classList.add(`hqu-p5-view-${mode}`);
+
+    settings.display = mode;
+    save(STORE.settings, settings);
+});
+
+/* 18. Translation Visibility */
+
+$("hquP5ApplyTranslation")?.addEventListener("click", () => {
+    const visible = $("hquP5ShowTranslation")?.checked ?? true;
+    const section = $("hquP5LearningCenter");
+
+    if (!section) return;
+
+    section.classList.toggle("hqu-p5-hide-translations", !visible);
+
+    settings.translationVisible = visible;
+    save(STORE.settings, settings);
+});
+
+/* 19. Quran Learning Quiz */
+
+function buildQuiz() {
+    quizQuestions = [];
+
+    if (!surahs.length) return;
+
+    const total = surahs.length;
+
+    quizQuestions.push({
+        question: "Quran Majeed mein total kitni Surahs hain?",
+        answer: String(total),
+        options: [String(total - 1), String(total), String(total + 1)]
+    });
+
+    surahs.slice(0, 10).forEach(s => {
+        const n = Number(s.number || s.surahNumber || s.id);
+        const name = surahName(s);
+
+        quizQuestions.push({
+            question: `Surah "${name}" ka number kya hai?`,
+            answer: String(n),
+            options: [
+                String(Math.max(1, n - 1)),
+                String(n),
+                String(Math.min(total, n + 1))
+            ]
+        });
+    });
+
+    quizQuestions = quizQuestions.sort(() => Math.random() - 0.5);
+}
+
+function showQuizQuestion() {
+    if (quizIndex >= quizQuestions.length) {
+        message(
+            "hquP5QuizQuestion",
+            `Quiz complete! Score: ${quizScore} / ${quizTotal}`
+        );
+
+        message("hquP5QuizOptions", "");
+        message("hquP5QuizResult", "Aapka quiz complete ho gaya.");
+
+        progress.quizCorrect += quizScore;
+        save(STORE.progress, progress);
+        renderProgress();
+        return;
+    }
+
+    const q = quizQuestions[quizIndex];
+
+    message(
+        "hquP5QuizQuestion",
+        `${quizIndex + 1}. ${q.question}`
+    );
+
+    const box = $("hquP5QuizOptions");
+    if (!box) return;
+
+    box.replaceChildren();
+
+    const options = [...q.options].sort(() => Math.random() - 0.5);
+
+    options.forEach(option => {
+        const btn = make("button", option);
+        btn.type = "button";
+
+        btn.addEventListener("click", () => {
+            const correct = option === q.answer;
+
+            if (correct) quizScore++;
+
+            quizTotal++;
+            message(
+                "hquP5QuizResult",
+                correct ? "Correct answer!" : `Correct answer: ${q.answer}`
+            );
+
+            quizIndex++;
+            setTimeout(showQuizQuestion, 900);
+        });
+
+        box.appendChild(btn);
+    });
+}
+
+$("hquP5StartQuiz")?.addEventListener("click", () => {
+    buildQuiz();
+
+    if (!quizQuestions.length) {
+        message("hquP5QuizQuestion", "Surah data load nahi hua.");
+        return;
+    }
+
+    quizScore = 0;
+    quizTotal = 0;
+    quizIndex = 0;
+
+    showQuizQuestion();
+});
+
+/* 20. Learning Progress Tracker */
+
+function renderProgress() {
+    const box = $("hquP5ProgressStats");
+    if (box) {
+        box.textContent =
+            `Memorized Ayahs: ${progress.memorized} | ` +
+            `Correct Quiz Answers: ${progress.quizCorrect} | ` +
+            `Reading Goal Completed: ${goals.completed}`;
+    }
+
+    const bar = $("hquP5ProgressBar");
+    if (bar) {
+        const target = Math.max(1, goals.target);
+        const percent = Math.min(
+            100,
+            Math.round(goals.completed / target * 100)
+        );
+
+        bar.style.width = `${percent}%`;
+        bar.setAttribute("role", "progressbar");
+        bar.setAttribute("aria-valuenow", String(percent));
+        bar.setAttribute("aria-valuemin", "0");
+        bar.setAttribute("aria-valuemax", "100");
+    }
+}
+
+$("hquP5RefreshProgress")?.addEventListener("click", renderProgress);
+
+/* Load Surah metadata */
+
+async function loadSurahData() {
+    try {
+        const response = await fetch("./data/surahs.json");
+
+        if (!response.ok) throw new Error("Surah file not found");
+
+        const data = await response.json();
+
+        surahs = Array.isArray(data) ? data :
+            Array.isArray(data.surahs) ? data.surahs : [];
+
+        [
+            "hquP5WordSurah",
+            "hquP5TafsirSurah",
+            "hquP5MemorizeSurah",
+            "hquP5NoteSurah",
+            "hquP5CollectionSurah"
+        ].forEach(populateSurah);
+
+        buildQuiz();
+
+    } catch {
+        console.warn(
+            "Package 5: ./data/surahs.json not found. Add verified Surah metadata."
+        );
+    }
+}
+
+/* Restore settings */
+
+function restoreSettings() {
+    const section = $("hquP5LearningCenter");
+    if (!section) return;
+
+    if (settings.display) {
+        section.classList.add(`hqu-p5-view-${settings.display}`);
+
+        if ($("hquP5DisplayMode")) {
+            $("hquP5DisplayMode").value = settings.display;
+        }
+    }
+
+    if (settings.translationVisible === false) {
+        section.classList.add("hqu-p5-hide-translations");
+
+        if ($("hquP5ShowTranslation")) {
+            $("hquP5ShowTranslation").checked = false;
+        }
+    }
+
+    if (settings.font) {
+        document.querySelectorAll(
+            "#hquP5LearningCenter .ayah-arabic, #hquP5LearningCenter .arabic-text, #hquP5LearningCenter .quran-arabic"
+        ).forEach(node => {
+            node.style.fontFamily =
+                `"${settings.font}", "Noto Naskh Arabic", serif`;
+        });
+    }
+}
+
+/* Initialize all Package 5 features */
+
+function initializePackage5() {
+    renderGoal();
+    renderTimer();
+    renderNotes();
+    renderCollections();
+    renderProgress();
+    restoreSettings();
+    loadSurahData();
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializePackage5, {
+        once: true
+    });
+} else {
+    initializePackage5();
+}
+
+})();
