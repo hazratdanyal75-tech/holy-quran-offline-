@@ -3569,3 +3569,288 @@ if ("serviceWorker" in navigator) {
   loadAudioLibrary();
 
 })();
+
+/* =========================================
+   FILE 49 — QURAN READING HISTORY
+========================================= */
+
+(function () {
+  "use strict";
+
+  const HISTORY_KEY = "hquReadingHistory";
+  const LAST_READ_KEY = "hquLastReadSurah";
+
+  const historyList = document.getElementById("hquHistoryList");
+  const lastReadName = document.getElementById("hquLastReadName");
+  const continueButton = document.getElementById("hquContinueReading");
+  const clearButton = document.getElementById("hquClearHistory");
+  const historyMessage = document.getElementById("hquHistoryMessage");
+
+  if (!historyList || !lastReadName) return;
+
+  let surahNames = {};
+
+  function getHistory() {
+    try {
+      const data = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+      return Array.isArray(data) ? data : [];
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function getLastRead() {
+    try {
+      return JSON.parse(localStorage.getItem(LAST_READ_KEY) || "null");
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function saveHistory(history) {
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    } catch (error) {
+      showMessage("Reading history save nahi ho saki.");
+    }
+  }
+
+  function showMessage(text) {
+    if (historyMessage) {
+      historyMessage.textContent = text;
+    }
+  }
+
+  function getSurahName(number, fallback) {
+    return surahNames[number] || fallback || "Surah " + number;
+  }
+
+  function findSurahButton(number) {
+    const buttons = document.querySelectorAll(".surah-item");
+
+    for (const button of buttons) {
+      const values = [
+        button.dataset.surah,
+        button.dataset.number,
+        button.dataset.surahNumber
+      ];
+
+      if (values.some(value =>
+        value && Number(value) === Number(number)
+      )) {
+        return button;
+      }
+    }
+
+    const expectedName = String(getSurahName(number)).toLowerCase();
+
+    for (const button of buttons) {
+      if (
+        expectedName !== "" &&
+        button.textContent.toLowerCase().includes(expectedName)
+      ) {
+        return button;
+      }
+    }
+
+    return null;
+  }
+
+  function saveOpenedSurah(number, fallbackName) {
+    number = Number(number);
+
+    if (!Number.isInteger(number) || number < 1 || number > 114) {
+      return;
+    }
+
+    const record = {
+      number: number,
+      name: getSurahName(number, fallbackName),
+      openedAt: new Date().toISOString()
+    };
+
+    const history = getHistory().filter(
+      item => Number(item.number) !== number
+    );
+
+    history.unshift(record);
+
+    saveHistory(history.slice(0, 30));
+
+    try {
+      localStorage.setItem(LAST_READ_KEY, JSON.stringify(record));
+    } catch (error) {
+      showMessage("Last read record save nahi ho saka.");
+    }
+
+    renderHistory();
+  }
+
+  function openSurah(number) {
+    const button = findSurahButton(number);
+
+    if (button) {
+      button.click();
+      showMessage("Surah open kar di gayi.");
+    } else {
+      showMessage(
+        "Surah list mein yeh Surah button nahi mila."
+      );
+    }
+  }
+
+  function renderHistory() {
+    const history = getHistory();
+    const lastRead = getLastRead();
+
+    historyList.replaceChildren();
+
+    if (lastRead && lastRead.number) {
+      lastReadName.textContent =
+        lastRead.name || "Surah " + lastRead.number;
+    } else if (history.length) {
+      lastReadName.textContent = history[0].name;
+    } else {
+      lastReadName.textContent = "No reading history yet";
+    }
+
+    if (!history.length) {
+      const empty = document.createElement("p");
+      empty.textContent = "Your reading history will appear here.";
+      historyList.appendChild(empty);
+      return;
+    }
+
+    history.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "hqu-history-item";
+
+      const info = document.createElement("div");
+      info.className = "hqu-history-info";
+
+      const title = document.createElement("strong");
+      title.textContent =
+        item.name || "Surah " + item.number;
+
+      const date = document.createElement("small");
+
+      const parsedDate = new Date(item.openedAt);
+
+      date.textContent = Number.isNaN(parsedDate.getTime())
+        ? ""
+        : parsedDate.toLocaleString();
+
+      const openButton = document.createElement("button");
+      openButton.type = "button";
+      openButton.textContent = "Open";
+      openButton.addEventListener("click", () => {
+        openSurah(item.number);
+      });
+
+      info.appendChild(title);
+      info.appendChild(date);
+
+      card.appendChild(info);
+      card.appendChild(openButton);
+
+      historyList.appendChild(card);
+    });
+  }
+
+  // Capture clicks on Surah list items.
+  document.addEventListener("click", function (event) {
+    const button = event.target.closest(".surah-item");
+
+    if (!button) return;
+
+    const values = [
+      button.dataset.surah,
+      button.dataset.number,
+      button.dataset.surahNumber
+    ];
+
+    let number = values
+      .map(Number)
+      .find(value =>
+        Number.isInteger(value) && value >= 1 && value <= 114
+      );
+
+    if (!number) {
+      const text = button.textContent;
+      const match = text.match(/^\s*(\d{1,3})[\s.)-]/);
+
+      if (match) number = Number(match[1]);
+    }
+
+    if (number) {
+      saveOpenedSurah(number, button.textContent.trim());
+    }
+
+  }, true);
+
+  if (continueButton) {
+    continueButton.addEventListener("click", () => {
+      const lastRead = getLastRead();
+
+      if (lastRead && lastRead.number) {
+        openSurah(lastRead.number);
+      } else {
+        showMessage("Abhi koi reading history available nahi hai.");
+      }
+    });
+  }
+
+  if (clearButton) {
+    clearButton.addEventListener("click", () => {
+      try {
+        localStorage.removeItem(HISTORY_KEY);
+        localStorage.removeItem(LAST_READ_KEY);
+
+        renderHistory();
+        showMessage("Reading history clear ho gayi.");
+
+      } catch (error) {
+        showMessage("History clear nahi ho saki.");
+      }
+    });
+  }
+
+  async function loadSurahNames() {
+    try {
+      const response = await fetch("./data/surahs.json");
+
+      if (!response.ok) return;
+
+      const data = await response.json();
+
+      const list = Array.isArray(data)
+        ? data
+        : data.surahs || [];
+
+      list.forEach(surah => {
+        const number = Number(
+          surah.number || surah.id || surah.surahNumber
+        );
+
+        const name =
+          surah.englishName ||
+          surah.nameEnglish ||
+          surah.name ||
+          surah.english_name;
+
+        if (number && name) {
+          surahNames[number] = name;
+        }
+      });
+
+      renderHistory();
+
+    } catch (error) {
+      console.warn("Surah names could not be loaded.");
+    }
+  }
+
+  renderHistory();
+  loadSurahNames();
+
+})();
