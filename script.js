@@ -1904,3 +1904,92 @@ if ("serviceWorker" in navigator) {
   loadAudioLibrary();
 
 })();
+
+/* =====================================
+   FILE 24: 114 SURAH AUDIO SELECTION
+===================================== */
+
+(function () {
+  const player = document.getElementById("hquAudioPlayer");
+  const surahList = document.getElementById("surahList");
+
+  if (!player || !surahList) return;
+
+  if (document.getElementById("hquSurahSelect")) return;
+
+  const section = document.createElement("div");
+  section.id = "hquSurahSelection";
+
+  section.innerHTML = `
+    <label for="hquSurahSelect">
+      📖 Select Surah for Recitation
+    </label>
+    <select id="hquSurahSelect">
+      <option value="">Loading Surahs...</option>
+    </select>
+  `;
+
+  const qariSelect = document.getElementById("hquQariSelect");
+
+  if (qariSelect) {
+    qariSelect.insertAdjacentElement("afterend", section);
+  } else {
+    player.appendChild(section);
+  }
+
+  const select = document.getElementById("hquSurahSelect");
+
+  function updateSurahOptions() {
+    const items = surahList.querySelectorAll(".surah-item");
+
+    if (!items.length) return;
+
+    const previousValue = select.value;
+    select.innerHTML = "";
+
+    items.forEach(item => {
+      const match = item.textContent.match(/^\s*(\d+)/);
+      if (!match) return;
+
+      const number = Number(match[1]);
+
+      const option = document.createElement("option");
+      option.value = number;
+      option.textContent = item.textContent.trim();
+
+      select.appendChild(option);
+    });
+
+    if (previousValue && select.querySelector(
+      `option[value="${previousValue}"]`
+    )) {
+      select.value = previousValue;
+    }
+  }
+
+  select.addEventListener("change", () => {
+    const number = Number(select.value);
+    if (!number) return;
+
+    const items = surahList.querySelectorAll(".surah-item");
+
+    const target = Array.from(items).find(item => {
+      const match = item.textContent.match(/^\s*(\d+)/);
+      return match && Number(match[1]) === number;
+    });
+
+    if (target) {
+      target.click();
+    }
+  });
+
+  const observer = new MutationObserver(updateSurahOptions);
+
+  observer.observe(surahList, {
+    childList: true,
+    subtree: true
+  });
+
+  updateSurahOptions();
+
+})();
