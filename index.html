@@ -1182,5 +1182,120 @@ content="Complete Quran, translations, recitation and Islamic companion.">
 
 </section>
 
+<!-- FILE 32: QURAN HIFZ TRACKER -->
+
+<section id="hquHifzTracker" class="hifz-section">
+
+  <div class="hifz-heading">
+    <span class="hifz-icon">📖</span>
+    <h2>Quran Hifz Tracker</h2>
+    <p>Track your Quran memorization journey</p>
+  </div>
+
+  <div class="hifz-summary">
+
+    <div class="hifz-stat">
+      <span>📚</span>
+      <h3 id="hifzSurahProgress">0 / 114</h3>
+      <p>Memorized Surahs</p>
+    </div>
+
+    <div class="hifz-stat">
+      <span>📗</span>
+      <h3 id="hifzJuzProgress">0 / 30</h3>
+      <p>Completed Juz</p>
+    </div>
+
+  </div>
+
+  <div class="hifz-progress-card">
+    <h3>🌟 Overall Hifz Progress</h3>
+
+    <div class="hifz-progress-track">
+      <div id="hifzProgressBar"></div>
+    </div>
+
+    <p id="hifzOverallProgress">0% Completed</p>
+  </div>
+
+  <div class="hifz-control-card">
+
+    <h3>📖 Memorized Surahs</h3>
+    <p>Select a Surah after memorizing it.</p>
+
+    <select id="hifzSurahSelect">
+      <option value="">Loading Surahs...</option>
+    </select>
+
+    <button id="hifzMarkSurah">
+      + Mark Surah as Memorized
+    </button>
+
+    <div id="hifzSurahMessage"></div>
+
+    <div id="hifzSurahList">
+      <p>No Surahs marked yet.</p>
+    </div>
+
+  </div>
+
+  <div class="hifz-control-card">
+
+    <h3>📗 Completed Juz</h3>
+    <p>Select the Juz you have completed.</p>
+
+    <select id="hifzJuzSelect">
+      <option value="">Select Juz</option>
+      <option value="1">Juz 1</option>
+      <option value="2">Juz 2</option>
+      <option value="3">Juz 3</option>
+      <option value="4">Juz 4</option>
+      <option value="5">Juz 5</option>
+      <option value="6">Juz 6</option>
+      <option value="7">Juz 7</option>
+      <option value="8">Juz 8</option>
+      <option value="9">Juz 9</option>
+      <option value="10">Juz 10</option>
+      <option value="11">Juz 11</option>
+      <option value="12">Juz 12</option>
+      <option value="13">Juz 13</option>
+      <option value="14">Juz 14</option>
+      <option value="15">Juz 15</option>
+      <option value="16">Juz 16</option>
+      <option value="17">Juz 17</option>
+      <option value="18">Juz 18</option>
+      <option value="19">Juz 19</option>
+      <option value="20">Juz 20</option>
+      <option value="21">Juz 21</option>
+      <option value="22">Juz 22</option>
+      <option value="23">Juz 23</option>
+      <option value="24">Juz 24</option>
+      <option value="25">Juz 25</option>
+      <option value="26">Juz 26</option>
+      <option value="27">Juz 27</option>
+      <option value="28">Juz 28</option>
+      <option value="29">Juz 29</option>
+      <option value="30">Juz 30</option>
+    </select>
+
+    <button id="hifzMarkJuz">
+      + Mark Juz as Completed
+    </button>
+
+    <div id="hifzJuzMessage"></div>
+
+    <div id="hifzJuzList">
+      <p>No Juz completed yet.</p>
+    </div>
+
+  </div>
+
+  <p class="hifz-note">
+    🤍 Mark a Surah or Juz only when you have memorized it.
+    This tracker helps you record your own progress.
+  </p>
+
+</section>
+
 </body>
 </html>
