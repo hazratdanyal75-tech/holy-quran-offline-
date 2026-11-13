@@ -3452,3 +3452,350 @@ body {
     padding: 8px 11px;
   }
 }
+
+/* ==========================================
+ HOLY QURAN ULTIMATE
+ PACKAGE 2 — 10 ADVANCED FEATURES
+ MOBILE FRIENDLY CSS
+========================================== */
+
+.hqu-p2-section {
+  --p2-bg: #ffffff;
+  --p2-text: #18352c;
+  --p2-muted: #64756e;
+  --p2-border: #dce9e2;
+  --p2-primary: #087b58;
+  --p2-soft: #eaf7f0;
+
+  background: var(--p2-bg);
+  color: var(--p2-text);
+  border: 1px solid var(--p2-border);
+  border-radius: 18px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 5px 20px rgba(0,0,0,.06);
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.hqu-p2-section * {
+  box-sizing: border-box;
+}
+
+.hqu-p2-section h2 {
+  font-size: 22px;
+  margin: 0 0 10px;
+  color: var(--p2-primary);
+}
+
+.hqu-p2-section h3 {
+  font-size: 17px;
+  margin: 14px 0 6px;
+}
+
+.hqu-p2-section p {
+  line-height: 1.7;
+  color: var(--p2-muted);
+}
+
+.hqu-p2-section label {
+  display: block;
+  margin: 13px 0 7px;
+  font-weight: 600;
+}
+
+.hqu-p2-section input:not([type="checkbox"]),
+.hqu-p2-section select,
+.hqu-p2-section textarea {
+  display: block;
+  width: 100%;
+  min-height: 45px;
+  padding: 12px;
+  border: 1px solid var(--p2-border);
+  border-radius: 10px;
+  background: var(--p2-bg);
+  color: var(--p2-text);
+  font-size: 15px;
+  outline: none;
+  margin-bottom: 12px;
+}
+
+.hqu-p2-section textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.hqu-p2-section input:focus,
+.hqu-p2-section select:focus,
+.hqu-p2-section textarea:focus {
+  border-color: var(--p2-primary);
+  box-shadow: 0 0 0 3px rgba(8,123,88,.12);
+}
+
+.hqu-p2-section button {
+  background: var(--p2-primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 17px;
+  margin: 5px 5px 5px 0;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 43px;
+  transition: transform .2s, opacity .2s;
+}
+
+.hqu-p2-section button:active {
+  transform: scale(.97);
+}
+
+.hqu-p2-section button:hover {
+  opacity: .88;
+}
+
+/* NOTES AND FAVORITES */
+
+#hquP2NotesList,
+#hquP2FavoritesList {
+  margin-top: 18px;
+}
+
+.hqu-p2-item {
+  padding: 14px;
+  margin: 10px 0;
+  border: 1px solid var(--p2-border);
+  border-radius: 12px;
+  background: var(--p2-soft);
+  overflow-wrap: anywhere;
+}
+
+.hqu-p2-item strong {
+  display: block;
+  margin-bottom: 7px;
+}
+
+.hqu-p2-item p {
+  white-space: pre-wrap;
+}
+
+/* DAILY CHECKLIST */
+
+#hquP2ChecklistItems {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0;
+}
+
+#hquP2ChecklistItems label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px;
+  margin: 0;
+  border-radius: 10px;
+  background: var(--p2-soft);
+}
+
+#hquP2ChecklistItems input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--p2-primary);
+}
+
+/* PROGRESS */
+
+#hquP2ChecklistProgress,
+#hquP2TasbeehProgress {
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--p2-soft);
+  font-weight: bold;
+  text-align: center;
+}
+
+/* ASMA UL HUSNA */
+
+#hquP2NamesList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.hqu-p2-name-card {
+  padding: 15px;
+  text-align: center;
+  border: 1px solid var(--p2-border);
+  border-radius: 12px;
+  background: var(--p2-soft);
+}
+
+/* DUAS */
+
+#hquP2DuasList {
+  display: grid;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.hqu-p2-dua-card {
+  padding: 15px;
+  border: 1px solid var(--p2-border);
+  border-radius: 12px;
+  background: var(--p2-soft);
+}
+
+.hqu-p2-dua-card .arabic {
+  font-size: 23px;
+  line-height: 2;
+  text-align: right;
+}
+
+/* QUIZ */
+
+#hquP2QuizQuestion {
+  padding: 18px;
+  margin: 15px 0;
+  background: var(--p2-soft);
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1.7;
+}
+
+#hquP2QuizOptions {
+  display: grid;
+  gap: 10px;
+}
+
+#hquP2QuizOptions button {
+  width: 100%;
+  text-align: left;
+  background: var(--p2-soft);
+  color: var(--p2-text);
+  border: 1px solid var(--p2-border);
+}
+
+#hquP2QuizOptions button:disabled {
+  opacity: .75;
+}
+
+/* ADVANCED TASBEEH */
+
+#hquP2TasbeehCount {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 155px;
+  width: 155px;
+  max-width: 100%;
+  margin: 22px auto;
+  border-radius: 50%;
+  border: 8px solid var(--p2-primary);
+  background: var(--p2-soft);
+  color: var(--p2-primary);
+  font-size: 45px;
+  font-weight: 800;
+  box-shadow: 0 5px 18px rgba(0,0,0,.08);
+}
+
+#hquP2TasbeehAdd {
+  display: block;
+  width: 100%;
+  min-height: 55px;
+  font-size: 18px;
+}
+
+/* ISLAMIC CALENDAR */
+
+.hqu-p2-date-card {
+  text-align: center;
+  padding: 20px;
+  border-radius: 15px;
+  background: var(--p2-soft);
+  margin-top: 15px;
+}
+
+.hqu-p2-date-card p {
+  font-size: 19px;
+  font-weight: bold;
+  color: var(--p2-primary);
+}
+
+/* THEME BUTTONS */
+
+#hquP2LightMode {
+  background: #e9f4ed;
+  color: #174d36;
+}
+
+#hquP2DarkMode {
+  background: #24332e;
+  color: white;
+}
+
+/* BACKUP */
+
+#hquP2ImportBackup {
+  padding: 12px;
+  border: 1px dashed var(--p2-primary);
+  border-radius: 10px;
+}
+
+/* INFORMATION */
+
+.hqu-p2-info {
+  font-size: 13px;
+  padding: 10px;
+  background: var(--p2-soft);
+  border-radius: 9px;
+}
+
+/* DARK MODE */
+
+body.hqu-p2-dark .hqu-p2-section {
+  --p2-bg: #17241f;
+  --p2-text: #edf7f0;
+  --p2-muted: #b8c9bf;
+  --p2-border: #354a40;
+  --p2-primary: #64d6a2;
+  --p2-soft: #23372e;
+
+  box-shadow: none;
+}
+
+body.hqu-p2-dark .hqu-p2-section input:not([type="checkbox"]),
+body.hqu-p2-dark .hqu-p2-section select,
+body.hqu-p2-dark .hqu-p2-section textarea {
+  color-scheme: dark;
+}
+
+/* MOBILE RESPONSIVE */
+
+@media (max-width: 600px) {
+  .hqu-p2-section {
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 14px;
+  }
+
+  .hqu-p2-section h2 {
+    font-size: 19px;
+  }
+
+  .hqu-p2-section button {
+    font-size: 13px;
+  }
+
+  #hquP2NamesList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #hquP2TasbeehCount {
+    width: 140px;
+    min-height: 140px;
+  }
+}
+
+/* END PACKAGE 2 CSS */
