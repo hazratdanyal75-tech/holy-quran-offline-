@@ -5821,3 +5821,10 @@ body.hqu-p3-reduce-motion .hqu-p6-section *::after {
 </section>
 
 <!-- END PACKAGE 7 HTML -->
+
+/* FIX: Hide Holy Quran loading screen */
+.app-loader.hidden {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
