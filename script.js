@@ -2724,3 +2724,213 @@ if ("serviceWorker" in navigator) {
   renderHistory();
 
 })();
+
+/* =========================================
+   FILE 40: QURAN DAILY GOALS & STREAK
+========================================= */
+
+(function () {
+  "use strict";
+
+  const GOAL_KEY = "hquQuranDailyGoal";
+  const READING_KEY = "hquQuranDailyReading";
+
+  const targetInput = document.getElementById("quranDailyTarget");
+  const readingInput = document.getElementById("quranAyahsRead");
+
+  const saveGoalBtn = document.getElementById("saveQuranGoal");
+  const saveReadingBtn = document.getElementById("saveQuranReading");
+
+  const goalMessage = document.getElementById("quranGoalMessage");
+  const readingMessage = document.getElementById("quranReadingMessage");
+
+  const streakElement = document.getElementById("quranStreakCount");
+  const todayElement = document.getElementById("quranTodayTotal");
+  const daysElement = document.getElementById("quranTotalDays");
+  const totalElement = document.getElementById("quranTotalAyahs");
+
+  const progressBar = document.getElementById("quranDailyProgressBar");
+  const progressText = document.getElementById("quranDailyProgressText");
+
+  if (
+    !targetInput ||
+    !readingInput ||
+    !saveGoalBtn ||
+    !saveReadingBtn
+  ) return;
+
+  function localDate(date = new Date()) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
+
+  function readStorage(key, fallback) {
+    try {
+      const value = JSON.parse(localStorage.getItem(key));
+      return value === null ? fallback : value;
+    } catch (error) {
+      return fallback;
+    }
+  }
+
+  let dailyGoal = Number(readStorage(GOAL_KEY, 20));
+
+  if (!Number.isInteger(dailyGoal) || dailyGoal < 1 || dailyGoal > 6236) {
+    dailyGoal = 20;
+  }
+
+  let readings = readStorage(READING_KEY, {});
+
+  if (
+    !readings ||
+    typeof readings !== "object" ||
+    Array.isArray(readings)
+  ) {
+    readings = {};
+  }
+
+  function showMessage(element, message) {
+    if (element) element.textContent = message;
+  }
+
+  function saveReadings() {
+    try {
+      localStorage.setItem(READING_KEY, JSON.stringify(readings));
+      return true;
+    } catch (error) {
+      showMessage(readingMessage, "Could not save reading data.");
+      return false;
+    }
+  }
+
+  function calculateStreak() {
+    const activeDates = Object.keys(readings).filter(date => {
+      return /^\d{4}-\d{2}-\d{2}$/.test(date) &&
+        Number(readings[date]) > 0;
+    });
+
+    const activeSet = new Set(activeDates);
+
+    let current = new Date();
+    const today = localDate(current);
+
+    // If nothing has been read today, allow yesterday's streak to continue.
+    if (!activeSet.has(today)) {
+      current.setDate(current.getDate() - 1);
+    }
+
+    let streak = 0;
+
+    while (activeSet.has(localDate(current))) {
+      streak++;
+      current.setDate(current.getDate() - 1);
+    }
+
+    return streak;
+  }
+
+  function updateDisplay() {
+    const today = localDate();
+    const todayRead = Number(readings[today]) || 0;
+
+    const activeDays = Object.keys(readings).filter(date => {
+      return Number(readings[date]) > 0;
+    }).length;
+
+    const totalRead = Object.values(readings).reduce((sum, value) => {
+      const count = Number(value);
+      return sum + (
+        Number.isInteger(count) && count > 0 ? count : 0
+      );
+    }, 0);
+
+    const percentage = Math.min(
+      100,
+      Math.round((todayRead / dailyGoal) * 100)
+    );
+
+    streakElement.textContent = calculateStreak() + " Days";
+    todayElement.textContent = todayRead;
+    daysElement.textContent = activeDays;
+    totalElement.textContent = totalRead;
+
+    progressBar.style.width = percentage + "%";
+
+    progressText.textContent =
+      percentage + "% of daily goal completed";
+
+    targetInput.value = dailyGoal;
+    readingInput.value = todayRead;
+  }
+
+  saveGoalBtn.addEventListener("click", function () {
+    const newGoal = Number(targetInput.value);
+
+    if (
+      !Number.isInteger(newGoal) ||
+      newGoal < 1 ||
+      newGoal > 6236
+    ) {
+      showMessage(
+        goalMessage,
+        "Please enter a goal between 1 and 6236."
+      );
+      return;
+    }
+
+    try {
+      localStorage.setItem(GOAL_KEY, JSON.stringify(newGoal));
+      dailyGoal = newGoal;
+
+      updateDisplay();
+      showMessage(goalMessage, "Daily goal saved successfully! ✓");
+    } catch (error) {
+      showMessage(goalMessage, "Could not save your daily goal.");
+    }
+  });
+
+  saveReadingBtn.addEventListener("click", function () {
+    const count = Number(readingInput.value);
+
+    if (
+      !Number.isInteger(count) ||
+      count < 0 ||
+      count > 6236
+    ) {
+      showMessage(
+        readingMessage,
+        "Please enter a number between 0 and 6236."
+      );
+      return;
+    }
+
+    const today = localDate();
+    const previousValue = readings[today];
+
+    readings[today] = count;
+
+    if (!saveReadings()) {
+      if (previousValue === undefined) {
+        delete readings[today];
+      } else {
+        readings[today] = previousValue;
+      }
+      return;
+    }
+
+    updateDisplay();
+
+    showMessage(
+      readingMessage,
+      "Today's reading saved successfully! ✓"
+    );
+  });
+
+  updateDisplay();
+
+  console.log("Quran Daily Goals loaded successfully.");
+
+})();
