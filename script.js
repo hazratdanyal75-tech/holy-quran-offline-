@@ -1050,23 +1050,34 @@ function initializeApp() {
     updateStatistics();
     updateTasbeeh();
 
-    // Load previously saved reading progress
-    if (state.readingHistory) {
+    // Load previously saved reading progress safely
+    const savedHistory = state.readingHistory;
+
+    if (
+        savedHistory &&
+        !Array.isArray(savedHistory) &&
+        Number.isInteger(Number(savedHistory.surah)) &&
+        Number(savedHistory.surah) >= 1 &&
+        Number(savedHistory.surah) <= surahs.length
+    ) {
         const name = getElement("lastSurahName");
         const details = getElement("lastReadingDetails");
 
+        const surahNumber = Number(savedHistory.surah);
+        const ayahNumber = Number(savedHistory.ayah) || 1;
+
         if (name) {
-            name.textContent =
-                surahs[state.readingHistory.surah - 1][0];
+            name.textContent = surahs[surahNumber - 1][0];
         }
 
         if (details) {
             details.textContent =
-                "Surah " + state.readingHistory.surah +
-                " • Ayah " + state.readingHistory.ayah;
+                "Surah " + surahNumber +
+                " • Ayah " + ayahNumber;
         }
     }
 
+    
     // Connect local Quran data when the data files exist
     loadLocalQuranData();
 
