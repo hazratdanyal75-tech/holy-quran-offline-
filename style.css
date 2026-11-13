@@ -2713,3 +2713,228 @@ body {
     align-items: flex-start;
   }
 }
+
+/* =========================================
+   FILE 41: QURAN DAILY GOALS DESIGN
+========================================= */
+
+.daily-goals-section {
+  width: 100%;
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 22px;
+  box-sizing: border-box;
+  border-radius: 22px;
+  background: var(--card-bg, #ffffff);
+  color: var(--text-color, #202b35);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+}
+
+.daily-goals-heading {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.daily-goals-heading > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 65px;
+  height: 65px;
+  border-radius: 20px;
+  background: #fff4d9;
+  font-size: 34px;
+}
+
+.daily-goals-heading h2 {
+  margin: 12px 0 7px;
+  color: #b17a16;
+  font-size: 25px;
+}
+
+.daily-goals-heading p {
+  font-size: 14px;
+  opacity: 0.75;
+}
+
+.streak-card {
+  padding: 22px;
+  margin-bottom: 17px;
+  border-radius: 17px;
+  background: linear-gradient(135deg, #fff1d9, #ffe3b5);
+  color: #81500b;
+  text-align: center;
+}
+
+.streak-card > span {
+  font-size: 35px;
+}
+
+.streak-card h3 {
+  margin: 8px 0;
+  font-size: 29px;
+}
+
+.streak-card p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.daily-goal-card,
+.daily-reading-card,
+.reading-summary-card {
+  padding: 20px;
+  margin-bottom: 17px;
+  border: 1px solid rgba(170, 130, 50, 0.16);
+  border-radius: 17px;
+  background: var(--card-bg, #ffffff);
+}
+
+.daily-goal-card h3,
+.daily-reading-card h3,
+.reading-summary-card h3 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+.daily-goal-card label,
+.daily-reading-card label {
+  display: block;
+  margin: 14px 0 7px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.daily-goal-card input,
+.daily-reading-card input {
+  display: block;
+  width: 100%;
+  min-height: 47px;
+  padding: 12px;
+  box-sizing: border-box;
+  border: 1px solid #d9d2bf;
+  border-radius: 10px;
+  background: var(--card-bg, #ffffff);
+  color: var(--text-color, #202b35);
+  font-size: 15px;
+}
+
+.daily-goal-card button,
+.daily-reading-card button {
+  width: 100%;
+  min-height: 47px;
+  padding: 12px;
+  margin-top: 14px;
+  border: none;
+  border-radius: 11px;
+  background: #b17a16;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.daily-goal-card button:active,
+.daily-reading-card button:active {
+  transform: scale(0.98);
+}
+
+#quranGoalMessage,
+#quranReadingMessage {
+  min-height: 20px;
+  margin: 10px 0 0;
+  color: #16845b;
+  font-size: 13px;
+}
+
+.daily-goal-progress {
+  margin-top: 22px;
+}
+
+.daily-goal-progress-track {
+  width: 100%;
+  height: 13px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #eee9df;
+}
+
+#quranDailyProgressBar {
+  width: 0%;
+  height: 100%;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #d49a2e, #f0c45e);
+  transition: width 0.5s ease;
+}
+
+#quranDailyProgressText {
+  margin-top: 10px;
+  color: #a36e12;
+  font-size: 13px;
+  font-weight: bold;
+  text-align: right;
+}
+
+.reading-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.reading-summary-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 7px;
+  border-radius: 12px;
+  background: #fff5e3;
+  text-align: center;
+}
+
+.reading-summary-grid strong {
+  color: #a36e12;
+  font-size: 23px;
+}
+
+.reading-summary-grid span {
+  font-size: 11px;
+}
+
+.daily-goal-note {
+  padding: 15px;
+  border-radius: 12px;
+  background: #fff8e6;
+  color: #70551a;
+  font-size: 13px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .daily-goals-section {
+    padding: 14px;
+  }
+
+  .daily-goal-card,
+  .daily-reading-card,
+  .reading-summary-card {
+    padding: 15px;
+  }
+
+  .reading-summary-grid {
+    gap: 7px;
+  }
+
+  .reading-summary-grid > div {
+    padding: 13px 4px;
+  }
+
+  .reading-summary-grid strong {
+    font-size: 20px;
+  }
+
+  .reading-summary-grid span {
+    font-size: 10px;
+  }
+}
