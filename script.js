@@ -3854,3 +3854,738 @@ if ("serviceWorker" in navigator) {
   loadSurahNames();
 
 })();
+
+/* ==================================================
+ HOLY QURAN ULTIMATE
+ PACKAGE 2 — 10 ADVANCED FEATURES
+ JAVASCRIPT
+================================================== */
+
+(() => {
+  "use strict";
+
+  const $ = id => document.getElementById(id);
+  const read = (key, fallback) => {
+    try {
+      const value = JSON.parse(localStorage.getItem(key));
+      return value ?? fallback;
+    } catch {
+      return fallback;
+    }
+  };
+  const save = (key, value) =>
+    localStorage.setItem(key, JSON.stringify(value));
+
+  const KEYS = {
+    notes: "hquPackage2Notes",
+    favorites: "hquPackage2Favorites",
+    checklist: "hquPackage2Checklist",
+    tasbeeh: "hquPackage2Tasbeeh",
+    theme: "hquPackage2Theme"
+  };
+
+  let surahs = [];
+  let notes = read(KEYS.notes, []);
+  let favorites = read(KEYS.favorites, []);
+  let tasbeeh = read(KEYS.tasbeeh, {});
+  let quizQuestions = [];
+  let quizIndex = 0;
+  let quizScore = 0;
+  let quizActive = false;
+  let editingNote = null;
+
+  const today = () => new Date().toISOString().slice(0, 10);
+
+  function message(id, text) {
+    const element = $(id);
+    if (element) element.textContent = text;
+  }
+
+  function addElement(parent, tag, text, className) {
+    const element = document.createElement(tag);
+    if (text !== undefined) element.textContent = text;
+    if (className) element.className = className;
+    parent.appendChild(element);
+    return element;
+  }
+
+  function getSurahNumber(s) {
+    return Number(s.number ?? s.id ?? s.surahNumber);
+  }
+
+  function getSurahName(s) {
+    return s.englishName ?? s.nameEnglish ??
+      s.english_name ?? s.name ?? `Surah ${getSurahNumber(s)}`;
+  }
+
+  function populateSurahSelect(id) {
+    const select = $(id);
+    if (!select) return;
+
+    select.replaceChildren();
+
+    const first = document.createElement("option");
+    first.value = "";
+    first.textContent = "Select Surah";
+    select.appendChild(first);
+
+    surahs.forEach(s => {
+      const option = document.createElement("option");
+      option.value = String(getSurahNumber(s));
+      option.textContent = `${getSurahNumber(s)}. ${getSurahName(s)}`;
+      select.appendChild(option);
+    });
+  }
+
+  async function loadSurahs() {
+    try {
+      const response = await fetch("./data/surahs.json");
+      if (!response.ok) throw new Error("Surah data unavailable");
+
+      const data = await response.json();
+      surahs = Array.isArray(data) ? data :
+        Array.isArray(data.surahs) ? data.surahs : [];
+
+      ["hquP2NoteSurah", "hquP2FavSurah"].forEach(populateSurahSelect);
+
+      buildQuiz();
+    } catch (error) {
+      message("hquP2NoteMessage", "Surah list could not be loaded.");
+      message("hquP2FavMessage", "Surah list could not be loaded.");
+    }
+  }
+
+  function findSurah(number) {
+    return surahs.find(s => getSurahNumber(s) === Number(number));
+  }
+
+  /* =========================================
+     1. PERSONAL QURAN NOTES
+  ========================================= */
+
+  function renderNotes() {
+    const list = $("hquP2NotesList");
+    if (!list) return;
+
+    list.replaceChildren();
+
+    if (!notes.length) {
+      addElement(list, "p", "No personal notes saved yet.");
+      return;
+    }
+
+    notes.forEach(note => {
+      const card = addElement(list, "div", undefined, "hqu-p2-item");
+      const surah = findSurah(note.surah);
+      addElement(card, "strong",
+        `${surah ? getSurahName(surah) : "Surah " + note.surah}` +
+        (note.ayah ? ` — Ayah ${note.ayah}` : "")
+      );
+      addElement(card, "p", note.text);
+
+      const edit = addElement(card, "button", "✏️ Edit");
+      edit.type = "button";
+      edit.addEventListener("click", () => {
+        $("hquP2NoteSurah").value = note.surah;
+        $("hquP2NoteAyah").value = note.ayah || "";
+        $("hquP2NoteText").value = note.text;
+        editingNote = note.id;
+        $("hquP2SaveNote").textContent = "Update Note";
+      });
+
+      const remove = addElement(card, "button", "🗑 Delete");
+      remove.type = "button";
+      remove.addEventListener("click", () => {
+        if (!confirm("Delete this note?")) return;
+        notes = notes.filter(n => n.id !== note.id);
+        save(KEYS.notes, notes);
+        renderNotes();
+      });
+    });
+  }
+
+  $("hquP2SaveNote")?.addEventListener("click", () => {
+    const surah = $("hquP2NoteSurah")?.value;
+    const ayah = $("hquP2NoteAyah")?.value;
+    const text = $("hquP2NoteText")?.value.trim();
+
+    if (!surah || !text) {
+      message("hquP2NoteMessage", "Please select a Surah and write a note.");
+      return;
+    }
+
+    if (ayah && Number(ayah) < 1) {
+      message("hquP2NoteMessage", "Enter a valid Ayah number.");
+      return;
+    }
+
+    if (editingNote !== null) {
+      const old = notes.find(n => n.id === editingNote);
+      if (old) {
+        old.surah = Number(surah);
+        old.ayah = ayah ? Number(ayah) : "";
+        old.text = text;
+      }
+      editingNote = null;
+      $("hquP2SaveNote").textContent = "💾 Save Note";
+    } else {
+      notes.unshift({
+        id: Date.now(),
+        surah: Number(surah),
+        ayah: ayah ? Number(ayah) : "",
+        text,
+        date: today()
+      });
+    }
+
+    save(KEYS.notes, notes);
+    $("hquP2NoteText").value = "";
+    $("hquP2NoteAyah").value = "";
+    message("hquP2NoteMessage", "Note saved successfully!");
+    renderNotes();
+  });
+
+  /* =========================================
+     2. FAVORITE AYahs
+  ========================================= */
+
+  function renderFavorites() {
+    const list = $("hquP2FavoritesList");
+    if (!list) return;
+
+    list.replaceChildren();
+
+    if (!favorites.length) {
+      addElement(list, "p", "No favorite Ayahs saved yet.");
+      return;
+    }
+
+    favorites.forEach(fav => {
+      const card = addElement(list, "div", undefined, "hqu-p2-item");
+      const surah = findSurah(fav.surah);
+
+      addElement(card, "strong",
+        `${surah ? getSurahName(surah) : "Surah " + fav.surah} — Ayah ${fav.ayah}`
+      );
+
+      if (fav.text) addElement(card, "p", fav.text);
+
+      const remove = addElement(card, "button", "Remove Favorite");
+      remove.type = "button";
+      remove.addEventListener("click", () => {
+        favorites = favorites.filter(f => f.id !== fav.id);
+        save(KEYS.favorites, favorites);
+        renderFavorites();
+      });
+    });
+  }
+
+  $("hquP2SaveFavorite")?.addEventListener("click", () => {
+    const surah = $("hquP2FavSurah")?.value;
+    const ayah = Number($("hquP2FavAyah")?.value);
+    const text = $("hquP2FavText")?.value.trim() || "";
+
+    if (!surah || !Number.isInteger(ayah) || ayah < 1) {
+      message("hquP2FavMessage", "Select a Surah and enter a valid Ayah number.");
+      return;
+    }
+
+    const duplicate = favorites.some(f =>
+      f.surah === Number(surah) && f.ayah === ayah
+    );
+
+    if (duplicate) {
+      message("hquP2FavMessage", "This Ayah is already in your favorites.");
+      return;
+    }
+
+    favorites.unshift({
+      id: Date.now(),
+      surah: Number(surah),
+      ayah,
+      text
+    });
+
+    save(KEYS.favorites, favorites);
+    $("hquP2FavAyah").value = "";
+    $("hquP2FavText").value = "";
+    message("hquP2FavMessage", "Favorite saved!");
+    renderFavorites();
+  });
+
+  /* =========================================
+     3. DAILY ISLAMIC CHECKLIST
+  ========================================= */
+
+  function checklistKey() {
+    return `${KEYS.checklist}_${today()}`;
+  }
+
+  function updateChecklist() {
+    const boxes = document.querySelectorAll(
+      "#hquP2ChecklistItems input[type=checkbox]"
+    );
+
+    const state = read(checklistKey(), {});
+
+    boxes.forEach(box => {
+      box.checked = Boolean(state[box.value]);
+
+      box.onchange = () => {
+        const updated = read(checklistKey(), {});
+        updated[box.value] = box.checked;
+        save(checklistKey(), updated);
+        updateChecklistProgress();
+      };
+    });
+
+    updateChecklistProgress();
+  }
+
+  function updateChecklistProgress() {
+    const boxes = [...document.querySelectorAll(
+      "#hquP2ChecklistItems input[type=checkbox]"
+    )];
+
+    const completed = boxes.filter(b => b.checked).length;
+    message(
+      "hquP2ChecklistProgress",
+      `Today's progress: ${completed}/${boxes.length}`
+    );
+  }
+
+  $("hquP2ResetChecklist")?.addEventListener("click", () => {
+    if (!confirm("Reset today's checklist?")) return;
+
+    localStorage.removeItem(checklistKey());
+    updateChecklist();
+  });
+
+  /* =========================================
+     4. ASMA UL HUSNA DATA LOADER
+  ========================================= */
+
+  let namesData = [];
+
+  async function loadNames() {
+    const list = $("hquP2NamesList");
+    if (!list) return;
+
+    try {
+      const response = await fetch("./data/asma-ul-husna.json");
+      if (!response.ok) throw new Error("Data unavailable");
+
+      const data = await response.json();
+      namesData = Array.isArray(data) ? data :
+        Array.isArray(data.names) ? data.names : [];
+
+      renderNames();
+    } catch {
+      list.textContent =
+        "Verified names data file is not available yet. Add data/asma-ul-husna.json to enable this feature.";
+    }
+  }
+
+  function renderNames() {
+    const list = $("hquP2NamesList");
+    if (!list) return;
+
+    list.replaceChildren();
+
+    const query = ($("hquP2NameSearch")?.value || "").toLowerCase();
+
+    const filtered = namesData.filter(item =>
+      [item.arabic, item.name, item.transliteration, item.meaning]
+        .some(value => String(value || "").toLowerCase().includes(query))
+    );
+
+    filtered.forEach(item => {
+      const card = addElement(list, "div", undefined, "hqu-p2-name-card");
+      addElement(card, "h3", item.arabic || "");
+      addElement(card, "strong", item.transliteration || item.name || "");
+      addElement(card, "p", item.meaning || "");
+    });
+
+    if (!filtered.length) addElement(list, "p", "No matching names found.");
+  }
+
+  $("hquP2NameSearch")?.addEventListener("input", renderNames);
+
+  /* =========================================
+     5. DAILY DUAS DATA LOADER
+  ========================================= */
+
+  let duasData = [];
+
+  async function loadDuas() {
+    const list = $("hquP2DuasList");
+    if (!list) return;
+
+    try {
+      const response = await fetch("./data/duas.json");
+      if (!response.ok) throw new Error("Data unavailable");
+
+      const data = await response.json();
+      duasData = Array.isArray(data) ? data :
+        Array.isArray(data.duas) ? data.duas : [];
+
+      renderDuas();
+    } catch {
+      list.textContent =
+        "Verified Dua data file is not available yet. Add data/duas.json to enable this feature.";
+    }
+  }
+
+  function renderDuas() {
+    const list = $("hquP2DuasList");
+    if (!list) return;
+
+    list.replaceChildren();
+
+    const query = ($("hquP2DuaSearch")?.value || "").toLowerCase();
+    const category = $("hquP2DuaCategory")?.value || "all";
+
+    const filtered = duasData.filter(dua => {
+      const matchesCategory = category === "all" ||
+        dua.category === category;
+
+      const matchesSearch = [
+        dua.title, dua.arabic, dua.translation, dua.reference
+      ].some(value => String(value || "").toLowerCase().includes(query));
+
+      return matchesCategory && matchesSearch;
+    });
+
+    filtered.forEach(dua => {
+      const card = addElement(list, "div", undefined, "hqu-p2-dua-card");
+      addElement(card, "h3", dua.title || "Daily Dua");
+      addElement(card, "p", dua.arabic || "", "arabic");
+      addElement(card, "p", dua.translation || "");
+      addElement(card, "small", dua.reference || "");
+    });
+
+    if (!filtered.length) addElement(list, "p", "No matching Duas found.");
+  }
+
+  $("hquP2DuaSearch")?.addEventListener("input", renderDuas);
+  $("hquP2DuaCategory")?.addEventListener("change", renderDuas);
+
+  /* =========================================
+     6. QURAN KNOWLEDGE QUIZ
+     Uses Surah metadata only
+  ========================================= */
+
+  function buildQuiz() {
+    quizQuestions = [];
+
+    if (surahs.length < 4) return;
+
+    surahs.forEach(s => {
+      const correct = getSurahNumber(s);
+      const name = getSurahName(s);
+
+      if (!correct || !name) return;
+
+      const choices = [correct];
+
+      while (choices.length < 4) {
+        const random = getSurahNumber(
+          surahs[Math.floor(Math.random() * surahs.length)]
+        );
+
+        if (random && !choices.includes(random)) choices.push(random);
+      }
+
+      choices.sort(() => Math.random() - .5);
+
+      quizQuestions.push({
+        question: `What is the number of Surah ${name}?`,
+        answer: correct,
+        options: choices
+      });
+    });
+
+    quizQuestions.sort(() => Math.random() - .5);
+  }
+
+  function showQuizQuestion() {
+    if (quizIndex >= quizQuestions.length) {
+      quizActive = false;
+      message("hquP2QuizQuestion", "Quiz completed! 🎉");
+      message("hquP2QuizOptions", "");
+      message("hquP2QuizResult", "Well done! You completed the quiz.");
+      message("hquP2QuizScore", `Final Score: ${quizScore}`);
+      return;
+    }
+
+    const q = quizQuestions[quizIndex];
+    message("hquP2QuizQuestion", q.question);
+
+    const options = $("hquP2QuizOptions");
+    if (!options) return;
+    options.replaceChildren();
+
+    q.options.forEach(option => {
+      const surah = findSurah(option);
+      const button = addElement(
+        options,
+        "button",
+        surah ? `${option}. ${getSurahName(surah)}` : String(option)
+      );
+
+      button.type = "button";
+      button.addEventListener("click", () => {
+        if (!quizActive) return;
+
+        if (option === q.answer) {
+          quizScore++;
+          message("hquP2QuizResult", "Correct answer! ✅");
+        } else {
+          message(
+            "hquP2QuizResult",
+            `Correct answer: ${q.answer}`
+          );
+        }
+
+        quizIndex++;
+        message("hquP2QuizScore", `Score: ${quizScore}`);
+        options.querySelectorAll("button").forEach(b => b.disabled = true);
+
+        const next = addElement(options, "button", "Next Question →");
+        next.addEventListener("click", showQuizQuestion);
+      });
+    });
+  }
+
+  $("hquP2StartQuiz")?.addEventListener("click", () => {
+    if (!quizQuestions.length) {
+      message("hquP2QuizResult", "Surah data is not available.");
+      return;
+    }
+
+    quizIndex = 0;
+    quizScore = 0;
+    quizActive = true;
+    message("hquP2QuizScore", "Score: 0");
+    message("hquP2QuizResult", "");
+    showQuizQuestion();
+  });
+
+  /* =========================================
+     7. ADVANCED TASBEEH
+  ========================================= */
+
+  function currentDhikr() {
+    const type = $("hquP2TasbeehType")?.value || "SubhanAllah";
+
+    if (type === "Custom") {
+      return $("hquP2CustomDhikr")?.value.trim() || "Custom";
+    }
+
+    return type;
+  }
+
+  function currentTasbeehCount() {
+    return Number(tasbeeh[currentDhikr()] || 0);
+  }
+
+  function renderTasbeeh() {
+    const count = currentTasbeehCount();
+    const goal = Math.max(1, Number($("hquP2TasbeehGoal")?.value) || 100);
+
+    message("hquP2TasbeehCount", String(count));
+    message(
+      "hquP2TasbeehProgress",
+      `Progress: ${Math.min(100, Math.round(count / goal * 100))}%`
+    );
+  }
+
+  $("hquP2TasbeehAdd")?.addEventListener("click", () => {
+    const key = currentDhikr();
+    tasbeeh[key] = Number(tasbeeh[key] || 0) + 1;
+    save(KEYS.tasbeeh, tasbeeh);
+    renderTasbeeh();
+  });
+
+  $("hquP2TasbeehReset")?.addEventListener("click", () => {
+    if (!confirm("Reset this Dhikr count?")) return;
+
+    tasbeeh[currentDhikr()] = 0;
+    save(KEYS.tasbeeh, tasbeeh);
+    renderTasbeeh();
+  });
+
+  $("hquP2TasbeehType")?.addEventListener("change", renderTasbeeh);
+  $("hquP2CustomDhikr")?.addEventListener("input", renderTasbeeh);
+  $("hquP2TasbeehGoal")?.addEventListener("input", renderTasbeeh);
+
+  /* =========================================
+     8. ISLAMIC CALENDAR
+  ========================================= */
+
+  function renderCalendar() {
+    const now = new Date();
+
+    message(
+      "hquP2GregorianDate",
+      new Intl.DateTimeFormat("en-PK", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      }).format(now)
+    );
+
+    try {
+      const hijri = new Intl.DateTimeFormat("en", {
+        calendar: "islamic",
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      }).format(now);
+
+      message("hquP2HijriDate", hijri);
+    } catch {
+      message("hquP2HijriDate", "Hijri calendar is not supported by this browser.");
+    }
+  }
+
+  /* =========================================
+     9. DARK AND LIGHT MODE
+  ========================================= */
+
+  function setTheme(theme) {
+    document.body.classList.toggle("hqu-p2-dark", theme === "dark");
+    save(KEYS.theme, theme);
+
+    message(
+      "hquP2ThemeMessage",
+      theme === "dark" ? "Dark mode enabled 🌙" : "Light mode enabled ☀️"
+    );
+  }
+
+  $("hquP2LightMode")?.addEventListener("click", () => setTheme("light"));
+  $("hquP2DarkMode")?.addEventListener("click", () => setTheme("dark"));
+
+  const savedTheme = read(KEYS.theme, "light");
+  setTheme(savedTheme === "dark" ? "dark" : "light");
+
+  /* =========================================
+     10. SETTINGS AND DATA BACKUP
+  ========================================= */
+
+  const backupKeys = Object.values(KEYS);
+
+  $("hquP2ExportBackup")?.addEventListener("click", () => {
+    const backup = {
+      app: "Holy Quran Ultimate",
+      version: 2,
+      createdAt: new Date().toISOString(),
+      data: {}
+    };
+
+    backupKeys.forEach(key => {
+      const value = localStorage.getItem(key);
+      if (value !== null) backup.data[key] = value;
+    });
+
+    const blob = new Blob(
+      [JSON.stringify(backup, null, 2)],
+      { type: "application/json" }
+    );
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = "holy-quran-ultimate-backup.json";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+
+    message("hquP2BackupMessage", "Backup downloaded successfully!");
+  });
+
+  let pendingBackup = null;
+
+  $("hquP2ImportBackup")?.addEventListener("change", async event => {
+    const file = event.target.files?.[0];
+    pendingBackup = null;
+
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text);
+
+      if (
+        data.app !== "Holy Quran Ultimate" ||
+        !data.data ||
+        typeof data.data !== "object" ||
+        Array.isArray(data.data)
+      ) {
+        throw new Error("Invalid backup file");
+      }
+
+      pendingBackup = data;
+      message("hquP2BackupMessage", "Backup file ready. Press Restore Backup.");
+    } catch {
+      message("hquP2BackupMessage", "Invalid backup file.");
+    }
+  });
+
+  $("hquP2ImportButton")?.addEventListener("click", () => {
+    if (!pendingBackup) {
+      message("hquP2BackupMessage", "Please select a valid backup file first.");
+      return;
+    }
+
+    if (!confirm("Restore backup? Current Package 2 data will be replaced.")) {
+      return;
+    }
+
+    try {
+      backupKeys.forEach(key => {
+        if (Object.prototype.hasOwnProperty.call(pendingBackup.data, key)) {
+          const value = pendingBackup.data[key];
+
+          if (typeof value !== "string") {
+            throw new Error("Invalid backup value");
+          }
+
+          JSON.parse(value);
+          localStorage.setItem(key, value);
+        }
+      });
+
+      message("hquP2BackupMessage", "Backup restored. Reload the app to see all changes.");
+      pendingBackup = null;
+    } catch {
+      message("hquP2BackupMessage", "Could not restore this backup.");
+    }
+  });
+
+  /* =========================================
+     START ALL FEATURES
+  ========================================= */
+
+  function startPackage2() {
+    renderNotes();
+    renderFavorites();
+    updateChecklist();
+    renderTasbeeh();
+    renderCalendar();
+    loadNames();
+    loadDuas();
+    loadSurahs();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", startPackage2, { once: true });
+  } else {
+    startPackage2();
+  }
+
+})();
+
+/* ============== END PACKAGE 2 ============== */
