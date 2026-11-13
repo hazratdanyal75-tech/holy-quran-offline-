@@ -2505,3 +2505,222 @@ if ("serviceWorker" in navigator) {
   console.log("Hifz Tracker improvements loaded successfully.");
 
 })();
+
+/* =========================================
+   FILE 37: DAILY HIFZ REVISION SYSTEM
+========================================= */
+
+(function () {
+  "use strict";
+
+  const STORAGE_KEY = "hquDailyHifzRevisions";
+
+  const surahSelect = document.getElementById("revisionSurah");
+  const dateInput = document.getElementById("revisionDate");
+  const notesInput = document.getElementById("revisionNotes");
+  const saveButton = document.getElementById("saveRevision");
+
+  const message = document.getElementById("revisionMessage");
+  const historyList = document.getElementById("revisionHistoryList");
+  const totalElement = document.getElementById("revisionTotal");
+  const todayElement = document.getElementById("revisionToday");
+
+  if (!surahSelect || !dateInput || !saveButton) return;
+
+  let revisions = [];
+
+  function getLocalDate() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
+
+  function loadRevisions() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      revisions = Array.isArray(saved) ? saved : [];
+    } catch (error) {
+      revisions = [];
+    }
+  }
+
+  function saveData() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(revisions));
+      return true;
+    } catch (error) {
+      showMessage("Could not save data on this device.");
+      return false;
+    }
+  }
+
+  function showMessage(text) {
+    message.textContent = text;
+  }
+
+  function loadSurahOptions() {
+    const existing = new Set(
+      Array.from(surahSelect.options).map(option => option.value)
+    );
+
+    fetch("./data/surahs.json")
+      .then(response => {
+        if (!response.ok) throw new Error("Surah file unavailable");
+        return response.json();
+      })
+      .then(data => {
+        const surahs = Array.isArray(data)
+          ? data
+          : Array.isArray(data.surahs)
+            ? data.surahs
+            : Object.values(data);
+
+        surahs.forEach((surah, index) => {
+          if (!surah || typeof surah !== "object") return;
+
+          const number = Number(
+            surah.number || surah.id || surah.surahNumber || index + 1
+          );
+
+          const name =
+            surah.englishName ||
+            surah.nameEnglish ||
+            surah.name ||
+            surah.english_name ||
+            "Surah " + number;
+
+          if (
+            !Number.isInteger(number) ||
+            number < 1 ||
+            number > 114 ||
+            existing.has(String(number))
+          ) return;
+
+          const option = document.createElement("option");
+          option.value = number;
+          option.textContent = number + ". " + name;
+
+          surahSelect.appendChild(option);
+          existing.add(String(number));
+        });
+      })
+      .catch(error => {
+        console.error("Revision Surah loading error:", error);
+        showMessage("Please check data/surahs.json.");
+      });
+  }
+
+  function renderHistory() {
+    historyList.replaceChildren();
+
+    const today = getLocalDate();
+
+    const todayCount = revisions.filter(
+      item => item.date === today
+    ).length;
+
+    totalElement.textContent = revisions.length;
+    todayElement.textContent = todayCount;
+
+    if (revisions.length === 0) {
+      historyList.textContent = "No revision records yet.";
+      return;
+    }
+
+    const sorted = [...revisions].sort(
+      (a, b) => b.date.localeCompare(a.date) || b.id - a.id
+    );
+
+    sorted.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "revision-item";
+
+      const details = document.createElement("div");
+
+      const title = document.createElement("strong");
+      title.textContent = item.surahName;
+
+      const date = document.createElement("p");
+      date.textContent = "📅 " + item.date;
+
+      details.appendChild(title);
+      details.appendChild(date);
+
+      if (item.notes) {
+        const notes = document.createElement("p");
+        notes.textContent = item.notes;
+        details.appendChild(notes);
+      }
+
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.textContent = "Delete";
+      remove.className = "revision-delete";
+
+      remove.addEventListener("click", function () {
+        revisions = revisions.filter(
+          revision => revision.id !== item.id
+        );
+
+        if (saveData()) renderHistory();
+      });
+
+      card.appendChild(details);
+      card.appendChild(remove);
+
+      historyList.appendChild(card);
+    });
+  }
+
+  saveButton.addEventListener("click", function () {
+    const number = Number(surahSelect.value);
+    const date = dateInput.value;
+    const notes = notesInput.value.trim();
+
+    if (!number || !date) {
+      showMessage("Please select a Surah and revision date.");
+      return;
+    }
+
+    if (date > getLocalDate()) {
+      showMessage("Future dates cannot be selected.");
+      return;
+    }
+
+    const option = surahSelect.options[surahSelect.selectedIndex];
+
+    const revision = {
+      id: Date.now(),
+      surahNumber: number,
+      surahName: option.textContent,
+      date: date,
+      notes: notes
+    };
+
+    revisions.push(revision);
+
+    if (!saveData()) {
+      revisions.pop();
+      return;
+    }
+
+    renderHistory();
+
+    surahSelect.value = "";
+    dateInput.value = getLocalDate();
+    notesInput.value = "";
+
+    showMessage("Revision saved successfully! ✓");
+  });
+
+  loadRevisions();
+
+  dateInput.value = getLocalDate();
+
+  loadSurahOptions();
+  renderHistory();
+
+})();
