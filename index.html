@@ -1807,5 +1807,228 @@ content="Complete Quran, translations, recitation and Islamic companion.">
 
 <!-- END PACKAGE 2 HTML -->
 
+<!-- ==========================================
+ HOLY QURAN ULTIMATE
+ PACKAGE 3 — 10 NEW ADVANCED FEATURES
+ HTML
+=========================================== -->
+
+<!-- 1. QURAN PROGRESS DASHBOARD -->
+<section class="hqu-p3-section" id="hquP3Dashboard">
+  <h2>📊 Quran Progress Dashboard</h2>
+  <p>Your personal reading progress.</p>
+
+  <div class="hqu-p3-stats">
+    <div class="hqu-p3-stat">
+      <strong id="hquP3ReadSurahs">0</strong>
+      <span>Surahs Read</span>
+    </div>
+    <div class="hqu-p3-stat">
+      <strong id="hquP3Bookmarks">0</strong>
+      <span>Bookmarks</span>
+    </div>
+    <div class="hqu-p3-stat">
+      <strong id="hquP3Notes">0</strong>
+      <span>Personal Notes</span>
+    </div>
+    <div class="hqu-p3-stat">
+      <strong id="hquP3Favorites">0</strong>
+      <span>Favorite Ayahs</span>
+    </div>
+  </div>
+
+  <h3>Reading Progress</h3>
+  <div class="hqu-p3-progress-track">
+    <div id="hquP3ProgressBar"></div>
+  </div>
+  <p id="hquP3ProgressText">Progress information will appear here.</p>
+
+  <button type="button" id="hquP3RefreshDashboard">
+    🔄 Refresh Statistics
+  </button>
+</section>
+
+<!-- 2. READING PLANNER -->
+<section class="hqu-p3-section" id="hquP3Planner">
+  <h2>📅 Quran Reading Planner</h2>
+  <p>Create your personal reading plan.</p>
+
+  <label for="hquP3PlanSurah">Select Surah</label>
+  <select id="hquP3PlanSurah">
+    <option value="">Loading Surahs...</option>
+  </select>
+
+  <label for="hquP3PlanDate">Reading Date</label>
+  <input type="date" id="hquP3PlanDate">
+
+  <label for="hquP3PlanTarget">Target Ayahs</label>
+  <input type="number" id="hquP3PlanTarget"
+    min="1" placeholder="Enter target">
+
+  <button type="button" id="hquP3AddPlan">➕ Add Reading Plan</button>
+
+  <div id="hquP3PlansList"></div>
+  <p id="hquP3PlanMessage" aria-live="polite"></p>
+</section>
+
+<!-- 3. SURAH INFORMATION CARDS -->
+<section class="hqu-p3-section" id="hquP3SurahInfo">
+  <h2>📚 Surah Information</h2>
+  <p>Explore available Surah information.</p>
+
+  <input type="search" id="hquP3SurahSearch"
+    placeholder="Search Surah name or number...">
+
+  <select id="hquP3SurahFilter">
+    <option value="all">All Surahs</option>
+    <option value="Makki">Makki Surahs</option>
+    <option value="Madani">Madani Surahs</option>
+  </select>
+
+  <div id="hquP3SurahCards"></div>
+</section>
+
+<!-- 4. BOOKMARK FOLDERS -->
+<section class="hqu-p3-section" id="hquP3BookmarkFolders">
+  <h2>🔖 Bookmark Folders</h2>
+  <p>Organize your saved reading references.</p>
+
+  <label for="hquP3FolderName">New Folder Name</label>
+  <input id="hquP3FolderName" type="text"
+    placeholder="Example: Daily Reading">
+
+  <button type="button" id="hquP3CreateFolder">
+    ➕ Create Folder
+  </button>
+
+  <div id="hquP3FoldersList"></div>
+  <p id="hquP3FolderMessage" aria-live="polite"></p>
+</section>
+
+<!-- 5. SEARCH HISTORY -->
+<section class="hqu-p3-section" id="hquP3SearchHistory">
+  <h2>🔍 Search History</h2>
+  <p>Your recent searches on this device.</p>
+
+  <div id="hquP3SearchHistoryList">
+    <p>No search history yet.</p>
+  </div>
+
+  <button type="button" id="hquP3ClearSearchHistory">
+    🗑 Clear Search History
+  </button>
+</section>
+
+<!-- 6. PERSONAL STUDY LIBRARY -->
+<section class="hqu-p3-section" id="hquP3StudyLibrary">
+  <h2>🗂 My Study Library</h2>
+  <p>Save your personal Islamic study resources and references.</p>
+
+  <label for="hquP3ResourceTitle">Resource Title</label>
+  <input id="hquP3ResourceTitle" type="text"
+    placeholder="Enter title">
+
+  <label for="hquP3ResourceCategory">Category</label>
+  <select id="hquP3ResourceCategory">
+    <option value="Quran">Quran Study</option>
+    <option value="Tafsir">Tafsir Reference</option>
+    <option value="Hadith">Hadith Reference</option>
+    <option value="Arabic">Arabic Learning</option>
+    <option value="Other">Other</option>
+  </select>
+
+  <label for="hquP3ResourceDetails">Notes or Reference</label>
+  <textarea id="hquP3ResourceDetails"
+    placeholder="Write your study details or source reference..."></textarea>
+
+  <button type="button" id="hquP3SaveResource">
+    💾 Save Resource
+  </button>
+
+  <div id="hquP3LibraryList"></div>
+  <p id="hquP3LibraryMessage" aria-live="polite"></p>
+</section>
+
+<!-- 7. ARABIC FONT SETTINGS -->
+<section class="hqu-p3-section" id="hquP3ArabicSettings">
+  <h2>🔤 Arabic Reading Settings</h2>
+  <p>Adjust the Arabic text size in the Quran reader.</p>
+
+  <label for="hquP3ArabicSize">Arabic Font Size</label>
+  <input type="range" id="hquP3ArabicSize"
+    min="20" max="48" value="30">
+
+  <p id="hquP3ArabicSizeValue">30 px</p>
+
+  <div class="hqu-p3-arabic-preview" id="hquP3ArabicPreview">
+    بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+  </div>
+
+  <button type="button" id="hquP3ApplyArabicSize">
+    Apply Font Size
+  </button>
+</section>
+
+<!-- 8. LANGUAGE SELECTOR -->
+<section class="hqu-p3-section" id="hquP3Language">
+  <h2>🌐 Language Settings</h2>
+  <p>Select your preferred app language.</p>
+
+  <select id="hquP3LanguageSelect">
+    <option value="en">English</option>
+    <option value="ur">اردو</option>
+    <option value="ps">پښتو</option>
+  </select>
+
+  <button type="button" id="hquP3SaveLanguage">
+    💾 Save Language Preference
+  </button>
+
+  <p id="hquP3LanguageMessage" aria-live="polite">
+    Language preference can be saved here.
+  </p>
+</section>
+
+<!-- 9. NOTES EXPORT -->
+<section class="hqu-p3-section" id="hquP3NotesExport">
+  <h2>📤 Export Personal Notes</h2>
+  <p>Download your saved Package 2 Quran notes as a text file.</p>
+
+  <button type="button" id="hquP3ExportNotes">
+    📥 Download My Notes
+  </button>
+
+  <p id="hquP3ExportMessage" aria-live="polite"></p>
+</section>
+
+<!-- 10. ACCESSIBILITY SETTINGS -->
+<section class="hqu-p3-section" id="hquP3Accessibility">
+  <h2>♿ Accessibility Settings</h2>
+  <p>Customize your reading experience.</p>
+
+  <label>
+    <input type="checkbox" id="hquP3LargeText">
+    Larger Text
+  </label>
+
+  <label>
+    <input type="checkbox" id="hquP3HighContrast">
+    High Contrast
+  </label>
+
+  <label>
+    <input type="checkbox" id="hquP3ReduceMotion">
+    Reduce Animations
+  </label>
+
+  <button type="button" id="hquP3ApplyAccessibility">
+    Apply Accessibility Settings
+  </button>
+
+  <p id="hquP3AccessibilityMessage" aria-live="polite"></p>
+</section>
+
+<!-- END PACKAGE 3 HTML -->
+
 </body>
 </html>
