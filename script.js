@@ -1375,3 +1375,245 @@ if ("serviceWorker" in navigator) {
   }
 
 })();
+
+/* =====================================
+   FILE 16: BOOKMARK & LAST READ SYSTEM
+===================================== */
+
+(function () {
+  const container = document.getElementById("ayahContainer");
+  const surahList = document.getElementById("surahList");
+
+  if (!container) return;
+
+  let currentSurah = 1;
+
+  const getBookmarks = () => {
+    try {
+      return JSON.parse(localStorage.getItem("hquBookmarks")) || [];
+    } catch {
+      return [];
+    }
+  };
+
+  const saveBookmarks = (items) => {
+    localStorage.setItem("hquBookmarks", JSON.stringify(items));
+  };
+
+  const getLastRead = () => {
+    try {
+      return JSON.parse(localStorage.getItem("hquLastRead"));
+    } catch {
+      return null;
+    }
+  };
+
+  // Bookmark and Last Read panel
+  const panel = document.createElement("section");
+  panel.id = "bookmarkPanel";
+
+  panel.innerHTML = `
+    <h3>⭐ My Quran Bookmarks</h3>
+    <p id="bookmarkCount">Saved: 0</p>
+    <div id="bookmarkList"></div>
+
+    <div class="last-read-box">
+      <h3>📖 Last Read</h3>
+      <p id="lastReadText">No reading history yet.</p>
+      <button id="resumeReading">Continue Reading</button>
+    </div>
+  `;
+
+  container.parentNode.insertBefore(panel, container);
+
+  const bookmarkList = document.getElementById("bookmarkList");
+
+  function updateBookmarkPanel() {
+    const bookmarks = getBookmarks();
+
+    document.getElementById("bookmarkCount").textContent =
+      "Saved: " + bookmarks.length;
+
+    bookmarkList.innerHTML = "";
+
+    if (bookmarks.length === 0) {
+      bookmarkList.innerHTML =
+        "<p>No bookmarks saved yet.</p>";
+    }
+
+    bookmarks.forEach((item) => {
+      const row = document.createElement("div");
+      row.className = "bookmark-row";
+
+      const label = document.createElement("span");
+      label.textContent =
+        "Surah " + item.surah + " — Ayah " + item.ayah;
+
+      const remove = document.createElement("button");
+      remove.textContent = "Remove";
+
+      remove.addEventListener("click", () => {
+        saveBookmarks(
+          getBookmarks().filter(
+            b => !(b.surah === item.surah && b.ayah === item.ayah)
+          )
+        );
+        updateBookmarkPanel();
+        decorateAyahs();
+      });
+
+      row.append(label, remove);
+      bookmarkList.appendChild(row);
+    });
+
+    const lastRead = getLastRead();
+
+    document.getElementById("lastReadText").textContent =
+      lastRead
+        ? `Surah ${lastRead.surah}, Ayah ${lastRead.ayah}`
+        : "No reading history yet.";
+  }
+
+  function saveReadingPosition(ayah) {
+    const position = {
+      surah: currentSurah,
+      ayah: ayah
+    };
+
+    localStorage.setItem(
+      "hquLastRead",
+      JSON.stringify(position)
+    );
+
+    updateBookmarkPanel();
+  }
+
+  function decorateAyahs() {
+    const cards = container.querySelectorAll(".ayah-card");
+    const bookmarks = getBookmarks();
+
+    cards.forEach((card, index) => {
+      const ayahNumber = index + 1;
+
+      card.dataset.ayahNumber = ayahNumber;
+
+      if (!card.querySelector(".ayah-bookmark-btn")) {
+        const button = document.createElement("button");
+
+        button.className = "ayah-bookmark-btn";
+        button.type = "button";
+
+        card.appendChild(button);
+      }
+
+      const button = card.querySelector(".ayah-bookmark-btn");
+
+      const saved = bookmarks.some(
+        b => b.surah === currentSurah && b.ayah === ayahNumber
+      );
+
+      button.textContent = saved
+        ? "⭐ Bookmarked"
+        : "☆ Save Bookmark";
+
+      button.onclick = (event) => {
+        event.stopPropagation();
+
+        let updated = getBookmarks();
+
+        const exists = updated.some(
+          b => b.surah === currentSurah && b.ayah === ayahNumber
+        );
+
+        if (exists) {
+          updated = updated.filter(
+            b => !(b.surah === currentSurah && b.ayah === ayahNumber)
+          );
+        } else {
+          updated.push({
+            surah: currentSurah,
+            ayah: ayahNumber
+          });
+        }
+
+        saveBookmarks(updated);
+        updateBookmarkPanel();
+        decorateAyahs();
+      };
+
+      card.onclick = () => {
+        saveReadingPosition(ayahNumber);
+      };
+    });
+  }
+
+  // Detect selected Surah
+  if (surahList) {
+    surahList.addEventListener("click", (event) => {
+      const item = event.target.closest(".surah-item");
+      if (!item) return;
+
+      const match = item.textContent.match(/^\s*(\d+)/);
+
+      if (match) {
+        currentSurah = Number(match[1]);
+      }
+
+      setTimeout(decorateAyahs, 100);
+    });
+  }
+
+  // Watch for new Ayah cards
+  const observer = new MutationObserver(() => {
+    decorateAyahs();
+  });
+
+  observer.observe(container, {
+    childList: true,
+    subtree: true
+  });
+
+  // Continue from last read
+  document.getElementById("resumeReading").onclick = () => {
+    const lastRead = getLastRead();
+
+    if (!lastRead) {
+      alert("No saved reading position yet.");
+      return;
+    }
+
+    currentSurah = lastRead.surah;
+
+    const surahItems = surahList
+      ? surahList.querySelectorAll(".surah-item")
+      : [];
+
+    const target = Array.from(surahItems).find(item => {
+      const match = item.textContent.match(/^\s*(\d+)/);
+      return match && Number(match[1]) === lastRead.surah;
+    });
+
+    if (target) {
+      target.click();
+
+      setTimeout(() => {
+        const ayah = container.querySelector(
+          `[data-ayah-number="${lastRead.ayah}"]`
+        );
+
+        if (ayah) {
+          ayah.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+          });
+        }
+      }, 500);
+    } else {
+      alert("Please select the saved Surah from the Surah list.");
+    }
+  };
+
+  updateBookmarkPanel();
+  decorateAyahs();
+
+})();
