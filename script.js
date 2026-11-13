@@ -1993,3 +1993,88 @@ if ("serviceWorker" in navigator) {
   updateSurahOptions();
 
 })();
+
+/* =====================================
+   FILE 27: DIGITAL TASBEEH JAVASCRIPT
+===================================== */
+
+(function () {
+  const countDisplay = document.getElementById("tasbeehCount");
+  const dhikrDisplay = document.getElementById("tasbeehDhikr");
+  const countButton = document.getElementById("tasbeehIncrement");
+  const resetButton = document.getElementById("tasbeehReset");
+  const message = document.getElementById("tasbeehMessage");
+  const targetDisplay = document.getElementById("tasbeehTarget");
+
+  if (!countDisplay || !countButton || !resetButton) return;
+
+  const target = 100;
+  let selectedDhikr = "سبحان الله";
+
+  let counts = {};
+
+  try {
+    counts = JSON.parse(
+      localStorage.getItem("hquTasbeehCounts")
+    ) || {};
+  } catch {
+    counts = {};
+  }
+
+  function currentCount() {
+    return Number(counts[selectedDhikr]) || 0;
+  }
+
+  function saveCounts() {
+    localStorage.setItem(
+      "hquTasbeehCounts",
+      JSON.stringify(counts)
+    );
+  }
+
+  function updateDisplay() {
+    countDisplay.textContent = currentCount();
+    dhikrDisplay.textContent = selectedDhikr;
+    targetDisplay.textContent = target;
+  }
+
+  document.querySelectorAll(".tasbeeh-type").forEach(button => {
+    button.addEventListener("click", () => {
+      selectedDhikr = button.dataset.dhikr;
+
+      document.querySelectorAll(".tasbeeh-type")
+        .forEach(item => item.classList.remove("active"));
+
+      button.classList.add("active");
+
+      message.textContent = "Selected: " + selectedDhikr;
+      updateDisplay();
+    });
+  });
+
+  countButton.addEventListener("click", () => {
+    counts[selectedDhikr] = currentCount() + 1;
+
+    saveCounts();
+    updateDisplay();
+
+    if (currentCount() === target) {
+      message.textContent =
+        "Alhamdulillah! Your 100-count target is complete.";
+    } else {
+      message.textContent = "Keep remembering Allah.";
+    }
+  });
+
+  resetButton.addEventListener("click", () => {
+    counts[selectedDhikr] = 0;
+
+    saveCounts();
+    updateDisplay();
+
+    message.textContent = "Counter reset successfully.";
+  });
+
+  updateDisplay();
+
+})();
