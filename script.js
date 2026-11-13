@@ -5278,3 +5278,972 @@ if ("serviceWorker" in navigator) {
   console.log("Holy Quran Ultimate - Package 3 Loaded Successfully!");
 
 })();
+
+/* ==========================================
+   HOLY QURAN ULTIMATE
+   PACKAGE 4 - AUDIO ENGINE
+   All 10 Features
+========================================== */
+
+(function () {
+  "use strict";
+
+  const $ = id => document.getElementById(id);
+
+  const KEYS = {
+    playlist: "hquPackage4Playlist",
+    bookmarks: "hquPackage4Bookmarks",
+    downloads: "hquPackage4Downloads",
+    settings: "hquPackage4Settings"
+  };
+
+  const QARIS = {
+    mishary: "Alafasy_128kbps",
+    abdulbasit: "Abdul_Basit_Murattal_192kbps",
+    sudais: "Sudais_128kbps",
+    shuraim: "Shuraim_128kbps",
+    maher: "Maher_AlMuaiqly_64kbps",
+    minshawi: "Minshawy_Murattal_128kbps",
+    husary: "Husary_128kbps",
+    ghamdi: "Ghamadi_40kbps"
+  };
+
+  const audio = $("hquP4AudioElement");
+
+  let surahs = [];
+  let currentIndex = -1;
+  let repeatCount = 0;
+  let sleepTimeout = null;
+  let wakeLock = null;
+  let currentObjectURL = null;
+  let databasePromise = null;
+
+  function read(key, fallback) {
+    try {
+      return JSON.parse(localStorage.getItem(key)) ?? fallback;
+    } catch {
+      return fallback;
+    }
+  }
+
+  function save(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  function text(value) {
+    return String(value ?? "");
+  }
+
+  function element(tag, value, className) {
+    const el = document.createElement(tag);
+    el.textContent = value;
+    if (className) el.className = className;
+    return el;
+  }
+
+  function clear(el) {
+    if (el) el.replaceChildren();
+  }
+
+  function numberOf(s) {
+    return Number(s.number || s.surahNumber || s.id || 0);
+  }
+
+  function nameOf(s) {
+    return s.englishName || s.nameEnglish ||
+      s.english_name || s.name || "Surah";
+  }
+
+  function arabicOf(s) {
+    return s.arabicName || s.nameArabic || "";
+  }
+
+  function formatTime(seconds) {
+    if (!Number.isFinite(seconds)) return "00:00";
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return String(mins).padStart(2, "0") +
+      ":" + String(secs).padStart(2, "0");
+  }
+
+  function message(id, value) {
+    if ($(id)) $(id).textContent = value;
+  }
+
+  function getSelectedQari() {
+    return $("hquP4Qari")?.value || "mishary";
+  }
+
+  function getAudioURL(surahNumber) {
+    const folder = QARIS[getSelectedQari()] || QARIS.mishary;
+    const file = String(surahNumber).padStart(3, "0") + ".mp3";
+
+    return "https://everyayah.com/data/" + folder + "/" + file;
+  }
+
+  /* ==========================================
+     OFFLINE AUDIO DATABASE
+     Uses IndexedDB on supported browsers
+  ========================================== */
+
+  function openDatabase() {
+    if (databasePromise) return databasePromise;
+
+    databasePromise = new Promise((resolve, reject) => {
+      if (!("indexedDB" in window)) {
+        reject(new Error("Offline storage is not supported."));
+        return;
+      }
+
+      const request = indexedDB.open("HolyQuranUltimateAudio", 1);
+
+      request.onupgradeneeded = () => {
+        const db = request.result;
+
+        if (!db.objectStoreNames.contains("audio")) {
+          db.createObjectStore("audio", { keyPath: "id" });
+        }
+      };
+
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+
+    return databasePromise;
+  }
+
+  async function storeAudio(id, blob, name, qari) {
+    const db = await openDatabase();
+
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction("audio", "readwrite");
+
+      transaction.objectStore("audio").put({
+        id,
+        blob,
+        name,
+        qari,
+        savedAt: new Date().toISOString()
+      });
+
+      transaction.oncomplete = () => resolve(true);
+      transaction.onerror = () => reject(transaction.error);
+    });
+  }
+
+  async function getStoredAudio(id) {
+    const db = await openDatabase();
+
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction("audio", "readonly");
+      const request = transaction.objectStore("audio").get(id);
+
+      request.onsuccess = () => resolve(request.result || null);
+      request.onerror = () => reject(request.error);
+    });
+  }
+
+  async function removeStoredAudio(id) {
+    const db = await openDatabase();
+
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction("audio", "readwrite");
+      transaction.objectStore("audio").delete(id);
+
+      transaction.oncomplete = () => resolve(true);
+      transaction.onerror = () => reject(transaction.error);
+    });
+  }
+
+  /* ==========================================
+     LOAD SURAH INFORMATION
+  ========================================== */
+
+  async function loadAudioSurahs() {
+    try {
+      const response = await fetch("./data/surahs.json");
+
+      if (!response.ok) {
+        throw new Error("Surah data unavailable");
+      }
+
+      const data = await response.json();
+
+      surahs = Array.isArray(data)
+        ? data
+        : Array.isArray(data.surahs)
+          ? data.surahs
+          : [];
+
+      populateSurahMenus();
+    } catch (error) {
+      console.error(error);
+
+      message(
+        "hquP4PlayerMessage",
+        "Surah list load nahi hui. data/surahs.json check karein."
+      );
+    }
+  }
+
+  function populateSurahMenus() {
+    [
+      "hquP4PlaylistSurah",
+      "hquP4DownloadSurah"
+    ].forEach(id => {
+      const select = $(id);
+      if (!select) return;
+
+      clear(select);
+
+      const first = element("option", "Select Surah");
+      first.value = "";
+      select.appendChild(first);
+
+      surahs.forEach(s => {
+        const option = element(
+          "option",
+          numberOf(s) + ". " + nameOf(s)
+        );
+
+        option.value = numberOf(s);
+        select.appendChild(option);
+      });
+    });
+  }
+
+  function getSurah(number) {
+    return surahs.find(s => numberOf(s) === Number(number));
+  }
+
+  /* ==========================================
+     1. QARI SELECTION
+  ========================================== */
+
+  const savedSettings = read(KEYS.settings, {});
+
+  if ($("hquP4Qari") && savedSettings.qari &&
+      QARIS[savedSettings.qari]) {
+    $("hquP4Qari").value = savedSettings.qari;
+  }
+
+  function updateQariDisplay() {
+    const select = $("hquP4Qari");
+
+    const name = select?.selectedOptions?.[0]?.textContent ||
+      "Mishary Rashid Alafasy";
+
+    message("hquP4QariMessage", "Selected Qari: " + name);
+    message("hquP4NowQari", "Qari: " + name);
+  }
+
+  $("hquP4Qari")?.addEventListener("change", () => {
+    updateQariDisplay();
+
+    if (currentIndex >= 0) {
+      playSurah(currentIndex, false);
+    }
+  });
+
+  /* ==========================================
+     2. QURAN AUDIO PLAYER
+  ========================================== */
+
+  async function playSurah(index, autoPlay) {
+    if (!audio || !surahs.length) return;
+
+    if (index < 0 || index >= surahs.length) return;
+
+    currentIndex = index;
+
+    const surah = surahs[index];
+    const number = numberOf(surah);
+    const name = nameOf(surah);
+
+    message("hquP4NowPlaying", name);
+    message(
+      "hquP4PlayerMessage",
+      "Loading " + name + "..."
+    );
+
+    updateQariDisplay();
+
+    if (currentObjectURL) {
+      URL.revokeObjectURL(currentObjectURL);
+      currentObjectURL = null;
+    }
+
+    audio.pause();
+    audio.removeAttribute("src");
+
+    const audioId = getSelectedQari() + "-" + number;
+
+    try {
+      const offline = await getStoredAudio(audioId);
+
+      if (offline?.blob) {
+        currentObjectURL = URL.createObjectURL(offline.blob);
+        audio.src = currentObjectURL;
+
+        message(
+          "hquP4PlayerMessage",
+          "Playing saved offline audio."
+        );
+      } else {
+        audio.src = getAudioURL(number);
+
+        message(
+          "hquP4PlayerMessage",
+          "Loading audio from online library..."
+        );
+      }
+
+      audio.load();
+
+      if (autoPlay) {
+        try {
+          await audio.play();
+          message("hquP4Play", "▶ Playing");
+        } catch {
+          message(
+            "hquP4PlayerMessage",
+            "Play button dobara press karein."
+          );
+        }
+      }
+    } catch (error) {
+      console.error(error);
+
+      audio.src = getAudioURL(number);
+      audio.load();
+
+      if (autoPlay) {
+        audio.play().catch(() => {
+          message(
+            "hquP4PlayerMessage",
+            "Audio play nahi ho saka. Internet aur audio source check karein."
+          );
+        });
+      }
+    }
+  }
+
+  $("hquP4Play")?.addEventListener("click", async () => {
+    if (currentIndex < 0) {
+      if (!surahs.length) {
+        message("hquP4PlayerMessage", "Surah list abhi load ho rahi hai.");
+        return;
+      }
+
+      await playSurah(0, true);
+      return;
+    }
+
+    audio?.play().then(() => {
+      message("hquP4PlayerMessage", "Audio playing.");
+    }).catch(() => {
+      message("hquP4PlayerMessage", "Audio play nahi ho saka.");
+    });
+  });
+
+  $("hquP4Pause")?.addEventListener("click", () => {
+    audio?.pause();
+    message("hquP4PlayerMessage", "Audio paused.");
+  });
+
+  $("hquP4Next")?.addEventListener("click", () => {
+    if (!surahs.length) return;
+    const next = Math.min(currentIndex + 1, surahs.length - 1);
+    playSurah(next, true);
+  });
+
+  $("hquP4Previous")?.addEventListener("click", () => {
+    if (!surahs.length) return;
+    const previous = Math.max(currentIndex - 1, 0);
+    playSurah(previous, true);
+  });
+
+  audio?.addEventListener("timeupdate", () => {
+    const seek = $("hquP4Seek");
+
+    if (seek && Number.isFinite(audio.duration)) {
+      seek.value = audio.duration
+        ? (audio.currentTime / audio.duration) * 100
+        : 0;
+    }
+
+    message("hquP4CurrentTime", formatTime(audio.currentTime));
+  });
+
+  audio?.addEventListener("loadedmetadata", () => {
+    message("hquP4Duration", formatTime(audio.duration));
+  });
+
+  audio?.addEventListener("play", () => {
+    message("hquP4Play", "▶ Playing");
+  });
+
+  audio?.addEventListener("pause", () => {
+    message("hquP4Play", "▶ Play");
+  });
+
+  audio?.addEventListener("error", () => {
+    message(
+      "hquP4PlayerMessage",
+      "Audio load nahi hua. Internet ya Qari audio source check karein."
+    );
+  });
+
+  $("hquP4Seek")?.addEventListener("input", event => {
+    if (audio && Number.isFinite(audio.duration)) {
+      audio.currentTime =
+        (Number(event.target.value) / 100) * audio.duration;
+    }
+  });
+
+  /* ==========================================
+     3. PLAYBACK SPEED
+  ========================================== */
+
+  $("hquP4Speed")?.addEventListener("change", event => {
+    if (audio) {
+      audio.playbackRate = Number(event.target.value) || 1;
+    }
+  });
+
+  /* ==========================================
+     4. REPEAT SETTINGS
+  ========================================== */
+
+  $("hquP4RepeatMode")?.addEventListener("change", event => {
+    const mode = event.target.value;
+
+    repeatCount = 0;
+
+    if (mode === "ayah") {
+      message(
+        "hquP4RepeatMessage",
+        "Ayah repeat ke liye individual Ayah audio source zaroori hai. Is player mein filhal full Surah repeat supported hai."
+      );
+    } else if (mode === "surah") {
+      message("hquP4RepeatMessage", "Surah repeat enabled.");
+    } else if (mode === "three") {
+      message("hquP4RepeatMessage", "Surah will repeat 3 times.");
+    } else if (mode === "five") {
+      message("hquP4RepeatMessage", "Surah will repeat 5 times.");
+    } else {
+      message("hquP4RepeatMessage", "Repeat is off.");
+    }
+  });
+
+  /* ==========================================
+     5. AUDIO PLAYLIST
+  ========================================== */
+
+  function renderPlaylist() {
+    const list = $("hquP4PlaylistList");
+    if (!list) return;
+
+    clear(list);
+
+    const playlist = read(KEYS.playlist, []);
+
+    if (!playlist.length) {
+      list.appendChild(element("p", "Playlist is empty."));
+      return;
+    }
+
+    playlist.forEach((item, index) => {
+      const row = element("div", "", "hqu-p4-item");
+
+      row.appendChild(element(
+        "h4",
+        item.number + ". " + item.name
+      ));
+
+      const play = element("button", "▶ Play");
+      play.type = "button";
+      play.addEventListener("click", () => {
+        const surahIndex = surahs.findIndex(
+          s => numberOf(s) === item.number
+        );
+
+        if (surahIndex >= 0) playSurah(surahIndex, true);
+      });
+
+      const remove = element("button", "Remove");
+      remove.type = "button";
+      remove.addEventListener("click", () => {
+        const items = read(KEYS.playlist, []);
+        items.splice(index, 1);
+        save(KEYS.playlist, items);
+        renderPlaylist();
+      });
+
+      row.append(play, remove);
+      list.appendChild(row);
+    });
+  }
+
+  $("hquP4AddPlaylist")?.addEventListener("click", () => {
+    const number = Number($("hquP4PlaylistSurah")?.value);
+    const surah = getSurah(number);
+
+    if (!surah) {
+      message("hquP4PlayerMessage", "Pehle Surah select karein.");
+      return;
+    }
+
+    const playlist = read(KEYS.playlist, []);
+
+    playlist.push({
+      number,
+      name: nameOf(surah)
+    });
+
+    save(KEYS.playlist, playlist);
+    renderPlaylist();
+
+    message("hquP4PlayerMessage", "Surah playlist mein add ho gayi.");
+  });
+
+  $("hquP4ClearPlaylist")?.addEventListener("click", () => {
+    save(KEYS.playlist, []);
+    renderPlaylist();
+  });
+
+  /* ==========================================
+     6. OFFLINE AUDIO DOWNLOADS
+  ========================================== */
+
+  async function downloadSurah() {
+    const number = Number($("hquP4DownloadSurah")?.value);
+    const surah = getSurah(number);
+
+    if (!surah) {
+      message("hquP4DownloadMessage", "Pehle Surah select karein.");
+      return;
+    }
+
+    const button = $("hquP4DownloadButton");
+    const qari = getSelectedQari();
+    const id = qari + "-" + number;
+
+    if (button) button.disabled = true;
+
+    message(
+      "hquP4DownloadMessage",
+      "Downloading " + nameOf(surah) + "... Please wait."
+    );
+
+    try {
+      const response = await fetch(getAudioURL(number));
+
+      if (!response.ok) {
+        throw new Error("Audio download failed.");
+      }
+
+      const blob = await response.blob();
+
+      if (!blob.size) {
+        throw new Error("Audio file is empty.");
+      }
+
+      await storeAudio(
+        id,
+        blob,
+        nameOf(surah),
+        qari
+      );
+
+      const downloads = read(KEYS.downloads, []);
+      const updated = downloads.filter(item => item.id !== id);
+
+      updated.unshift({
+        id,
+        number,
+        name: nameOf(surah),
+        qari,
+        size: blob.size
+      });
+
+      save(KEYS.downloads, updated);
+      renderDownloads();
+
+      message(
+        "hquP4DownloadMessage",
+        nameOf(surah) + " successfully saved for offline listening!"
+      );
+    } catch (error) {
+      console.error(error);
+
+      message(
+        "hquP4DownloadMessage",
+        "Download fail hua. Internet, storage permission ya audio server CORS support check karein."
+      );
+    } finally {
+      if (button) button.disabled = false;
+    }
+  }
+
+  $("hquP4DownloadButton")?.addEventListener("click", downloadSurah);
+
+  function renderDownloads() {
+    const list = $("hquP4DownloadsList");
+    if (!list) return;
+
+    clear(list);
+
+    const downloads = read(KEYS.downloads, []);
+
+    if (!downloads.length) {
+      list.appendChild(element("p", "No offline audio saved yet."));
+      return;
+    }
+
+    downloads.forEach(item => {
+      const row = element("div", "", "hqu-p4-item");
+
+      row.appendChild(element(
+        "h4",
+        item.number + ". " + item.name
+      ));
+
+      row.appendChild(element(
+        "p",
+        "Qari: " + item.qari
+      ));
+
+      const play = element("button", "▶ Play Offline");
+      play.type = "button";
+
+      play.addEventListener("click", async () => {
+        const index = surahs.findIndex(
+          s => numberOf(s) === item.number
+        );
+
+        if (index < 0) return;
+
+        if ($("hquP4Qari")) {
+          $("hquP4Qari").value = item.qari;
+          updateQariDisplay();
+        }
+
+        await playSurah(index, true);
+      });
+
+      const remove = element("button", "Delete Download");
+      remove.type = "button";
+
+      remove.addEventListener("click", async () => {
+        try {
+          await removeStoredAudio(item.id);
+
+          const updated = read(KEYS.downloads, [])
+            .filter(d => d.id !== item.id);
+
+          save(KEYS.downloads, updated);
+          renderDownloads();
+
+          message("hquP4DownloadMessage", "Offline audio deleted.");
+        } catch (error) {
+          message("hquP4DownloadMessage", "Delete nahi ho saka.");
+        }
+      });
+
+      row.append(play, remove);
+      list.appendChild(row);
+    });
+  }
+
+  /* ==========================================
+     7. TRANSLATION DISPLAY
+     Connect using a custom event from Quran reader:
+     document.dispatchEvent(new CustomEvent(
+       "hqu:ayah-selected",
+       { detail: { arabic: "...", translation: "..." } }
+     ));
+  ========================================== */
+
+  document.addEventListener("hqu:ayah-selected", event => {
+    const detail = event.detail || {};
+    const box = $("hquP4TranslationBox");
+
+    if (!box) return;
+
+    clear(box);
+
+    if (detail.arabic) {
+      const arabic = element("p", detail.arabic, "arabic-text");
+      arabic.dir = "rtl";
+      box.appendChild(arabic);
+    }
+
+    const language = $("hquP4TranslationLanguage")?.value || "en";
+
+    let translation = detail.translation;
+
+    if (translation && typeof translation === "object") {
+      translation = translation[language] ||
+        translation.en ||
+        translation.ur ||
+        "";
+    }
+
+    box.appendChild(
+      element("p", translation || "Selected Ayah ki translation available nahi hai.")
+    );
+  });
+
+  $("hquP4TranslationLanguage")?.addEventListener("change", () => {
+    message(
+      "hquP4PlayerMessage",
+      "Translation language preference updated. Available translation data is required."
+    );
+  });
+
+  /* ==========================================
+     8. AUDIO BOOKMARKS
+  ========================================== */
+
+  function renderBookmarks() {
+    const list = $("hquP4BookmarksList");
+    if (!list) return;
+
+    clear(list);
+
+    const bookmarks = read(KEYS.bookmarks, []);
+
+    if (!bookmarks.length) {
+      list.appendChild(element("p", "No audio bookmarks yet."));
+      return;
+    }
+
+    bookmarks.forEach((item, index) => {
+      const row = element("div", "", "hqu-p4-item");
+
+      row.appendChild(element("h4", item.name));
+      row.appendChild(element("p", item.surahName));
+      row.appendChild(element("p", "Position: " + formatTime(item.time)));
+
+      const play = element("button", "▶ Open Bookmark");
+      play.type = "button";
+
+      play.addEventListener("click", async () => {
+        const surahIndex = surahs.findIndex(
+          s => numberOf(s) === item.number
+        );
+
+        if (surahIndex < 0) return;
+
+        await playSurah(surahIndex, true);
+
+        const seekToPosition = () => {
+          if (Number.isFinite(audio.duration)) {
+            audio.currentTime = Math.min(item.time, audio.duration);
+            audio.removeEventListener("loadedmetadata", seekToPosition);
+          }
+        };
+
+        audio.addEventListener("loadedmetadata", seekToPosition);
+      });
+
+      const remove = element("button", "Delete");
+      remove.type = "button";
+
+      remove.addEventListener("click", () => {
+        const current = read(KEYS.bookmarks, []);
+        current.splice(index, 1);
+        save(KEYS.bookmarks, current);
+        renderBookmarks();
+      });
+
+      row.append(play, remove);
+      list.appendChild(row);
+    });
+  }
+
+  $("hquP4SaveBookmark")?.addEventListener("click", () => {
+    if (currentIndex < 0) {
+      message("hquP4BookmarkMessage", "Pehle audio play karein.");
+      return;
+    }
+
+    const name = text($("hquP4BookmarkName")?.value).trim();
+
+    if (!name) {
+      message("hquP4BookmarkMessage", "Bookmark ka naam likhein.");
+      return;
+    }
+
+    const surah = surahs[currentIndex];
+    const bookmarks = read(KEYS.bookmarks, []);
+
+    bookmarks.unshift({
+      name,
+      number: numberOf(surah),
+      surahName: nameOf(surah),
+      time: audio?.currentTime || 0
+    });
+
+    save(KEYS.bookmarks, bookmarks);
+
+    $("hquP4BookmarkName").value = "";
+    message("hquP4BookmarkMessage", "Audio bookmark saved!");
+
+    renderBookmarks();
+  });
+
+  /* ==========================================
+     9. SLEEP TIMER
+  ========================================== */
+
+  function cancelSleepTimer() {
+    if (sleepTimeout) {
+      clearTimeout(sleepTimeout);
+      sleepTimeout = null;
+    }
+
+    if ($("hquP4SleepTimer")) {
+      $("hquP4SleepTimer").value = "0";
+    }
+
+    message("hquP4SleepMessage", "Sleep timer is off.");
+  }
+
+  $("hquP4SleepTimer")?.addEventListener("change", event => {
+    if (sleepTimeout) clearTimeout(sleepTimeout);
+
+    const minutes = Number(event.target.value);
+
+    if (!minutes) {
+      message("hquP4SleepMessage", "Sleep timer is off.");
+      return;
+    }
+
+    message(
+      "hquP4SleepMessage",
+      "Audio will stop after " + minutes + " minutes."
+    );
+
+    sleepTimeout = setTimeout(() => {
+      audio?.pause();
+      sleepTimeout = null;
+
+      if ($("hquP4SleepTimer")) {
+        $("hquP4SleepTimer").value = "0";
+      }
+
+      message("hquP4SleepMessage", "Sleep timer finished. Audio stopped.");
+    }, minutes * 60 * 1000);
+  });
+
+  $("hquP4CancelSleep")?.addEventListener("click", cancelSleepTimer);
+
+  /* ==========================================
+     10. AUDIO SETTINGS
+  ========================================== */
+
+  function loadAudioSettings() {
+    const settings = read(KEYS.settings, {});
+
+    if ($("hquP4Autoplay")) {
+      $("hquP4Autoplay").checked = !!settings.autoplay;
+    }
+
+    if ($("hquP4RememberQari")) {
+      $("hquP4RememberQari").checked =
+        settings.rememberQari !== false;
+    }
+
+    if ($("hquP4KeepScreen")) {
+      $("hquP4KeepScreen").checked = !!settings.keepScreen;
+    }
+  }
+
+  $("hquP4SaveSettings")?.addEventListener("click", async () => {
+    const settings = read(KEYS.settings, {});
+
+    settings.autoplay = !!$("hquP4Autoplay")?.checked;
+    settings.rememberQari = !!$("hquP4RememberQari")?.checked;
+    settings.keepScreen = !!$("hquP4KeepScreen")?.checked;
+
+    if (settings.rememberQari) {
+      settings.qari = getSelectedQari();
+    } else {
+      delete settings.qari;
+    }
+
+    save(KEYS.settings, settings);
+
+    if (settings.keepScreen && navigator.wakeLock?.request) {
+      try {
+        wakeLock = await navigator.wakeLock.request("screen");
+      } catch {
+        message(
+          "hquP4SettingsMessage",
+          "Screen Wake Lock is not supported or permission was denied. Other settings saved."
+        );
+        return;
+      }
+    } else if (wakeLock) {
+      try {
+        await wakeLock.release();
+      } catch {}
+      wakeLock = null;
+    }
+
+    message("hquP4SettingsMessage", "Audio settings saved!");
+  });
+
+  /* ==========================================
+     AUDIO END - REPEAT & NEXT SURAH
+  ========================================== */
+
+  audio?.addEventListener("ended", async () => {
+    const mode = $("hquP4RepeatMode")?.value || "none";
+
+    if (mode === "surah") {
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
+      return;
+    }
+
+    if (mode === "three" || mode === "five") {
+      const limit = mode === "three" ? 3 : 5;
+      repeatCount++;
+
+      if (repeatCount < limit) {
+        audio.currentTime = 0;
+        audio.play().catch(() => {});
+        return;
+      }
+
+      repeatCount = 0;
+    }
+
+    const settings = read(KEYS.settings, {});
+
+    if (settings.autoplay && currentIndex < surahs.length - 1) {
+      await playSurah(currentIndex + 1, true);
+    } else {
+      message("hquP4PlayerMessage", "Surah finished.");
+    }
+  });
+
+  /* ==========================================
+     INITIALIZE PACKAGE 4
+  ========================================== */
+
+  loadAudioSettings();
+  updateQariDisplay();
+  loadAudioSurahs();
+  renderPlaylist();
+  renderDownloads();
+  renderBookmarks();
+
+  console.log(
+    "Holy Quran Ultimate - Package 4 Audio Center Loaded!"
+  );
+
+})();
