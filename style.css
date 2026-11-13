@@ -1782,3 +1782,103 @@ body {
     padding: 8px 11px;
   }
 }
+
+/* =====================================
+   FILE 17: BOOKMARK PROFESSIONAL DESIGN
+===================================== */
+
+#bookmarkPanel {
+  background: linear-gradient(145deg, #063d30, #087653);
+  color: #ffffff;
+  padding: 20px;
+  margin: 18px 0;
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(0, 50, 35, 0.18);
+}
+
+#bookmarkPanel h3 {
+  color: #f4d47a;
+  margin: 8px 0 12px;
+  font-size: 19px;
+}
+
+#bookmarkCount {
+  color: #e5f5ed;
+  font-size: 14px;
+}
+
+.bookmark-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 12px;
+  margin: 9px 0;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.bookmark-row button {
+  background: #e7bd55;
+  color: #173b2d;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: bold;
+}
+
+.last-read-box {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(255,255,255,0.10);
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.18);
+}
+
+#lastReadText {
+  color: #ffffff;
+  font-size: 15px;
+}
+
+#resumeReading {
+  width: 100%;
+  padding: 13px;
+  margin-top: 10px;
+  background: #f2ce70;
+  color: #123d2e;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.ayah-bookmark-btn {
+  display: block;
+  margin: 14px auto 4px;
+  padding: 10px 16px;
+  background: #e5bd5c;
+  color: #183e30;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.ayah-bookmark-btn:active,
+#resumeReading:active {
+  transform: scale(0.97);
+}
+
+@media (max-width: 480px) {
+  #bookmarkPanel {
+    padding: 15px;
+    border-radius: 14px;
+  }
+
+  .bookmark-row {
+    font-size: 13px;
+  }
+}
