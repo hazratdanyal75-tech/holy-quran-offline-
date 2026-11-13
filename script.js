@@ -2174,3 +2174,247 @@ if ("serviceWorker" in navigator) {
   updateStatistics();
 
 })();
+
+/* =========================================
+   FILE 33: QURAN HIFZ TRACKER
+========================================= */
+
+(function () {
+  "use strict";
+
+  const STORAGE_KEY = "hquHifzProgress";
+
+  const surahSelect = document.getElementById("hifzSurahSelect");
+  const juzSelect = document.getElementById("hifzJuzSelect");
+
+  const markSurahBtn = document.getElementById("hifzMarkSurah");
+  const markJuzBtn = document.getElementById("hifzMarkJuz");
+
+  const surahList = document.getElementById("hifzSurahList");
+  const juzList = document.getElementById("hifzJuzList");
+
+  const surahMessage = document.getElementById("hifzSurahMessage");
+  const juzMessage = document.getElementById("hifzJuzMessage");
+
+  const surahProgress = document.getElementById("hifzSurahProgress");
+  const juzProgress = document.getElementById("hifzJuzProgress");
+  const progressBar = document.getElementById("hifzProgressBar");
+  const overallProgress = document.getElementById("hifzOverallProgress");
+
+  if (!surahSelect || !juzSelect || !markSurahBtn || !markJuzBtn) {
+    return;
+  }
+
+  let hifzData = {
+    surahs: [],
+    juz: []
+  };
+
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+
+    if (saved && Array.isArray(saved.surahs) && Array.isArray(saved.juz)) {
+      hifzData = saved;
+    }
+  } catch (error) {
+    console.warn("Hifz data could not be loaded.", error);
+  }
+
+  function saveData() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(hifzData));
+    } catch (error) {
+      console.warn("Hifz data could not be saved.", error);
+    }
+  }
+
+  function showMessage(element, message) {
+    if (element) {
+      element.textContent = message;
+    }
+  }
+
+  function updateProgress() {
+    const surahCount = hifzData.surahs.length;
+    const juzCount = hifzData.juz.length;
+
+    const total = surahCount + juzCount;
+    const percentage = Math.round((total / 144) * 100);
+
+    surahProgress.textContent = surahCount + " / 114";
+    juzProgress.textContent = juzCount + " / 30";
+
+    progressBar.style.width = percentage + "%";
+    overallProgress.textContent = percentage + "% Completed";
+  }
+
+  function createListItem(parent, label, type, value) {
+    const item = document.createElement("div");
+    item.className = "hifz-list-item";
+
+    const name = document.createElement("span");
+    name.textContent = "✓ " + label;
+
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.textContent = "Remove";
+    removeButton.className = "hifz-remove-btn";
+
+    removeButton.addEventListener("click", function () {
+      if (type === "surah") {
+        hifzData.surahs = hifzData.surahs.filter(
+          number => number !== value
+        );
+      } else {
+        hifzData.juz = hifzData.juz.filter(
+          number => number !== value
+        );
+      }
+
+      saveData();
+      renderLists();
+      updateProgress();
+    });
+
+    item.appendChild(name);
+    item.appendChild(removeButton);
+    parent.appendChild(item);
+  }
+
+  function renderLists() {
+    surahList.replaceChildren();
+    juzList.replaceChildren();
+
+    if (hifzData.surahs.length === 0) {
+      surahList.textContent = "No Surahs marked yet.";
+    } else {
+      hifzData.surahs.forEach(number => {
+        const option = Array.from(surahSelect.options).find(
+          item => Number(item.value) === number
+        );
+
+        const name = option ? option.textContent : "Surah " + number;
+
+        createListItem(surahList, name, "surah", number);
+      });
+    }
+
+    if (hifzData.juz.length === 0) {
+      juzList.textContent = "No Juz completed yet.";
+    } else {
+      hifzData.juz.forEach(number => {
+        createListItem(juzList, "Juz " + number, "juz", number);
+      });
+    }
+  }
+
+  async function loadSurahs() {
+    try {
+      const response = await fetch("./data/surahs.json");
+
+      if (!response.ok) {
+        throw new Error("Surah data unavailable");
+      }
+
+      const data = await response.json();
+
+      const surahs = Array.isArray(data)
+        ? data
+        : Array.isArray(data.surahs)
+          ? data.surahs
+          : Object.values(data);
+
+      surahSelect.innerHTML = '<option value="">Select Surah</option>';
+
+      surahs.forEach((surah, index) => {
+        if (!surah || typeof surah !== "object") return;
+
+        const number = Number(
+          surah.number || surah.id || surah.surahNumber || index + 1
+        );
+
+        const name =
+          surah.englishName ||
+          surah.nameEnglish ||
+          surah.name ||
+          surah.english_name ||
+          ("Surah " + number);
+
+        if (!Number.isInteger(number) || number < 1 || number > 114) {
+          return;
+        }
+
+        const option = document.createElement("option");
+        option.value = number;
+        option.textContent = number + ". " + name;
+
+        surahSelect.appendChild(option);
+      });
+
+      renderLists();
+
+    } catch (error) {
+      surahSelect.innerHTML =
+        '<option value="">Could not load Surahs</option>';
+
+      showMessage(
+        surahMessage,
+        "Please check that data/surahs.json exists."
+      );
+
+      console.error("Hifz Surah loading error:", error);
+    }
+  }
+
+  markSurahBtn.addEventListener("click", function () {
+    const number = Number(surahSelect.value);
+
+    if (!number) {
+      showMessage(surahMessage, "Please select a Surah first.");
+      return;
+    }
+
+    if (hifzData.surahs.includes(number)) {
+      showMessage(surahMessage, "This Surah is already marked.");
+      return;
+    }
+
+    hifzData.surahs.push(number);
+    hifzData.surahs.sort((a, b) => a - b);
+
+    saveData();
+    renderLists();
+    updateProgress();
+
+    showMessage(surahMessage, "Surah successfully saved! ✓");
+    surahSelect.value = "";
+  });
+
+  markJuzBtn.addEventListener("click", function () {
+    const number = Number(juzSelect.value);
+
+    if (!Number.isInteger(number) || number < 1 || number > 30) {
+      showMessage(juzMessage, "Please select a Juz first.");
+      return;
+    }
+
+    if (hifzData.juz.includes(number)) {
+      showMessage(juzMessage, "This Juz is already marked.");
+      return;
+    }
+
+    hifzData.juz.push(number);
+    hifzData.juz.sort((a, b) => a - b);
+
+    saveData();
+    renderLists();
+    updateProgress();
+
+    showMessage(juzMessage, "Juz successfully saved! ✓");
+    juzSelect.value = "";
+  });
+
+  loadSurahs();
+  updateProgress();
+
+})();
