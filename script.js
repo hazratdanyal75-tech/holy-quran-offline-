@@ -1812,3 +1812,95 @@ if ("serviceWorker" in navigator) {
 
   loadQaris();
 })();
+
+/* =====================================
+   FILE 22: SURAH AUDIO CONNECTION
+===================================== */
+
+(function () {
+  const audio = document.getElementById("hquAudio");
+  const qariSelect = document.getElementById("hquQariSelect");
+  const surahList = document.getElementById("surahList");
+  const message = document.getElementById("hquAudioMessage");
+  const playButton = document.getElementById("hquPlay");
+
+  if (!audio || !qariSelect || !message) return;
+
+  let audioLibrary = [];
+  let currentSurah = 1;
+
+  async function loadAudioLibrary() {
+    try {
+      const response = await fetch("./data/audio-library.json");
+
+      if (!response.ok) {
+        throw new Error("Audio library not found");
+      }
+
+      const data = await response.json();
+      audioLibrary = data.qaris || [];
+
+      connectAudio();
+    } catch (error) {
+      message.textContent =
+        "Audio library could not be loaded.";
+    }
+  }
+
+  function connectAudio() {
+    const selectedQari = qariSelect.value;
+
+    const qari = audioLibrary.find(
+      item => item.id === selectedQari
+    );
+
+    if (!qari) {
+      message.textContent = "Please select a Qari.";
+      return;
+    }
+
+    const audioURL = qari.surahs?.[String(currentSurah)];
+
+    audio.pause();
+    audio.removeAttribute("src");
+    audio.load();
+
+    if (!audioURL || !audioURL.trim()) {
+      if (playButton) playButton.textContent = "▶ Play";
+
+      message.textContent =
+        "Verified audio for this Surah is not added yet.";
+
+      return;
+    }
+
+    audio.src = audioURL;
+    audio.load();
+
+    message.textContent =
+      qari.name + " — Surah " + currentSurah +
+      " is ready to play.";
+  }
+
+  // Detect selected Surah
+  if (surahList) {
+    surahList.addEventListener("click", event => {
+      const item = event.target.closest(".surah-item");
+
+      if (!item) return;
+
+      const match = item.textContent.match(/^\s*(\d+)/);
+
+      if (match) {
+        currentSurah = Number(match[1]);
+        connectAudio();
+      }
+    });
+  }
+
+  // Detect selected Qari
+  qariSelect.addEventListener("change", connectAudio);
+
+  loadAudioLibrary();
+
+})();
