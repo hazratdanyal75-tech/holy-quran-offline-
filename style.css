@@ -3097,3 +3097,186 @@ body {
     padding: 14px;
   }
 }
+
+/* =========================================
+   FILE 47 — ADVANCED QURAN AUDIO CSS
+========================================= */
+
+#hquAdvancedAudio {
+  width: 100%;
+  max-width: 750px;
+  margin: 25px auto;
+  padding: 25px;
+  box-sizing: border-box;
+  border-radius: 24px;
+  background: linear-gradient(145deg, #064d35, #087c4c);
+  color: #ffffff;
+  box-shadow: 0 12px 30px rgba(0, 65, 40, 0.20);
+  overflow: hidden;
+}
+
+.hqu-audio-heading {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.hqu-audio-icon {
+  display: block;
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.hqu-audio-heading h2 {
+  font-size: 24px;
+  color: #ffffff;
+  margin: 5px 0;
+}
+
+.hqu-audio-heading p {
+  color: #d3f4df;
+  font-size: 14px;
+}
+
+#hquAdvancedAudio label {
+  display: block;
+  color: #e4f7eb;
+  font-size: 14px;
+  margin: 12px 0 7px;
+}
+
+#hquQariSelect,
+#hquSpeed {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 12px;
+  background: #ffffff;
+  color: #075c3b;
+  font-size: 15px;
+  outline: none;
+}
+
+.hqu-audio-current {
+  text-align: center;
+  padding: 22px 12px;
+  margin: 20px 0;
+  border-radius: 17px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.14);
+}
+
+.hqu-audio-current h3 {
+  color: #ffffff;
+  font-size: 22px;
+  margin: 0 0 8px;
+}
+
+.hqu-audio-current p {
+  color: #d2f4df;
+  margin: 0;
+  font-size: 14px;
+}
+
+.hqu-audio-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 22px;
+  margin: 20px 0;
+}
+
+.hqu-audio-controls button {
+  width: 52px;
+  height: 52px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.16);
+  color: #ffffff;
+  font-size: 21px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.hqu-audio-controls button:hover {
+  background: rgba(255,255,255,0.28);
+  transform: scale(1.08);
+}
+
+#hquPlay {
+  width: 70px;
+  height: 70px;
+  background: #ffffff;
+  color: #087448;
+  font-size: 27px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+.hqu-audio-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.hqu-audio-progress span {
+  min-width: 35px;
+  font-size: 12px;
+  color: #e3f6e9;
+  text-align: center;
+}
+
+#hquProgress,
+#hquVolume {
+  width: 100%;
+  accent-color: #ffffff;
+  cursor: pointer;
+}
+
+.hqu-audio-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.hqu-audio-options > div {
+  min-width: 0;
+}
+
+#hquAudioMessage {
+  text-align: center;
+  color: #e0f6e8;
+  background: rgba(0,0,0,0.12);
+  padding: 13px;
+  border-radius: 12px;
+  margin-top: 22px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+#hquAdvancedAudio button:focus-visible,
+#hquAdvancedAudio select:focus-visible,
+#hquAdvancedAudio input:focus-visible {
+  outline: 3px solid #f3cf70;
+  outline-offset: 3px;
+}
+
+@media (max-width: 500px) {
+  #hquAdvancedAudio {
+    padding: 17px;
+    border-radius: 19px;
+  }
+
+  .hqu-audio-heading h2 {
+    font-size: 20px;
+  }
+
+  .hqu-audio-options {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .hqu-audio-controls {
+    gap: 15px;
+  }
+}
