@@ -1,0 +1,42 @@
+
+{
+  "qaris": [
+    {
+      "id": "mishary",
+      "name": "Mishary Rashid Alafasy",
+      "style": "Murattal",
+      "audioSource": ""
+    },
+    {
+      "id": "abdulbasit",
+      "name": "Abdul Basit Abdul Samad",
+      "style": "Murattal",
+      "audioSource": ""
+    },
+    {
+      "id": "sudais",
+      "name": "Abdul Rahman Al-Sudais",
+      "style": "Murattal",
+      "audioSource": ""
+    },
+    {
+      "id": "shuraim",
+      "name": "Saud Al-Shuraim",
+      "style": "Murattal",
+      "audioSource": ""
+    },
+    {
+      "id": "maher",
+      "name": "Maher Al-Muaiqly",
+      "style": "Murattal",
+      "audioSource": ""
+    },
+    {
+      "id": "hussary",
+      "name": "Mahmoud Khalil Al-Hussary",
+      "style": "Murattal",
+      "audioSource": ""
+    }
+  ],
+  "selectedQari": "mishary"
+}
